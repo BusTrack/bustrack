@@ -17,41 +17,38 @@
  * limitations under the License.
  * ========================================================================= */
 
-#ifndef BUSTRACK_SERVER_H_
-#define BUSTRACK_SERVER_H_
+#ifndef BUSTRACK_CLIENT_HANDLER_H_
+#define BUSTRACK_CLIENT_HANDLER_H_
 
 #include <memory>
-#include <QTcpServer>
-#include <QDir>
+#include <QTcpSocket>
 
-#include "client_handler.h"
 #include "request_router.h"
 
 namespace bustrack {
 
-  /**
-   * The BusTrack TCP socket server.
-   */
-  class Server : public QTcpServer {
+  class ClientHandler : public QObject {
     Q_OBJECT
 
   public:
-    Server(QObject* parent = 0);
+    ClientHandler(QTcpSocket* socket, std::shared_ptr<RequestRouter> router);
+    ClientHandler() = delete;
 
-    void setDataDir(const QDir& data_dir);
-    QDir getDataDir() const;
+  signals:
+    void jobDone(ClientHandler* handler);
 
   private slots:
-    void handleNewConnection();
-    void clientHandlerComplete(ClientHandler* handler);
+    void onReadyRead();
+    void onSocketDisconnected();
 
   private:
-    QDir data_dir_;
+    QTcpSocket* socket_;
+    int socket_id_;
     std::shared_ptr<RequestRouter> router_;
   };
 
 }
 
-#endif /* BUSTRACK_SERVER_H_ */
+#endif /* BUSTRACK_CLIENT_HANDLER_H_ */
 
 /* vim: set ts=2 sw=2 et: */

@@ -19,13 +19,17 @@
 
 # Add files for the server.
 set (server_SOURCES
-  dao/bus_stop_dao.cc
   dao/bus_dao.cc
+  dao/bus_service_dao.cc
+  dao/bus_stop_dao.cc
+  client_handler.cc
+  request_router.cc
   server.cc
   bustrackd.cc
 )
 
 set (server_HEADERS
+  client_handler.h
   server.h
 )
 

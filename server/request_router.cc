@@ -17,41 +17,21 @@
  * limitations under the License.
  * ========================================================================= */
 
-#ifndef BUSTRACK_SERVER_H_
-#define BUSTRACK_SERVER_H_
-
-#include <memory>
-#include <QTcpServer>
-#include <QDir>
-
-#include "client_handler.h"
+#include "server.h"
 #include "request_router.h"
 
 namespace bustrack {
 
-  /**
-   * The BusTrack TCP socket server.
-   */
-  class Server : public QTcpServer {
-    Q_OBJECT
+  RequestRouter::RequestRouter(Server* server) {
+    QDir data_dir = server->getDataDir();
 
-  public:
-    Server(QObject* parent = 0);
-
-    void setDataDir(const QDir& data_dir);
-    QDir getDataDir() const;
-
-  private slots:
-    void handleNewConnection();
-    void clientHandlerComplete(ClientHandler* handler);
-
-  private:
-    QDir data_dir_;
-    std::shared_ptr<RequestRouter> router_;
-  };
+    // Create the DAOs.
+    bus_dao_ = std::unique_ptr<BusDAO>(new BusDAO(data_dir));
+    bus_service_dao_ = std::unique_ptr<BusServiceDAO>(
+        new BusServiceDAO(data_dir));
+    bus_stop_dao_ = std::unique_ptr<BusStopDAO>(new BusStopDAO(data_dir));
+  }
 
 }
-
-#endif /* BUSTRACK_SERVER_H_ */
 
 /* vim: set ts=2 sw=2 et: */

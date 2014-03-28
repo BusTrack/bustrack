@@ -17,41 +17,39 @@
  * limitations under the License.
  * ========================================================================= */
 
-#ifndef BUSTRACK_SERVER_H_
-#define BUSTRACK_SERVER_H_
-
-#include <memory>
-#include <QTcpServer>
-#include <QDir>
-
+#include <QHostAddress>
 #include "client_handler.h"
-#include "request_router.h"
 
 namespace bustrack {
 
-  /**
-   * The BusTrack TCP socket server.
-   */
-  class Server : public QTcpServer {
-    Q_OBJECT
+  ClientHandler::ClientHandler(QTcpSocket* socket,
+      std::shared_ptr<RequestRouter> router) :
+      socket_ (socket),
+      socket_id_ (socket->socketDescriptor()),
+      router_ (router) {
+    qDebug("[%d] Connection from %s:%d received.", socket_id_,
+        socket->peerAddress().toString().toStdString().c_str(),
+        socket->peerPort());
 
-  public:
-    Server(QObject* parent = 0);
+    connect(socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+    connect(socket, SIGNAL(disconnected()), this, SLOT(onSocketDisconnected()));
+  }
 
-    void setDataDir(const QDir& data_dir);
-    QDir getDataDir() const;
+  void ClientHandler::onReadyRead() {
+    // We should read in the command here and decide what it is, then invoke
+    // RequestRouter to handle it.
+    char buf[1024];
+    qint64 lineLength = socket_->readLine(buf, sizeof(buf));
+    if (lineLength != -1) {
+      qDebug() << "Data received: " << lineLength;
+    }
+  }
 
-  private slots:
-    void handleNewConnection();
-    void clientHandlerComplete(ClientHandler* handler);
-
-  private:
-    QDir data_dir_;
-    std::shared_ptr<RequestRouter> router_;
-  };
+  void ClientHandler::onSocketDisconnected() {
+    qDebug("[%d] Connection closed.", socket_id_);
+    emit jobDone(this);
+  }
 
 }
-
-#endif /* BUSTRACK_SERVER_H_ */
 
 /* vim: set ts=2 sw=2 et: */

@@ -17,41 +17,52 @@
  * limitations under the License.
  * ========================================================================= */
 
-#ifndef BUSTRACK_SERVER_H_
-#define BUSTRACK_SERVER_H_
+#ifndef BUSTRACK_BUS_SERVICE_DAO_H_
+#define BUSTRACK_BUS_SERVICE_DAO_H_
 
-#include <memory>
-#include <QTcpServer>
 #include <QDir>
 
-#include "client_handler.h"
-#include "request_router.h"
+#include "bustrack/bus_service.h"
+#include "file_based_dao.h"
 
 namespace bustrack {
 
   /**
-   * The BusTrack TCP socket server.
+   * This is the data access object (DAO) for bus services.
+   * Provides a high level abstraction for retrieval of bus services in
+   * BusTrack.
+   *
+   * This DAO uses a file-based source to create the data model.
    */
-  class Server : public QTcpServer {
-    Q_OBJECT
-
+  class BusServiceDAO : public FileBasedDAO<BusService> {
   public:
-    Server(QObject* parent = 0);
+    /**
+     * The constructor invokes the rollback() method to perform an initial
+     * population of the internal list of buses from a file.
+     *
+     * @param data_dir A QDir object that points to a data directory.
+     */
+    BusServiceDAO(const QDir& data_dir);
+    BusServiceDAO() = delete;
+    ~BusServiceDAO();
 
-    void setDataDir(const QDir& data_dir);
-    QDir getDataDir() const;
+    /**
+     * Saves the internal list of bus services to disk.
+     */
+    void commit();
 
-  private slots:
-    void handleNewConnection();
-    void clientHandlerComplete(ClientHandler* handler);
+    /**
+     * Restore the internal list of bus services from disk.
+     */
+    void rollback();
 
   private:
-    QDir data_dir_;
-    std::shared_ptr<RequestRouter> router_;
+    static const QString DATA_FILE_NAME;
+    static const int NUM_FIELDS = 1;
   };
 
 }
 
-#endif /* BUSTRACK_SERVER_H_ */
+#endif /* BUSTRACK_BUS_SERVICE_DAO_H_ */
 
 /* vim: set ts=2 sw=2 et: */
