@@ -23,6 +23,11 @@
 #include <QTcpServer>
 #include <QDir>
 
+#include <memory>
+
+#include "dao/bus_stop_dao.h"
+#include "dao/bus_dao.h"
+
 namespace bustrack {
 
   /**
@@ -37,11 +42,17 @@ namespace bustrack {
     void setDataDir(const QDir& data_dir);
     QDir getDataDir() const;
 
+    bool listen(const QHostAddress& address = QHostAddress::Any,
+        quint16 port = 0);
+
   private slots:
     void handleNewConnection();
 
   private:
     QDir data_dir_;
+
+    std::unique_ptr<BusStopDAO> bus_stop_dao_;
+    std::unique_ptr<BusDAO> bus_dao_;
   };
 
 }

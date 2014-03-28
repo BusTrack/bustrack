@@ -20,13 +20,10 @@
 #ifndef BUSTRACK_BUS_STOP_DAO_H_
 #define BUSTRACK_BUS_STOP_DAO_H_
 
-#include <unordered_map>
-#include <vector>
-
 #include <QDir>
 
 #include "bustrack/bus_stop.h"
-#include "data_access_object.h"
+#include "file_based_dao.h"
 
 namespace bustrack {
 
@@ -36,12 +33,9 @@ namespace bustrack {
    *
    * This DAO uses a file-based source to create the data model.
    */
-  class BusStopDAO : public DataAccessObject {
+  class BusStopDAO : public FileBasedDAO<BusStop> {
   public:
     /**
-     * Constructs a new instance of the data access object.
-     * The data directory indicates the directory to look for the data file.
-     *
      * The constructor invokes the rollback() method to perform an initial
      * population of the internal list of bus stops from a file.
      *
@@ -54,62 +48,16 @@ namespace bustrack {
     /**
      * Saves the internal list of bus stops to disk.
      */
-    virtual void commit();
+    void commit();
 
     /**
      * Restore the internal list of bus stops from disk.
      */
-    virtual void rollback();
+    void rollback();
     
-    /**
-     * Returns a vector of BusStop instances.
-     */
-    std::vector<BusStop> getBusStops() const;
-
-    /**
-     * Returns a BusStop instance given the ID of the stop.
-     * If a bus stop of the given ID does not exist, an exception is thrown.
-     */
-    BusStop getBusStop(const std::string& stop_id) const;
-
-    /**
-     * Returns true if a bus stop of the given ID exists, false otherwise.
-     */
-    bool busStopExists(const std::string& stop_id) const;
-    
-    /**
-     * Creates a bus stop using the specified instance of BusStop.
-     *
-     * Returns false if a bus stop with the given ID already exists, true
-     * otherwise.
-     *
-     * @param bus_stop The bus stop to be created.
-     */
-    bool createBusStop(BusStop bus_stop);
-
-    /**
-     * Replaces an existing bus stop using the specified instance of BusStop.
-     * Returns false if an existing bus stop does not exist, true otherwise.
-     *
-     * @param bus_stop The bus stop to be replaced.
-     */
-    bool replaceBusStop(BusStop bus_stop);
-
-    /**
-     * Removes an existing bus stop given by stop_id.
-     * Returns true if the bus stop could be found, false otherwise.
-     *
-     * @param stop_id The stop ID of the bus stop to be removed.
-     */
-    bool removeBusStop(const std::string& stop_id);
-
   private:
     static const QString DATA_FILE_NAME;
     static const int NUM_FIELDS = 4;
-
-    std::unordered_map<std::string, BusStop> bus_stops_;
-    QDir data_dir_;
-    QString data_file_path_;
   };
 
 }

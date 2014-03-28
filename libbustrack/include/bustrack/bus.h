@@ -26,14 +26,14 @@ namespace bustrack {
 
   class Bus {
   public:
-    std::string getPlateNumber();
-    void setPlateNumber(const std::string& plate_number);
+    std::string getId();
+    void setId(const std::string& id);
 
     BusService getService();
     void setService(BusService service);
 
   private:
-    std::string plate_number_;
+    std::string id_;
     BusService service_;
   };
 

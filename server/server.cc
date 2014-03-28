@@ -23,7 +23,9 @@
 
 namespace bustrack {
 
-  Server::Server(QObject* parent) {
+  Server::Server(QObject*) :
+      bus_stop_dao_(nullptr),
+      bus_dao_(nullptr) {
     connect(this, SIGNAL(newConnection()), this, SLOT(handleNewConnection()));
   }
 
@@ -35,11 +37,25 @@ namespace bustrack {
     return data_dir_;
   }
 
+  bool Server::listen(const QHostAddress& address, quint16 port) {
+    // Before we do the actual listening, create the DAOs.
+    bus_stop_dao_ = std::unique_ptr<BusStopDAO>(new BusStopDAO(data_dir_));
+    bus_dao_ = std::unique_ptr<BusDAO>(new BusDAO(data_dir_));
+
+    // Now we can listen.
+    return QTcpServer::listen(address, port);
+  }
+
   void Server::handleNewConnection() {
     QTcpSocket* socket = nextPendingConnection();
 
     // Test writing some data to the socket then closing it.
-    socket->write("test\r\n", 7);
+    std::vector<Bus> buses = bus_dao_->getItems();
+    for (Bus bus : buses) {
+      socket->write(bus.getId().c_str(), bus.getId().length());
+      socket->write("\r\n", 2);
+    }
+
     socket->close();
 
     // TODO: We should create a new ClientHandler instance here, then pass

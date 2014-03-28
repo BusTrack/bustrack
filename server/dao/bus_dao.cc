@@ -26,8 +26,7 @@ namespace bustrack {
   const QString BusDAO::DATA_FILE_NAME = "buses.txt";
 
   BusDAO::BusDAO(const QDir& data_dir) :
-      data_dir_(data_dir) {
-    data_file_path_ = data_dir_.filePath(DATA_FILE_NAME);
+      FileBasedDAO<Bus>(data_dir, DATA_FILE_NAME) {
     rollback();
   }
 
@@ -36,100 +35,52 @@ namespace bustrack {
   }
 
   void BusDAO::commit() {
+    using std::shared_ptr;
     using std::fstream;
+    using std::pair;
+    using std::string;
+    using std::endl;
 
-    fstream file_stream (data_file_path_.toStdString(), std::ios::out);
-    if (file_stream.fail()) {
-      qWarning() << "Failed to write bus list to file.";
-      return;
+    shared_ptr<fstream> file_stream (prepareCommit());
+    if (file_stream != nullptr) {
+      // Write out buses, line by line.
+      for (pair<string, Bus> bus_pair : items_) {
+        Bus bus = bus_pair.second;
+        *file_stream << bus.getId() << endl;
+      }
+
+      closeCommit();
     }
-
-    // Write out buses, line by line.
-    for (std::pair<std::string, Bus> bus_pair : buses_) {
-      Bus bus = bus_pair.second;
-      file_stream << bus.getPlateNumber() << std::endl;
-    }
-
-    file_stream.close();
   }
 
   void BusDAO::rollback() {
-    buses_.clear();
+    using std::shared_ptr;
+    using std::fstream;
 
-    // Check if the data file exists.
-    if (!data_dir_.exists(DATA_FILE_NAME)) {
-      return;
-    }
+    shared_ptr<fstream> file_stream (prepareRollback());
+    if (file_stream != nullptr) {
+      // Read in buses, line by line.
+      // Each line should have the format: bus_id
+      for (std::string line; getline(*file_stream, line);) {
+        QString q_line (line.c_str());
+        QStringList tokens = q_line.split("|");
 
-    std::fstream file_stream (data_file_path_.toStdString(), std::ios::in);
-    if (file_stream.fail()) {
-      throw std::runtime_error("Failed to read bus list from file.");
-    }
+        if (tokens.size() != NUM_FIELDS) {
+          qWarning() << "One of the buses in file has insufficient number of "
+            "fields.";
+          continue;
+        }
 
-    // Read in bus stops, line by line.
-    // Each line should have the format: stop_id|stop_name|lat|lng
-    for (std::string line; getline(file_stream, line);) {
-      QString q_line (line.c_str());
-      QStringList tokens = q_line.split("|");
+        // Create the bus object.
+        Bus bus;
+        bus.setId(tokens[0].toStdString());
 
-      if (tokens.size() != NUM_FIELDS) {
-        qWarning() << "One of the buses in file has insufficient number of "
-          "fields.";
-        continue;
+        // Stuff the bus object into our list.
+        items_.insert(std::make_pair(bus.getId(), bus));
       }
 
-      // Create the bus stop object.
-      Bus bus;
-      bus.setPlateNumber(tokens[0].toStdString());
-
-      // Stuff the bus stop object into our list.
-      buses_.insert(std::make_pair(bus.getPlateNumber(), bus));
+      closeRollback();
     }
-  }
-
-  std::vector<Bus> BusDAO::getBuses() const {
-    std::vector<Bus> buses;
-    for (std::pair<std::string, Bus> bus_pair : buses_) {
-      Bus bus = bus_pair.second;
-      buses.push_back(bus);
-    }
-
-    return buses;
-  }
-
-  Bus BusDAO::getBus(const std::string& plate_number) const {
-    return buses_.at(plate_number);
-  }
-
-  bool BusDAO::busExists(const std::string& plate_number) const {
-    return buses_.find(plate_number) != buses_.end();
-  }
-
-  bool BusDAO::createBus(Bus bus) {
-    if (busExists(bus.getPlateNumber())) {
-      return false;
-    }
-
-    buses_.insert(std::make_pair(bus.getPlateNumber(), bus));
-    return true;
-  }
-
-  bool BusDAO::replaceBus(Bus bus) {
-    if (!busExists(bus.getPlateNumber())) {
-      return false;
-    }
-
-    buses_.insert(std::make_pair(bus.getPlateNumber(), bus));
-    return true;
-  }
-
-  bool BusDAO::removeBus(const std::string& plate_number) {
-    if (!busExists(plate_number)) {
-      return false;
-    }
-
-    buses_.erase(buses_.find(plate_number));
-    return true;
   }
 
 }

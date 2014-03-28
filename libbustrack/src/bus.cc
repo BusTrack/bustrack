@@ -21,12 +21,12 @@
 
 namespace bustrack {
 
-  std::string Bus::getPlateNumber() {
-    return plate_number_;
+  std::string Bus::getId() {
+    return id_;
   }
 
-  void Bus::setPlateNumber(const std::string& plate_number) {
-    plate_number_ = plate_number;
+  void Bus::setId(const std::string& id) {
+    id_ = id;
   }
 
   BusService Bus::getService() {
