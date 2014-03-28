@@ -1,0 +1,27 @@
+# CMake build files
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
+install_manifest.txt
+CTestTestfile.cmake
+Testing/
+
+# Visual Studio build files
+*.idb
+*.tlog
+*.sdf
+*.opensdf
+*.lastbuildstate
+*.exp
+
+# Build directory
+build/
+msvc/evsr.v11.suo
+
+# Qt Creator project files
+*.pro.user
+
+# Object files
+*.o
+*.jpg
