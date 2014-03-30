@@ -20,25 +20,35 @@
 #ifndef BUSTRACK_REQUEST_ROUTER_H_
 #define BUSTRACK_REQUEST_ROUTER_H_
 
-#include <memory>
-#include <QDir>
-
 #include "dao/bus_dao.h"
 #include "dao/bus_service_dao.h"
 #include "dao/bus_stop_dao.h"
 
 namespace bustrack {
 
-  class Server;
+  /**
+   * The RequestRouter class is responsible for determining the type of
+   * request received by the ClientHandler, then routing it to the appropriate
+   * logic to process the request.
+   */
+  class ServerContext;
   class RequestRouter {
   public:
-    RequestRouter(Server* server);
+    /**
+     * Constructs a RequestRouter instance.
+     *
+     * @param context The sever context.
+     */
+    RequestRouter(ServerContext const* context);
+
+    /**
+     * We require the server context to proceed, so we disable the default
+     * constructor.
+     */
     RequestRouter() = delete;
 
   private:
-    std::unique_ptr<BusDAO> bus_dao_;
-    std::unique_ptr<BusServiceDAO> bus_service_dao_;
-    std::unique_ptr<BusStopDAO> bus_stop_dao_;
+    ServerContext const* context_;
   };
 
 }

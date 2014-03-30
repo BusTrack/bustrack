@@ -22,29 +22,85 @@
 
 #include <memory>
 #include <QTcpSocket>
-
-#include "request_router.h"
+#include "message.h"
 
 namespace bustrack {
 
+  /**
+   * The ClientHandler class is reponsible for managing communication with a
+   * single client over the network. An instance is created by Server for each 
+   * connection received.
+   *
+   * Upon receiving data from the network, the data is passed on to
+   * RequestRouter, which determines the kind of request. Once the kind of
+   * request has been determined, the request is then execute, and the
+   * resulting response is sent back to the client.
+   */
+  class ServerContext;
   class ClientHandler : public QObject {
     Q_OBJECT
 
   public:
-    ClientHandler(QTcpSocket* socket, std::shared_ptr<RequestRouter> router);
+    /**
+     * Constructs a ClientHandler instance.
+     *
+     * @param socket The socket to be managed.
+     * @param context The server context.
+     */
+    ClientHandler(QTcpSocket* socket, ServerContext const* context);
+
+    /**
+     * As we need the socket and context to proceed, we should delete the
+     * default constructor.
+     */
     ClientHandler() = delete;
 
+    /**
+     * ClientHandlers should not be copy-constructible nor copy-assignable.
+     */
+    ClientHandler(const ClientHandler&) = delete;
+    ClientHandler& operator=(const ClientHandler&) = delete;
+
+    /**
+     * ClientHandlers can be move-constructible and move-assignable.
+     */
+    ClientHandler(ClientHandler&&) = default;
+    ClientHandler& operator=(ClientHandler&&) = default;
+
   signals:
+    /**
+     * Emitted when the job of this ClientHandler instance is done and should
+     * be cleaned up by its parent.
+     *
+     * In BusTrack, this signal is processed by Server. As the memory for this
+     * instance is allocated using new, the Server makes use of this event
+     * to free up memory used by this instance.
+     *
+     * @param handler A pointer to this instance.
+     */
     void jobDone(ClientHandler* handler);
 
   private slots:
+    /**
+     * Called when there is data available on the socket to be read.
+     */
     void onReadyRead();
+  
+    /**
+     * Called when the socket has been disconnected by either a network
+     * condition, or client action.
+     */
     void onSocketDisconnected();
 
   private:
+    static const std::string TAG;
+    static const int NUM_TOKENS_IN_REQUEST = 3;
+
     QTcpSocket* socket_;
     int socket_id_;
-    std::shared_ptr<RequestRouter> router_;
+    ServerContext const* context_;
+
+    Message parseMessage(const std::string& line);
   };
 
 }

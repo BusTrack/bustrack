@@ -28,11 +28,9 @@ namespace bustrack {
 
   Server BusTrackDaemon::server_;
 
-  int BusTrackDaemon::startServer(const QHostAddress& address,
-      const int& port, const QDir& data_dir) {
+  int BusTrackDaemon::startServer() {
     // Create the server instance and start listening.
-    server_.setDataDir(data_dir);
-    if (!server_.listen(address, port)) {
+    if (!server_.listen()) {
       qCritical() << "Failed to listen on specified address and port.";
       qCritical() << "The error was: " << server_.errorString();
       return EXIT_LISTEN_FAILED;
@@ -40,7 +38,7 @@ namespace bustrack {
 
     // Print information about the server.
     std::cout << "BusTrack Server listening on " <<
-      server_.serverAddress().toString().toStdString() << " port " <<
+      server_.serverAddress().toString().toStdString() << ":" <<
       server_.serverPort() << "..." << std::endl;
     
     return EXIT_OK;
@@ -80,13 +78,19 @@ namespace bustrack {
       data_dir.setPath(data_dir_name);
 
       if (!data_dir.exists() && !data_dir.mkdir(data_dir_name)) {
-        qCritical() << "Data directory does not exists or is inaccessible.";
+        qCritical() << "Data directory does not exist or is inaccessible.";
         return EXIT_DATA_DIR_NOT_EXIST;
       }
     }
 
     // Create the server instance and start listening.
-    if (startServer(server_address, server_port, data_dir) != EXIT_OK) {
+    ServerContext context = server_.getContext();
+    context.setListenAddress(server_address);
+    context.setListenPort(server_port);
+    context.setDataDir(data_dir);
+    server_.setContext(context);
+
+    if (startServer() != EXIT_OK) {
       return EXIT_LISTEN_FAILED;
     }
 

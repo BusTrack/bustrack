@@ -17,19 +17,13 @@
  * limitations under the License.
  * ========================================================================= */
 
-#include "server.h"
+#include "server_context.h"
 #include "request_router.h"
 
 namespace bustrack {
 
-  RequestRouter::RequestRouter(Server* server) {
-    QDir data_dir = server->getDataDir();
-
-    // Create the DAOs.
-    bus_dao_ = std::unique_ptr<BusDAO>(new BusDAO(data_dir));
-    bus_service_dao_ = std::unique_ptr<BusServiceDAO>(
-        new BusServiceDAO(data_dir));
-    bus_stop_dao_ = std::unique_ptr<BusStopDAO>(new BusStopDAO(data_dir));
+  RequestRouter::RequestRouter(ServerContext const* context) :
+    context_(context) {
   }
 
 }

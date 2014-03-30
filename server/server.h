@@ -22,32 +22,91 @@
 
 #include <memory>
 #include <QTcpServer>
-#include <QDir>
 
-#include "client_handler.h"
-#include "request_router.h"
+#include "server_context.h"
 
 namespace bustrack {
 
   /**
    * The BusTrack TCP socket server.
+   *
+   * This socket server listens for connection requests based on parameters
+   * specified by its ServerContext. The ServerContext can be set via
+   * the setContext() method.
+   *
+   * If there is an incoming connection, handleNewConnection() is invoked and
+   * a ClientHandler instance is spawned to handle this connection.
+   *
+   * This socket server does not use threading as it relies on Qt's async
+   * programming model and event loop to multiplex connections.
    */
+  class ClientHandler;
   class Server : public QTcpServer {
     Q_OBJECT
 
   public:
+    /**
+     * Constructs a Server instance.
+     * @param parent The QObject parent of this server instance.
+     */
     Server(QObject* parent = 0);
 
-    void setDataDir(const QDir& data_dir);
-    QDir getDataDir() const;
+    /**
+     * Returns the server context in use.
+     * 
+     * As this method returns a copy of the server context, changes performed
+     * to the returned ServerContext instance will not be reflected in this
+     * Server instance.
+     *
+     * To make changes to the server context, obtain an instance of the server
+     * contxt using this method, make changes to the instance, then call
+     * setContext() to commit the changes.
+     *
+     * @return A copy of the server context in use.
+     */
+    ServerContext getContext() const;
+
+    /**
+     * Sets the server context to be used.
+     *
+     * @param context The server context to be used.
+     */
+    void setContext(const ServerContext& context);
+
+    /**
+     * Initiate listening. False is returned on failure. The exact failure
+     * condition can be determined by calling serverError() or errorString()
+     * from the QTcpServer class.
+     *
+     * @return true on success, false otherwise
+     */
+    bool listen();
 
   private slots:
+    /**
+     * Handles a new connection. This method spawns a ClientHandler instance
+     * and passes the next pending QTcpSocket (in the connected state) to it.
+     */
     void handleNewConnection();
+
+    /**
+     * Cleans up the ClientHandler instance after it is complete.
+     */
     void clientHandlerComplete(ClientHandler* handler);
 
   private:
-    QDir data_dir_;
-    std::shared_ptr<RequestRouter> router_;
+    ServerContext context_;
+
+    /**
+     * We disable the listen() method from QTcpServer because we do not
+     * rely on the two parameters to determine the listening address and port
+     * of the server.
+     *
+     * Instead, the port and address are obtained from the server context.
+     */
+    bool listen(const QHostAddress& address, quint16 port) {
+      return QTcpServer::listen(address, port);
+    };
   };
 
 }

@@ -17,24 +17,27 @@
  * limitations under the License.
  * ========================================================================= */
 
-#include <iostream>
 #include <QTcpSocket>
 
+#include "client_handler.h"
 #include "server.h"
 
 namespace bustrack {
 
   Server::Server(QObject*) {
-    router_ = std::make_shared<RequestRouter>(this);
     connect(this, SIGNAL(newConnection()), this, SLOT(handleNewConnection()));
   }
 
-  void Server::setDataDir(const QDir& data_dir) {
-    data_dir_ = data_dir;
+  ServerContext Server::getContext() const {
+    return context_;
   }
 
-  QDir Server::getDataDir() const {
-    return data_dir_;
+  void Server::setContext(const ServerContext& context) {
+    context_ = context;
+  }
+
+  bool Server::listen() {
+    return listen(context_.getListenAddress(), context_.getListenPort());
   }
 
   void Server::handleNewConnection() {
@@ -42,7 +45,8 @@ namespace bustrack {
 
     // Pass control of the socket to a ClientHandler.
     // There is no need to perform any threading.
-    ClientHandler* handler = new ClientHandler(socket, router_);
+    ClientHandler* handler = new ClientHandler(socket,
+        reinterpret_cast<ServerContext const*>(&context_));
     connect(handler, SIGNAL(jobDone(ClientHandler*)), this,
         SLOT(clientHandlerComplete(ClientHandler*)));
   }

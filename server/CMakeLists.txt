@@ -22,8 +22,11 @@ set (server_SOURCES
   dao/bus_dao.cc
   dao/bus_service_dao.cc
   dao/bus_stop_dao.cc
+  dao/dao_manager.cc
   client_handler.cc
   request_router.cc
+  message.cc
+  server_context.cc
   server.cc
   bustrackd.cc
 )

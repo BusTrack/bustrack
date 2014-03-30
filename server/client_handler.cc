@@ -18,36 +18,56 @@
  * ========================================================================= */
 
 #include <QHostAddress>
+
+#include "server_context.h"
 #include "client_handler.h"
 
 namespace bustrack {
 
+  const std::string ClientHandler::TAG ("ClientHandler");
+
   ClientHandler::ClientHandler(QTcpSocket* socket,
-      std::shared_ptr<RequestRouter> router) :
+      ServerContext const* context) :
       socket_ (socket),
       socket_id_ (socket->socketDescriptor()),
-      router_ (router) {
-    qDebug("[%d] Connection from %s:%d received.", socket_id_,
-        socket->peerAddress().toString().toStdString().c_str(),
-        socket->peerPort());
-
+      context_ (context) {
+    // Set up events for this socket.
     connect(socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(onSocketDisconnected()));
+
+    qDebug("%s [%d]: Connection from %s:%d received.", TAG.c_str(), socket_id_,
+        socket->peerAddress().toString().toStdString().c_str(),
+        socket->peerPort());
   }
 
   void ClientHandler::onReadyRead() {
     // We should read in the command here and decide what it is, then invoke
     // RequestRouter to handle it.
     char buf[1024];
-    qint64 lineLength = socket_->readLine(buf, sizeof(buf));
-    if (lineLength != -1) {
-      qDebug() << "Data received: " << lineLength;
+    qint64 line_length = socket_->readLine(buf, sizeof(buf));
+    if (line_length != -1) {
+      qDebug("%s [%d]: %lld bytes received", TAG.c_str(), socket_id_,
+          line_length);
     }
+
+    QString line = QString(buf).trimmed();
+    Message message = parseMessage(line.toStdString());
+    qDebug("%s [%d]: Message type %s received", TAG.c_str(), socket_id_,
+        Message::typeToString(message.getType()).c_str());
   }
 
   void ClientHandler::onSocketDisconnected() {
-    qDebug("[%d] Connection closed.", socket_id_);
+    // Disconnect socket events before cleanup.
+    disconnect(socket_, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+    disconnect(socket_, SIGNAL(disconnected()), this,
+        SLOT(onSocketDisconnected()));
+
+    qDebug("%s [%d]: Connection closed.", TAG.c_str(), socket_id_);
     emit jobDone(this);
+  }
+
+  Message ClientHandler::parseMessage(const std::string& line) {
+    return Message::decodeFromString(line);
   }
 
 }

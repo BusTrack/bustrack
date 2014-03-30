@@ -17,50 +17,28 @@
  * limitations under the License.
  * ========================================================================= */
 
-#ifndef BUSTRACK_BUSTRACKD_H_
-#define BUSTRACK_BUSTRACKD_H_
+#ifndef BUSTRACK_DAO_MANAGER_H_
+#define BUSTRACK_DAO_MANAGER_H_
 
-#include <QHostAddress>
-#include <QDir>
-
-#include "server.h"
+#include "../dao/bus_dao.h"
+#include "../dao/bus_service_dao.h"
+#include "../dao/bus_stop_dao.h"
 
 namespace bustrack {
 
-  /**
-   * The BusTrack Daemon.
-   */
-  class BusTrackDaemon {
+  class DAOManager {
   public:
-    /**
-     * Exit codes for the daemon.
-     */
-    static const int EXIT_OK = 0;
-    static const int EXIT_NOT_ENOUGH_ARGUMENTS = 1;
-    static const int EXIT_INVALID_SERVER_ADDRESS = 2;
-    static const int EXIT_INVALID_SERVER_PORT = 3;
-    static const int EXIT_DATA_DIR_NOT_EXIST = 4;
-    static const int EXIT_LISTEN_FAILED = 5;
-
-    /**
-     * Minimum length of arguments on the command line.
-     */
-    static const int ARGS_MIN_LENGTH = 3;
-
-    /**
-     * The application entry point.
-     */
-    static int main(int argc, char* argv[]);
+    DAOManager(const QDir& data_dir);
+    DAOManager() = delete;
 
   private:
-    static Server server_;
-
-    static int startServer();
-    static void printHelp();
+    std::shared_ptr<BusDAO> bus_dao_;
+    std::shared_ptr<BusServiceDAO> bus_service_dao_;
+    std::shared_ptr<BusStopDAO> bus_stop_dao_;
   };
 
 }
 
-#endif /* BUSTRACK_BUSTRACKD_H_ */
+#endif /* BUSTRACK_DAO_MANAGER_H_ */
 
 /* vim: set ts=2 sw=2 et: */
