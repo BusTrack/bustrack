@@ -10,5 +10,6 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
 
 BusTrackWindow::~BusTrackWindow()
 {
+    //testing commit //terence
     delete ui;
 }
