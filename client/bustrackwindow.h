@@ -7,6 +7,7 @@
 #include <QGraphicsScene>
 #include <QPixmap>
 #include <QDebug>
+#include <QSlider>
 
 namespace Ui {
 class BusTrackWindow;
@@ -23,14 +24,16 @@ public:
 protected:
     void wheelEvent(QWheelEvent *event);
     void resizeEvent(QResizeEvent *event);
+private slots:
+    void zoomSlide(int newZoom);
 
 private:
     Ui::BusTrackWindow *ui;
-
     QGraphicsScene mapScene;
     QPixmap mapPixmap;
     float currentZoom;
     bool canPan;
+    int slideValue;
 
     // supporting methods
     void setMap();
