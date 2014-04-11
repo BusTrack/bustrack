@@ -56,10 +56,10 @@ namespace bustrack {
      * copy-constructor will be called (and internal refcount incremented). In
      * actual fact, there is only one instance of DAOManager.
      */
-    ServerContext(const ServerContext&) = default;
-    ServerContext& operator=(const ServerContext&) = default;
-    ServerContext(ServerContext&&) = default;
-    ServerContext& operator=(ServerContext&&) = default;
+    ServerContext(const ServerContext&) { };
+    ServerContext& operator=(const ServerContext&) { };
+    ServerContext(ServerContext&&) { };
+    ServerContext& operator=(ServerContext&&) { };
 
     /**
      * Returns the listening address of the server.

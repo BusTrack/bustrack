@@ -54,7 +54,7 @@ namespace bustrack {
     /**
      * Create a virtual destructor in case someone wants to inherit.
      */
-    virtual ~FileBasedDAO() = default;
+    virtual ~FileBasedDAO() {};
 
     /**
      * Saves the internal list of items to disk.
