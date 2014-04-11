@@ -18,3 +18,5 @@ SOURCES += main.cpp\
 HEADERS  += bustrackwindow.h
 
 FORMS    += bustrackwindow.ui
+
+RESOURCES += bustrack.qrc
