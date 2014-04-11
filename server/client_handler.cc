@@ -20,6 +20,8 @@
 #include <QHostAddress>
 
 #include "server_context.h"
+#include "request_router.h"
+
 #include "client_handler.h"
 
 namespace bustrack {
@@ -51,9 +53,13 @@ namespace bustrack {
     }
 
     QString line = QString(buf).trimmed();
-    Message message = parseMessage(line.toStdString());
-    qDebug("%s [%d]: Message type %s received", TAG.c_str(), socket_id_,
-        Message::typeToString(message.getType()).c_str());
+    Message message = Message::decodeFromString(line.toStdString());
+    qDebug("%s [%d]: Message with tag %s received", TAG.c_str(), socket_id_,
+        message.getTag().c_str());
+
+    // Obtain the request router.
+    std::shared_ptr<RequestRouter> router = context_->getRequestRouter();
+    router->process(message);
   }
 
   void ClientHandler::onSocketDisconnected() {
@@ -64,10 +70,6 @@ namespace bustrack {
 
     qDebug("%s [%d]: Connection closed.", TAG.c_str(), socket_id_);
     emit jobDone(this);
-  }
-
-  Message ClientHandler::parseMessage(const std::string& line) {
-    return Message::decodeFromString(line);
   }
 
 }

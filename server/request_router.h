@@ -24,6 +24,8 @@
 #include "dao/bus_service_dao.h"
 #include "dao/bus_stop_dao.h"
 
+#include "message.h"
+
 namespace bustrack {
 
   /**
@@ -47,7 +49,15 @@ namespace bustrack {
      */
     RequestRouter() = delete;
 
+    /**
+     * Processes the request given by the message.
+     *
+     * @param Message request
+     */
+    void process(Message request);
+
   private:
+    static const std::string TAG;
     ServerContext const* context_;
   };
 

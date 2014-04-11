@@ -25,7 +25,6 @@ set (server_SOURCES
   dao/dao_manager.cc
   client_handler.cc
   request_router.cc
-  message.cc
   server_context.cc
   server.cc
   bustrackd.cc

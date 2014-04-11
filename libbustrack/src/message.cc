@@ -22,10 +22,13 @@
 
 namespace bustrack {
 
-  Message::Message() : type_(TYPE_NOOP) { }
+  const std::string Message::TAG_NOOP ("NOOP");
+  const std::string Message::TAG_INVALID ("INVALID");
 
-  Message::Message(const Type& type, const QByteArray& payload) :
-      type_(type),
+  Message::Message() : tag_(TAG_NOOP) { }
+
+  Message::Message(const std::string& tag, const QByteArray& payload) :
+      tag_(tag),
       payload_(payload) {
   }
 
@@ -42,12 +45,12 @@ namespace bustrack {
     if (tokens.empty() || tokens.size() > 2) {
       qWarning("Message: Unable to decode message, tokens.size() == %lu",
           tokens.size());
-      return Message (TYPE_INVALID, QByteArray());
+      return Message (TAG_INVALID, QByteArray());
     }
 
     // Take the first token and convert the string to type.
     Message message;
-    message.setType(stringToType(tokens[0]));
+    message.setTag(tokens[0]);
     
     // Is there a payload?
     if (tokens.size() > 1) {
@@ -58,33 +61,12 @@ namespace bustrack {
     return message;
   }
 
-  std::string Message::typeToString(const Type& type) {
-    switch (type) {
-    case TYPE_NOOP:
-      return "NOOP";
-    case TYPE_INVALID:
-      return "INVALID";
-    default:
-      qWarning("Message: Default condition reached in switch statement for "
-          "method typeToString");
-      return "";
-    }
+  std::string Message::getTag() const {
+    return tag_;
   }
 
-  Message::Type Message::stringToType(const std::string& str) {
-    if (str == "NOOP") {
-      return TYPE_NOOP;
-    } else {
-      return TYPE_INVALID;
-    }
-  }
-
-  Message::Type Message::getType() const {
-    return type_;
-  }
-
-  void Message::setType(const Message::Type& type) {
-    type_ = type;
+  void Message::setTag(const std::string& tag) {
+    tag_ = tag;
   }
 
   QByteArray Message::getPayload() const {
@@ -98,7 +80,9 @@ namespace bustrack {
   std::string Message::toString() const {
     std::string encoded;
 
-    encoded.append(typeToString(type_));
+    encoded.append(tag_);
+    encoded.append(" ");
+
     QByteArray payload_base64 = payload_.toBase64();
     encoded.append(std::string(payload_base64.data()));
 

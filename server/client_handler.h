@@ -99,8 +99,6 @@ namespace bustrack {
     QTcpSocket* socket_;
     int socket_id_;
     ServerContext const* context_;
-
-    Message parseMessage(const std::string& line);
   };
 
 }

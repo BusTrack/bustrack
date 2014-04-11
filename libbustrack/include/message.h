@@ -39,30 +39,24 @@ namespace bustrack {
    */
   class Message {
   public:
-    /**
-     * An enum containing all the possible message types.
-     */
-    enum Type {
-      TYPE_NOOP = 0,
-      TYPE_INVALID = 1,
-      TYPE_MAX_ = 2
-    };
+    static const std::string TAG_NOOP;
+    static const std::string TAG_INVALID;
 
     /**
      * Constructs a new empty message.
      *
-     * By default, the message type is set to MESSAGE_NOOP. This message
-     * carries no payload.
+     * By default, the message tag is set to NOOP. This message carries no
+     * payload.
      */
     Message();
 
     /**
-     * Constructs a message with the specified type and payload.
+     * Constructs a message with the specified tag and payload.
      *
-     * @param type The type of the message
+     * @param tag The tag of the message
      * @param payload The payload of the message
      */
-    Message(const Type& type, const QByteArray& payload);
+    Message(const std::string& tag, const QByteArray& payload);
 
     /**
      * Factory method that creates a message by decoding it from a string.
@@ -75,34 +69,15 @@ namespace bustrack {
     static Message decodeFromString(const std::string& str);
 
     /**
-     * Converts the specified message type to a string.
-     *
-     * @param type The message type to convert
-     * @return A string representing the message type.
+     * Returns the tag of message.
      */
-    static std::string typeToString(const Type& type);
+    std::string getTag() const;
 
     /**
-     * Converts the specified string to a message type.
-     *
-     * If the string does not correspond to any of the defined message types,
-     * MESSAGE_INVALID is returned.
-     *
-     * @param str The string to convert
-     * @return The type corresponding to the string to convert
+     * Sets the tag of message.
+     * @param tag The tag of the message
      */
-    static Type stringToType(const std::string& str);
-
-    /**
-     * Returns the type of message.
-     */
-    Type getType() const;
-
-    /**
-     * Sets the type of message.
-     * @param type The type of the message
-     */
-    void setType(const Type& type);
+    void setTag(const std::string& tag);
 
     /**
      * Returns the payload of the message.
@@ -123,7 +98,7 @@ namespace bustrack {
     std::string toString() const;
 
   private:
-    Type type_;
+    std::string tag_;
     QByteArray payload_;
   };
 

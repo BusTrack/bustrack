@@ -17,22 +17,17 @@
  * limitations under the License.
  * ========================================================================= */
 
-#include "server_context.h"
-#include "request_router.h"
+#ifndef BUSTRACK_BASE_STATION_H_
+#define BUSTRACK_BASE_STATION_H_
 
 namespace bustrack {
 
-  const std::string RequestRouter::TAG ("RequestRouter");
+  class BaseStation {
 
-  RequestRouter::RequestRouter(ServerContext const* context) :
-    context_(context) {
-  }
-
-  void RequestRouter::process(Message request) {
-    qDebug("%s: routing request with tag %s", TAG.c_str(),
-        request.getTag().c_str());
-  }
+  };
 
 }
+
+#endif /* BUSTRACK_BASE_STATION_H_ */
 
 /* vim: set ts=2 sw=2 et: */

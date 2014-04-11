@@ -25,7 +25,13 @@ add_library (bustrack
   src/bus_route.cc
   src/bus_service.cc
   src/bus_stop.cc
+  src/coords.cc
   src/waypoint.cc
+  src/message.cc
 )
+
+# Add definitions for Qt4.
+include (${QT_USE_FILE})
+add_definitions (${QT_DEFINITIONS})
 
 # vim: set ts=2 sw=2 et:
