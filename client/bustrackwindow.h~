@@ -23,7 +23,6 @@ public:
 protected:
     void wheelEvent(QWheelEvent *event);
     void resizeEvent(QResizeEvent *event);
-    void mousePressEvent(QMouseEvent *event);
 
 private:
     Ui::BusTrackWindow *ui;

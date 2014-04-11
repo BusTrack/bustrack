@@ -44,10 +44,6 @@ void BusTrackWindow::resizeEvent(QResizeEvent *event)
 
 }
 
-void BusTrackWindow::mousePressEvent(QMouseEvent *event)
-{
-
-}
 
 void BusTrackWindow::setMap()
 {
