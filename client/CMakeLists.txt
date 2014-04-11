@@ -31,9 +31,14 @@ set (client_FORMS
   bustrackwindow.ui
 )
 
+set (client_RESOURCES
+  bustrack.qrc
+)
+
 # Run the Qt4 preprocessor.
 qt4_wrap_cpp (client_HEADERS_MOC ${client_HEADERS})
 qt4_wrap_ui (client_FORMS_HEADERS ${client_FORMS})
+qt4_add_resources (client_RESOURCES_RCC ${client_RESOURCES})
 
 # Add definitions for Qt4.
 include (${QT_USE_FILE})
@@ -48,6 +53,7 @@ include_directories (${CMAKE_CURRENT_BINARY_DIR})
 add_executable (client ${client_SOURCES}
   ${client_HEADERS_MOC}
   ${client_FORMS_HEADERS}
+  ${client_RESOURCES_RCC}
 )
 
 # Link the BusTrack daemon to the common BusTrack library.

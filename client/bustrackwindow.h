@@ -2,6 +2,9 @@
 #define BUSTRACKWINDOW_H
 
 #include <QMainWindow>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QPixmap>
 
 namespace Ui {
 class BusTrackWindow;
@@ -17,6 +20,8 @@ public:
 
 private:
     Ui::BusTrackWindow *ui;
+    QGraphicsScene mapScene;
+    QPixmap mapPixmap;
 };
 
 #endif // BUSTRACKWINDOW_H

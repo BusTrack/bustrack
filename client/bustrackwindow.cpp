@@ -6,6 +6,9 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     ui(new Ui::BusTrackWindow)
 {
     ui->setupUi(this);
+    mapPixmap = QPixmap(":/resources/map.png");
+    mapScene.addPixmap(mapPixmap);
+    ui->mapView->setScene(&mapScene);
 }
 
 BusTrackWindow::~BusTrackWindow()
@@ -13,3 +16,4 @@ BusTrackWindow::~BusTrackWindow()
     //testing commit //terence
     delete ui;
 }
+
