@@ -20,6 +20,22 @@ BusTrackWindow::~BusTrackWindow()
 // override default mouse behaviour to implement zoom
 void BusTrackWindow::wheelEvent(QWheelEvent *event)
 {
+    static const float zoomFactor = 1.15;
+    static const float minZoom = 1.0;
+    static float currentZoom = 1.0;
+
+    if(event->delta() > 0)
+    {
+        // zoom in
+        scaleMap(zoomFactor);
+        currentZoom *= zoomFactor;
+    }
+    else if(currentZoom > minZoom)
+    {
+        // zoom out
+        scaleMap(1.0/zoomFactor);
+        currentZoom /= zoomFactor;
+    }
 
 }
 
@@ -38,13 +54,6 @@ void BusTrackWindow::setMap()
 
 void BusTrackWindow::scaleMap(float zoom)
 {
-    if(zoom < 0)
-    {
-        return;
-    }
-    else
-    {
-         ui->mapView->scale(zoom, zoom);
-    }
+    ui->mapView->scale(zoom, zoom);
 }
 
