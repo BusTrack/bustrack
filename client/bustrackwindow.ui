@@ -7,8 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>1200</width>
-    <height>757</height>
+    <height>760</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>50</width>
+    <height>50</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>BusTrackWindow</string>
@@ -51,7 +57,25 @@
       <height>581</height>
      </rect>
     </property>
+    <property name="minimumSize">
+     <size>
+      <width>50</width>
+      <height>50</height>
+     </size>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAsNeeded</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAsNeeded</enum>
+    </property>
+    <property name="dragMode">
+     <enum>QGraphicsView::ScrollHandDrag</enum>
+    </property>
     <property name="transformationAnchor">
+     <enum>QGraphicsView::AnchorUnderMouse</enum>
+    </property>
+    <property name="resizeAnchor">
      <enum>QGraphicsView::AnchorUnderMouse</enum>
     </property>
    </widget>
@@ -75,7 +99,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>

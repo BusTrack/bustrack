@@ -7,6 +7,7 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setMap();
+    currentZoom = 1.0;
 }
 
 BusTrackWindow::~BusTrackWindow()
@@ -22,7 +23,6 @@ void BusTrackWindow::wheelEvent(QWheelEvent *event)
 {
     static const float zoomFactor = 1.15;
     static const float minZoom = 1.0;
-    static float currentZoom = 1.0;
 
     if(event->delta() > 0)
     {
@@ -40,11 +40,6 @@ void BusTrackWindow::wheelEvent(QWheelEvent *event)
 }
 
 void BusTrackWindow::resizeEvent(QResizeEvent *event)
-{
-
-}
-
-void BusTrackWindow::mousePressEvent(QMouseEvent *event)
 {
 
 }

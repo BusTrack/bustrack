@@ -23,13 +23,17 @@ public:
 protected:
     void wheelEvent(QWheelEvent *event);
     void resizeEvent(QResizeEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *event);
 
 private:
     Ui::BusTrackWindow *ui;
 
     QGraphicsScene mapScene;
     QPixmap mapPixmap;
-    float zoom;
+    float currentZoom;
+    bool canPan;
 
     // supporting methods
     void setMap();
