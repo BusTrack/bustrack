@@ -17,36 +17,26 @@
  * limitations under the License.
  * ========================================================================= */
 
-#include "request/bus_stops_request.h"
-#include "request/invalid_request.h"
-#include "server_context.h"
-
-#include "request_router.h"
+#include <QTcpSocket>
+#include "invalid_request.h"
 
 namespace bustrack {
 
-  const std::string RequestRouter::TAG ("RequestRouter");
-  const std::string RequestRouter::REQUEST_BUS_STOPS_TAG ("BUS_STOPS");
+  void InvalidRequest::process(Message message, QTcpSocket* socket) {
+    // Create the response payload.
+    std::string payload (message.getTag());
+    payload.append("_ERROR");
 
-  RequestRouter::RequestRouter(ServerContext const* context) :
-    context_(context) {
-  }
+    // Create the response message.
+    Message response;
+    response.setTag(payload);
+    response.setPayload("Invalid request.");
 
-  void RequestRouter::process(Message request, QTcpSocket* socket) {
-    qDebug("%s: routing request with tag %s", TAG.c_str(),
-        request.getTag().c_str());
-
-    // Get the actual request.
-    std::unique_ptr<Request> actual_request = getActualRequest(request);
-    actual_request->process(request, socket);
-  }
-
-  std::unique_ptr<Request> RequestRouter::getActualRequest(Message request) {
-    if (request.getTag() == REQUEST_BUS_STOPS_TAG) {
-      return std::unique_ptr<Request>(new BusStopsRequest(context_));
-    } else {
-      return std::unique_ptr<Request>(new InvalidRequest(context_));
-    }
+    // Send the response message.
+    std::string response_message = response.toString();
+    socket->write(response_message.data(), response_message.size());
+    socket->putChar('\n');
+    socket->flush();
   }
 
 }

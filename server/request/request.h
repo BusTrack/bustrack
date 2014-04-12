@@ -17,59 +17,65 @@
  * limitations under the License.
  * ========================================================================= */
 
-#ifndef BUSTRACK_REQUEST_ROUTER_H_
-#define BUSTRACK_REQUEST_ROUTER_H_
+#ifndef BUSTRACK_REQUEST_H_
+#define BUSTRACK_REQUEST_H_
 
-#include "dao/bus_dao.h"
-#include "dao/bus_service_dao.h"
-#include "dao/bus_stop_dao.h"
-#include "request/request.h"
-
+#include <string>
 #include "message.h"
 
 class QTcpSocket;
 namespace bustrack {
 
   /**
-   * The RequestRouter class is responsible for determining the type of
-   * request received by the ClientHandler, then routing it to the appropriate
-   * logic to process the request.
+   * The Request class represents a specific kind of request from the client.
+   * This is the base class for all kinds of requests.
+   *
+   * The collection of Request classes implements the Command pattern so that
+   * RequestRouter is not too concerned about what kind of request we have
+   * during the execution stage.
    */
   class ServerContext;
-  class RequestRouter {
+  class Request {
   public:
     /**
-     * Constructs a RequestRouter instance.
+     * Constructs a Request instance.
      *
-     * @param context The sever context.
+     * @param context The server context.
      */
-    RequestRouter(ServerContext const* context);
+    Request(ServerContext const* context);
 
     /**
-     * We require the server context to proceed, so we disable the default
+     * We will always require the server context, so we disable the default
      * constructor.
      */
-    RequestRouter() = delete;
+    Request() = delete;
 
     /**
-     * Processes the request given by the message.
-     *
-     * @param request The request to be processed.
-     * @param socket  The socket representing the source of the message.
+     * As this class is meant to be inherited and manipulated polymorphically,
+     * declare the destructor as virtual.
      */
-    void process(Message request, QTcpSocket* socket);
+    virtual ~Request() { };
 
+    /**
+     * Processes the request given by message.
+     *
+     * @param message The message containing the request payload.
+     * @param socket  The client socket.
+     */
+    virtual void process(Message message, QTcpSocket* socket) = 0;
+
+  protected:
+    /**
+     * Returns the server context associated with this request.
+     */
+    ServerContext const* getContext();
+   
   private:
-    static const std::string TAG;
-    static const std::string REQUEST_BUS_STOPS_TAG;
-
     ServerContext const* context_;
-
-    std::unique_ptr<Request> getActualRequest(Message request);
   };
 
-}
+};
 
-#endif /* BUSTRACK_REQUEST_ROUTER_H_ */
+#endif /* BUSTRACK_REQUEST_H */
 
 /* vim: set ts=2 sw=2 et: */

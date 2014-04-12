@@ -20,11 +20,13 @@
 # Add files for the client.
 set (client_SOURCES
   bustrackwindow.cpp
+  bustrackservice.cpp
   main.cpp
 )
 
 set (client_HEADERS
   bustrackwindow.h
+  bustrackservice.h
 )
 
 set (client_FORMS
