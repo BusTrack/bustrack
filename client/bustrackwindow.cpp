@@ -50,7 +50,18 @@ void BusTrackWindow::wheelEvent(QWheelEvent *event)
 
 void BusTrackWindow::mousePressEvent( QMouseEvent* event )
 {
-    qDebug() << event->globalPos();
+    if (QGraphicsItem *item = ui->mapView->itemAt(event->pos())) {
+        qDebug() << "You clicked on item" << item;
+        QList<QGraphicsItem *> childList = item->childItems();
+        qDebug() << childList;
+        for (int i = 0; i < childList.size(); i++){
+            if (childList[i]->isVisible()){
+                childList[i]->hide();
+            } else {
+                childList[i]->show();
+            }
+        }
+    }
 }
 
 void BusTrackWindow::resizeEvent(QResizeEvent *event)
@@ -86,15 +97,19 @@ void BusTrackWindow::zoomSlide(int newZoom)
 
 void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)
 {
-    QPixmap stopPixmap;
+    QPixmap busstopPixmap;
     if (numPeople >= 20) {
-	stopPixmap = QPixmap(":/resources/stopA.png");
+	busstopPixmap = QPixmap(":/resources/stopA.png");
     } else if (numPeople >= 10) {
-	stopPixmap = QPixmap(":/resources/stopC.png");
+	busstopPixmap = QPixmap(":/resources/stopC.png");
     } else
-        stopPixmap = QPixmap(":/resources/stopB.png");
-    stopPixmap = stopPixmap.scaledToHeight(30, Qt::SmoothTransformation);
-    QGraphicsPixmapItem* stopGraphics = new QGraphicsPixmapItem(stopPixmap);
-    stopGraphics->setOffset(offsetx, offsety);
-    mapScene.addItem(stopGraphics);
+        busstopPixmap = QPixmap(":/resources/stopB.png");
+    busstopPixmap = busstopPixmap.scaledToHeight(30, Qt::SmoothTransformation);
+    QGraphicsPixmapItem* busstopGraphics = new QGraphicsPixmapItem(busstopPixmap);
+    QGraphicsPixmapItem* tempGraphics = new QGraphicsPixmapItem(busstopPixmap);
+    tempGraphics->setOffset(offsetx+50,offsety+50);
+    tempGraphics->hide();
+    tempGraphics->setParentItem(busstopGraphics);
+    busstopGraphics->setOffset(offsetx, offsety);
+    mapScene.addItem(busstopGraphics);
 }
