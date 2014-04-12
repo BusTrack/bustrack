@@ -21,12 +21,14 @@
 set (client_SOURCES
   bustrackwindow.cpp
   bustrackservice.cpp
+  mapview.cpp
   main.cpp
 )
 
 set (client_HEADERS
   bustrackwindow.h
   bustrackservice.h
+  mapview.h
 )
 
 set (client_FORMS
@@ -50,6 +52,7 @@ add_definitions (${QT_DEFINITIONS})
 # generated in the binary directory, we need to include the binary directory
 # for the compiler to find it later on.
 include_directories (${CMAKE_CURRENT_BINARY_DIR})
+include_directories (${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add the executable and link the libraries.
 add_executable (client ${client_SOURCES}

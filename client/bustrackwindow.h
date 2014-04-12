@@ -5,8 +5,11 @@
 #include <QWheelEvent>
 #include <QGraphicsView>
 #include <QGraphicsScene>
+#include <QGraphicsPixmapItem>
 #include <QPixmap>
 #include <QDebug>
+#include <QSlider>
+
 
 namespace Ui {
 class BusTrackWindow;
@@ -23,17 +26,21 @@ public:
 protected:
     void wheelEvent(QWheelEvent *event);
     void resizeEvent(QResizeEvent *event);
+private slots:
+    void zoomSlide(int newZoom);
 
 private:
     Ui::BusTrackWindow *ui;
-
     QGraphicsScene mapScene;
     QPixmap mapPixmap;
-    float zoom;
+    float currentZoom;
+    bool canPan;
+    int slideValue;
 
     // supporting methods
     void setMap();
     void scaleMap(float zoom);
+    void drawStop(int offsetx, int offsety, int numPeople);
 };
 
 #endif // BUSTRACKWINDOW_H
