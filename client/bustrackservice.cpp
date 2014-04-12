@@ -17,30 +17,10 @@
  * limitations under the License.
  * ========================================================================= */
 
-#include "dao_manager.h"
+#include "bustrackservice.h"
 
-namespace bustrack {
-
-  DAOManager::DAOManager(const QDir& data_dir) {
-    // Create the DAOs.
-    bus_dao_ = std::unique_ptr<BusDAO>(new BusDAO(data_dir));
-    bus_service_dao_ = std::unique_ptr<BusServiceDAO>(
-        new BusServiceDAO(data_dir));
-    bus_stop_dao_ = std::unique_ptr<BusStopDAO>(new BusStopDAO(data_dir));
-  }
-
-  std::shared_ptr<BusDAO> DAOManager::getBusDAO() {
-    return bus_dao_;
-  }
-
-  std::shared_ptr<BusServiceDAO> DAOManager::getBusServiceDAO() {
-    return bus_service_dao_;
-  }
-
-  std::shared_ptr<BusStopDAO> DAOManager::getBusStopDAO() {
-    return bus_stop_dao_;
-  }
-
+BusTrackService::BusTrackService(QObject*)
+{
 }
 
-/* vim: set ts=2 sw=2 et: */
+// vim: set ts=4 sw=4 et:

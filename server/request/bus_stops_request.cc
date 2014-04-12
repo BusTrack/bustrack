@@ -17,36 +17,38 @@
  * limitations under the License.
  * ========================================================================= */
 
-#include "request/bus_stops_request.h"
-#include "request/invalid_request.h"
-#include "server_context.h"
+#include <QTcpSocket>
 
-#include "request_router.h"
+#include "../server_context.h"
+#include "../dao/dao_manager.h"
+
+#include "bus_stops_request.h"
 
 namespace bustrack {
 
-  const std::string RequestRouter::TAG ("RequestRouter");
-  const std::string RequestRouter::REQUEST_BUS_STOPS_TAG ("BUS_STOPS");
-
-  RequestRouter::RequestRouter(ServerContext const* context) :
-    context_(context) {
-  }
-
-  void RequestRouter::process(Message request, QTcpSocket* socket) {
-    qDebug("%s: routing request with tag %s", TAG.c_str(),
-        request.getTag().c_str());
-
-    // Get the actual request.
-    std::unique_ptr<Request> actual_request = getActualRequest(request);
-    actual_request->process(request, socket);
-  }
-
-  std::unique_ptr<Request> RequestRouter::getActualRequest(Message request) {
-    if (request.getTag() == REQUEST_BUS_STOPS_TAG) {
-      return std::unique_ptr<Request>(new BusStopsRequest(context_));
-    } else {
-      return std::unique_ptr<Request>(new InvalidRequest(context_));
+  void BusStopsRequest::process(Message message, QTcpSocket* socket) {
+    // Obtain the DAO manager.
+    std::shared_ptr<DAOManager> dao = getContext()->getDAOManager();
+    std::shared_ptr<BusStopDAO> bus_stop_dao = dao->getBusStopDAO();
+    std::vector<BusStop> bus_stops = bus_stop_dao->getItems();
+    
+    // Create the response payload.
+    std::string payload;
+    for (BusStop bus_stop : bus_stops) {
+      payload.append(bus_stop.getId());
+      payload.append("\n");
     }
+
+    // Create the response message.
+    Message response;
+    response.setTag("BUS_STOPS_RESPONSE");
+    response.setPayload(QString::fromStdString(payload).toLatin1());
+
+    // Send the response message down the wire.
+    std::string response_message = response.toString();
+    socket->write(response_message.data(), response_message.size());
+    socket->putChar('\n');
+    socket->flush();
   }
 
 }

@@ -32,12 +32,23 @@ To obtain the source for BusTrack, simply perform the following:
 Pre-requisites
 --------------
 
-BusTrack requires [Qt4](http://qt-project.org/).
+BusTrack requires [Qt4](http://qt-project.org/), a working C++ compiler and
+[CMake](http://cmake.org/).
 
 For Debian-based distributions such as Ubuntu, the dependencies can be installed
 easily:
 
-    sudo apt-get install libqt4-dev
+    sudo apt-get install build-essential cmake libqt4-dev
+
+Note that for Ubuntu 12.04 LTS, updated CMake packages are required. The
+updated packages can be found
+[on this PPA](https://launchpad.net/~yjwong/+archive/cmake). To add the PPA,
+use:
+
+    sudo add-apt-repository ppa:yjwong/cmake
+    sudo apt-get update
+
+Then install the dependencies as shown above.
 
 Development
 -----------

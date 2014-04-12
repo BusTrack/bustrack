@@ -17,59 +17,42 @@
  * limitations under the License.
  * ========================================================================= */
 
-#ifndef BUSTRACK_REQUEST_ROUTER_H_
-#define BUSTRACK_REQUEST_ROUTER_H_
+#ifndef BUSTRACK_INVALID_REQUEST_H_
+#define BUSTRACK_INVALID_REQUEST_H_
 
-#include "dao/bus_dao.h"
-#include "dao/bus_service_dao.h"
-#include "dao/bus_stop_dao.h"
-#include "request/request.h"
+#include "request.h"
 
-#include "message.h"
-
-class QTcpSocket;
 namespace bustrack {
 
   /**
-   * The RequestRouter class is responsible for determining the type of
-   * request received by the ClientHandler, then routing it to the appropriate
-   * logic to process the request.
+   * This represents a request for the bus stop list.
    */
-  class ServerContext;
-  class RequestRouter {
+  class InvalidRequest : public Request {
   public:
     /**
-     * Constructs a RequestRouter instance.
+     * Constructs an InvalidRequest instance.
      *
-     * @param context The sever context.
+     * @param context The server context.
      */
-    RequestRouter(ServerContext const* context);
+    InvalidRequest(ServerContext const* context): Request(context) { };
 
     /**
-     * We require the server context to proceed, so we disable the default
+     * We will always require the server context, so we disable the default
      * constructor.
      */
-    RequestRouter() = delete;
+    InvalidRequest() = delete;
 
     /**
      * Processes the request given by the message.
      *
-     * @param request The request to be processed.
-     * @param socket  The socket representing the source of the message.
+     * @param message The message containing the request payload.
+     * @param socket  The client socket.
      */
-    void process(Message request, QTcpSocket* socket);
-
-  private:
-    static const std::string TAG;
-    static const std::string REQUEST_BUS_STOPS_TAG;
-
-    ServerContext const* context_;
-
-    std::unique_ptr<Request> getActualRequest(Message request);
+    virtual void process(Message message, QTcpSocket* socket);
   };
 
 }
 
-#endif /* BUSTRACK_REQUEST_ROUTER_H_ */
+#endif /* BUSTRACK_INVALID_REQUEST_H_ */
 
 /* vim: set ts=2 sw=2 et: */

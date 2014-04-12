@@ -49,17 +49,14 @@ namespace bustrack {
     ServerContext();
 
     /**
-     * Explicitly define special functions.
-     *
      * ServerContext implements copy-semantics. While the contained DAOManager
      * does not have copy-semantics, it is wrapped within a shared_ptr whose
      * copy-constructor will be called (and internal refcount incremented). In
      * actual fact, there is only one instance of DAOManager.
+     *
+     * So it's actually perfectly okay to have the default copy-constructor
+     * and move-constructors defined for this.
      */
-    ServerContext(const ServerContext&) { };
-    ServerContext& operator=(const ServerContext&) { };
-    ServerContext(ServerContext&&) { };
-    ServerContext& operator=(ServerContext&&) { };
 
     /**
      * Returns the listening address of the server.

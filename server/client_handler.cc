@@ -59,7 +59,7 @@ namespace bustrack {
 
     // Obtain the request router.
     std::shared_ptr<RequestRouter> router = context_->getRequestRouter();
-    router->process(message);
+    router->process(message, socket_);
   }
 
   void ClientHandler::onSocketDisconnected() {
