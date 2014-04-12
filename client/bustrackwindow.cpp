@@ -1,6 +1,10 @@
 #include "bustrackwindow.h"
 #include "ui_bustrackwindow.h"
 
+const float ZOOM_FACTOR = 1.2;
+const float MIN_ZOOM = 1.0;
+const float MAX_ZOOM = 6.0;
+
 BusTrackWindow::BusTrackWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::BusTrackWindow)
@@ -27,23 +31,19 @@ BusTrackWindow::~BusTrackWindow()
 // override default mouse behaviour to implement zoom
 void BusTrackWindow::wheelEvent(QWheelEvent *event)
 {
-    static const float zoomFactor = 1.2;
-    static const float minZoom = 1.0;
-    static const float maxZoom = 6.0;
-
-    if(event->delta() > 0 && currentZoom <= maxZoom)
+    if(event->delta() > 0 && currentZoom <= MAX_ZOOM)
     {
         // zoom in
-        scaleMap(zoomFactor);
+        scaleMap(ZOOM_FACTOR);
         ui->zoomSlider->setValue(ui->zoomSlider->value()+1);
-        currentZoom *= zoomFactor;
+        currentZoom *= ZOOM_FACTOR;
     }
-    else if(currentZoom > minZoom)
+    else if(currentZoom > MIN_ZOOM)
     {
         // zoom out
-        scaleMap(1.0/zoomFactor);
+        scaleMap(1.0/ZOOM_FACTOR);
         ui->zoomSlider->setValue(ui->zoomSlider->value()-1);
-        currentZoom /= zoomFactor;
+        currentZoom /= ZOOM_FACTOR;
     }
 
 }
@@ -69,15 +69,12 @@ void BusTrackWindow::scaleMap(float zoom)
 
 void BusTrackWindow::zoomSlide(int newZoom)
 {
-    static const float zoomFactor = 1.2;
-    static const float minZoom = 1.0;
-
     if (newZoom > slideValue){
-        scaleMap(zoomFactor);
-        currentZoom *= zoomFactor;
+        scaleMap(ZOOM_FACTOR);
+        currentZoom *= ZOOM_FACTOR;
     } else if (newZoom < slideValue) {
-        scaleMap(1.0/zoomFactor);
-        currentZoom /= zoomFactor;
+        scaleMap(1.0/ZOOM_FACTOR);
+        currentZoom /= ZOOM_FACTOR;
     }
     slideValue = newZoom;
 }

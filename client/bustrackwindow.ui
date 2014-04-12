@@ -88,16 +88,84 @@
    <widget class="QLineEdit" name="searchLineEdit">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>20</y>
-      <width>221</width>
-      <height>24</height>
+      <x>70</x>
+      <y>40</y>
+      <width>191</width>
+      <height>32</height>
      </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>0</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-color: rgb(43, 62, 81);
+border-width: 3px;
+
+</string>
+    </property>
+    <property name="inputMask">
+     <string/>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="maxLength">
+     <number>50</number>
+    </property>
+    <property name="placeholderText">
+     <string>Enter bus or bus stop...</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="searchwBusIcon">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>40</y>
+      <width>30</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="bustrack.qrc">:/resources/searchwBus.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="searchButton">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>40</y>
+      <width>30</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="bustrack.qrc">
+      <normaloff>:/resources/search.png</normaloff>:/resources/search.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>30</width>
+      <height>30</height>
+     </size>
     </property>
    </widget>
    <zorder>mapView</zorder>
    <zorder>zoomSlider</zorder>
    <zorder>searchLineEdit</zorder>
+   <zorder>searchwBusIcon</zorder>
+   <zorder>searchButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -127,6 +195,8 @@
    <header>mapview.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="bustrack.qrc"/>
+ </resources>
  <connections/>
 </ui>

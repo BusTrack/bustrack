@@ -11,5 +11,9 @@
         <file>resources/stopB.png</file>
         <file>resources/stopC.png</file>
         <file>resources/stopD.png</file>
+        <file>resources/search.png</file>
+        <file>resources/searchBus.png</file>
+        <file>resources/searchStop.png</file>
+        <file>resources/searchwBus.png</file>
     </qresource>
 </RCC>
