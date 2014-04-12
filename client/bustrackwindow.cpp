@@ -106,10 +106,15 @@ void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)
         busstopPixmap = QPixmap(":/resources/stopB.png");
     busstopPixmap = busstopPixmap.scaledToHeight(30, Qt::SmoothTransformation);
     QGraphicsPixmapItem* busstopGraphics = new QGraphicsPixmapItem(busstopPixmap);
-    QGraphicsPixmapItem* tempGraphics = new QGraphicsPixmapItem(busstopPixmap);
-    tempGraphics->setOffset(offsetx+50,offsety+50);
-    tempGraphics->hide();
-    tempGraphics->setParentItem(busstopGraphics);
+
+    QGraphicsRectItem* busstopinfoGraphics = new QGraphicsRectItem(offsetx+40, offsety-25, 150, 180);
+    busstopinfoGraphics->setBrush(Qt::cyan);
+    QGraphicsSimpleTextItem* busstopName = new QGraphicsSimpleTextItem("COM2");
+    busstopName->setPos(offsetx+50,offsety-15);
+    busstopName->setParentItem(busstopinfoGraphics);
+
+    busstopinfoGraphics->hide();
+    busstopinfoGraphics->setParentItem(busstopGraphics);
     busstopGraphics->setOffset(offsetx, offsety);
     mapScene.addItem(busstopGraphics);
 }
