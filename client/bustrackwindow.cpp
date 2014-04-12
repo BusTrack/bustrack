@@ -10,6 +10,10 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     currentZoom = 1.0;
     slideValue = 0;
     connect(ui->zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(zoomSlide(int)));
+
+    drawStop(100,100,30);
+    drawStop(800,900,10);
+    drawStop(1000,300,20);
 }
 
 BusTrackWindow::~BusTrackWindow()
@@ -72,4 +76,19 @@ void BusTrackWindow::zoomSlide(int newZoom)
         currentZoom /= zoomFactor;
     }
     slideValue = newZoom;
+}
+
+void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)
+{
+    QPixmap stopPixmap;
+    if (numPeople >= 20) {
+	stopPixmap = QPixmap(":/resources/stopA.png");
+    } else if (numPeople >= 10) {
+	stopPixmap = QPixmap(":/resources/stopC.png");
+    } else
+        stopPixmap = QPixmap(":/resources/stopB.png");
+    stopPixmap = stopPixmap.scaledToHeight(30, Qt::SmoothTransformation);
+    QGraphicsPixmapItem* stopGraphics = new QGraphicsPixmapItem(stopPixmap);
+    stopGraphics->setOffset(offsetx, offsety);
+    mapScene.addItem(stopGraphics);
 }

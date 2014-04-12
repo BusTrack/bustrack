@@ -5,9 +5,11 @@
 #include <QWheelEvent>
 #include <QGraphicsView>
 #include <QGraphicsScene>
+#include <QGraphicsPixmapItem>
 #include <QPixmap>
 #include <QDebug>
 #include <QSlider>
+
 
 namespace Ui {
 class BusTrackWindow;
@@ -38,6 +40,7 @@ private:
     // supporting methods
     void setMap();
     void scaleMap(float zoom);
+    void drawStop(int offsetx, int offsety, int numPeople);
 };
 
 #endif // BUSTRACKWINDOW_H
