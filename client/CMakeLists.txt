@@ -21,10 +21,12 @@
 set (client_SOURCES
   bustrackwindow.cpp
   main.cpp
+  mapview.cpp
 )
 
 set (client_HEADERS
   bustrackwindow.h
+  mapview.h
 )
 
 set (client_FORMS
