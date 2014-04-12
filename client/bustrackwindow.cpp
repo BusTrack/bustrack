@@ -8,7 +8,7 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     ui->setupUi(this);
     setMap();
     currentZoom = 1.0;
-    slideValue = 0;
+    slideValue = 1.0;
     connect(ui->zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(zoomSlide(int)));
 
     drawStop(100,100,30);
@@ -27,19 +27,22 @@ BusTrackWindow::~BusTrackWindow()
 // override default mouse behaviour to implement zoom
 void BusTrackWindow::wheelEvent(QWheelEvent *event)
 {
-    static const float zoomFactor = 1.15;
+    static const float zoomFactor = 1.2;
     static const float minZoom = 1.0;
+    static const float maxZoom = 6.0;
 
-    if(event->delta() > 0)
+    if(event->delta() > 0 && currentZoom <= maxZoom)
     {
         // zoom in
         scaleMap(zoomFactor);
+        ui->zoomSlider->setValue(ui->zoomSlider->value()+1);
         currentZoom *= zoomFactor;
     }
     else if(currentZoom > minZoom)
     {
         // zoom out
         scaleMap(1.0/zoomFactor);
+        ui->zoomSlider->setValue(ui->zoomSlider->value()-1);
         currentZoom /= zoomFactor;
     }
 
@@ -66,8 +69,9 @@ void BusTrackWindow::scaleMap(float zoom)
 
 void BusTrackWindow::zoomSlide(int newZoom)
 {
-    static const float zoomFactor = 1.15;
+    static const float zoomFactor = 1.2;
     static const float minZoom = 1.0;
+
     if (newZoom > slideValue){
         scaleMap(zoomFactor);
         currentZoom *= zoomFactor;
