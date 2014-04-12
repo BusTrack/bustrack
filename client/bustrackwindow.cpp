@@ -48,6 +48,11 @@ void BusTrackWindow::wheelEvent(QWheelEvent *event)
 
 }
 
+void BusTrackWindow::mousePressEvent( QMouseEvent* event )
+{
+    qDebug() << event->globalPos();
+}
+
 void BusTrackWindow::resizeEvent(QResizeEvent *event)
 {
 

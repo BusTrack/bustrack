@@ -26,6 +26,7 @@ public:
 protected:
     void wheelEvent(QWheelEvent *event);
     void resizeEvent(QResizeEvent *event);
+    void mousePressEvent( QMouseEvent* event );
 private slots:
     void zoomSlide(int newZoom);
 

@@ -12,6 +12,8 @@ public:
 signals:
     
 public slots:
+    void mousePressEvent(QMouseEvent* event);
+    void wheelEvent(QWheelEvent *event);
     
 };
 
