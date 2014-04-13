@@ -55,6 +55,9 @@ private:
     bool stopInfoBtnClicked;
     bool hidden;
     bool dispatchWidgetVisible;
+    QHash<QString,QGraphicsItem*> busstopHash;
+    bool searchActive;
+    QGraphicsPathItem* searchOverlay;
 
     // supporting methods
     void initializeWidgets();
@@ -62,9 +65,10 @@ private:
     void initializeValues();
     void setMap();
     void scaleMap(float zoom);
-    void drawStop(int offsetx, int offsety, int numPeople);
+    void drawStop(QString name,int offsetx, int offsety, int numPeople);
     void drawBus(QString busService, float offsetx, float offsety, int numPeople);
     QImage determineBusPNG(QString busService);
+    void searchStop(QString name);
 };
 
 #endif // BUSTRACKWINDOW_H
