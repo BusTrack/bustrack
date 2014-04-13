@@ -243,7 +243,8 @@ void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)
     busstopinfoGraphics->setBrush(Qt::cyan);
     QGraphicsSimpleTextItem* busstopName = new QGraphicsSimpleTextItem("COM2");
     busstopName->setPos(offsetx+50,offsety-15);
-    busstopName->setParentItem(busstopinfoGraphics);
+    busstopName->setParentItem(busstopGraphics);
+    busstopName->hide();
 
     //Generation of busstopoccupany portion
     //Locating pixels to be painted and replacing them with new color (busstop occupancy)
@@ -270,13 +271,15 @@ void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)
     busstopoccupancyPixmap.convertFromImage(busstopoccupancy);
     busstopoccupancyPixmap = busstopoccupancyPixmap.scaledToHeight(60, Qt::SmoothTransformation);
     QGraphicsPixmapItem* busstopoccupancyGraphics = new QGraphicsPixmapItem(busstopoccupancyPixmap);
-    busstopoccupancyGraphics->setParentItem(busstopinfoGraphics);
+    busstopoccupancyGraphics->setParentItem(busstopGraphics);
+    busstopoccupancyGraphics->hide();
     busstopoccupancyGraphics->setOffset(offsetx-30, offsety+30);
     //Busstop occupancy
     QGraphicsSimpleTextItem* busstopoccupancyNumber = new QGraphicsSimpleTextItem(QString::number(numPeople));
     busstopoccupancyNumber-> setPos(offsetx+5,offsety+47);
-    busstopoccupancyNumber->setParentItem(busstopinfoGraphics);
+    busstopoccupancyNumber->setParentItem(busstopGraphics);
     busstopoccupancyNumber->setBrush(Qt::white);
+    busstopoccupancyNumber->hide();
 }
 
 void BusTrackWindow::drawBus(QString busService, float offsetx, float offsety, int numPeople)
