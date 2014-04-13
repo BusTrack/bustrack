@@ -238,13 +238,27 @@ void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)
 
     //Generation of child graphics (toggle-able additional info)
     QGraphicsRectItem* busstopinfoGraphics = new QGraphicsRectItem(offsetx+40, offsety-25, 150, 180);
+    QColor windowBorderColor;
+    windowBorderColor.setRgb(43,61,83);
+    QPen windowPen;
+    windowPen.setColor(windowBorderColor);
+    windowPen.setWidth(4);
     busstopinfoGraphics->hide();
     busstopinfoGraphics->setParentItem(busstopGraphics);
-    busstopinfoGraphics->setBrush(Qt::cyan);
+    busstopinfoGraphics->setPen(windowPen);
+    busstopinfoGraphics->setBrush(Qt::white);
+    QFont boldFont;
+    boldFont.setBold(true);
     QGraphicsSimpleTextItem* busstopName = new QGraphicsSimpleTextItem("COM2");
+    busstopName->setFont(boldFont);
     busstopName->setPos(offsetx+50,offsety-15);
     busstopName->setParentItem(busstopGraphics);
     busstopName->hide();
+    QGraphicsSimpleTextItem* busstopHeader = new QGraphicsSimpleTextItem("Bus        1st        2nd");
+    busstopHeader->setFont(boldFont);
+    busstopHeader->setPos(offsetx+50,offsety+5);
+    busstopHeader->setParentItem(busstopGraphics);
+    busstopHeader->hide();
 
     //Generation of busstopoccupany portion
     //Locating pixels to be painted and replacing them with new color (busstop occupancy)
