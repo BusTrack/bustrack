@@ -25,3 +25,6 @@ msvc/evsr.v11.suo
 # Object files
 *.o
 *.jpg
+
+# gedit backup files
+*~
