@@ -8,7 +8,6 @@
 #include <QGraphicsPixmapItem>
 #include <QPixmap>
 #include <QDebug>
-#include <QSlider>
 #include <QStandardItemModel>
 #include <string>
 
@@ -31,6 +30,9 @@ protected:
 
 private slots:
     void zoomSlide(int newZoom);
+    void toggleSearchResultsWidget(QString query);
+    void onBusInfoBtnClicked();
+    void onStopInfoBtnClicked();
 
 private:
     Ui::BusTrackWindow *ui;
@@ -38,8 +40,13 @@ private:
     QPixmap mapPixmap;
     float currentZoom;
     int slideValue;
+    bool busInfoBtnClicked;
+    bool stopInfoBtnClicked;
 
     // supporting methods
+    void initializeWidgets();
+    void initializeConnections();
+    void initializeValues();
     void setMap();
     void scaleMap(float zoom);
     void drawStop(int offsetx, int offsety, int numPeople);
