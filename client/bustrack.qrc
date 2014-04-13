@@ -28,5 +28,6 @@
         <file>resources/calBlue.png</file>
         <file>resources/clockWhite.png</file>
         <file>resources/clockBlue.png</file>
+        <file>resources/tick.png</file>
     </qresource>
 </RCC>
