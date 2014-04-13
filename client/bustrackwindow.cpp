@@ -103,8 +103,9 @@ void BusTrackWindow::zoomSlide(int newZoom)
 
 void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)
 {
+    //Color transitioning from red to yellow to green
     QColor repaintColor;
-    repaintColor.setRgb(0,0,0);
+    repaintColor.setRgb(255,0,36);
     if (numPeople < 30 && numPeople > 15) {
         repaintColor.setRgb(240.0/(numPeople-15), 240.0/(numPeople-15), 36);
     } else if (numPeople > 0) {
@@ -113,6 +114,7 @@ void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)
         repaintColor.setRgb(0,210,36);
     }
 
+    //Locating pixels to be painted and replacing them with new color
     QImage background;
     QImage world(2359, 1738, QImage::Format_RGB32);
     QSize sizeImage;
@@ -120,13 +122,11 @@ void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)
     QRgb color;
     int height, width;
     background.load(":/resources/stopA.png");
-    world.fill(1);
-	 
+    world.fill(1);	 
     QPainter painter(&world);
     sizeImage = background.size();
     width = sizeImage.width();
-    height = sizeImage.height();
-	 
+    height = sizeImage.height();	 
     for(int y = 0; y < height; y++) {
         for(int x = 0; x < width; x++) {
             color = background.pixel(x,y);
@@ -135,19 +135,14 @@ void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)
    	    }
         }
     }
- 
     painter.drawImage(0,0,background);
+
+    //Conversion of image to pixmap and scale
     QPixmap busstopPixmap;
     busstopPixmap.convertFromImage(background);
-    if (numPeople >= 20) {
-	busstopPixmap = QPixmap(":/resources/stopA.png");
-    } else if (numPeople >= 10) {
-	busstopPixmap = QPixmap(":/resources/stopC.png");
-    } else
-        busstopPixmap = QPixmap(":/resources/stopB.png");
-
     busstopPixmap = busstopPixmap.scaledToHeight(30, Qt::SmoothTransformation);
 
+    //Generation of child graphics (toggle-able additional info)
     QGraphicsPixmapItem* busstopGraphics = new QGraphicsPixmapItem(busstopPixmap);
     QGraphicsRectItem* busstopinfoGraphics = new QGraphicsRectItem(offsetx+40, offsety-25, 150, 180);
     busstopinfoGraphics->setBrush(Qt::cyan);
