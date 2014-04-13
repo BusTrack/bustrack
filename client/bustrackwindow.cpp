@@ -281,19 +281,11 @@ void BusTrackWindow::initializeWidgets()
     ui->calendarWidget->setVisible(false);
     ui->timeEdit->setVisible(false);
 
-    ui->A1Tick->setVisible(false);
-    ui->A2Tick->setVisible(false);
-    ui->BTick->setVisible(false);
-    ui->CTick->setVisible(false);
-    ui->D1Tick->setVisible(false);
-    ui->D2Tick->setVisible(false);
-
-    ui->A1Tick2->setVisible(false);
-    ui->A2Tick2->setVisible(false);
-    ui->BTick2->setVisible(false);
-    ui->CTick2->setVisible(false);
-    ui->D1Tick2->setVisible(false);
-    ui->D2Tick2->setVisible(false);
+    for(int i=0; i<BUS_NUM; i++)
+    {
+        calTickList[i]->setVisible(false);
+        clockTickList[i]->setVisible(false);
+    }
 
     setMap();
 
