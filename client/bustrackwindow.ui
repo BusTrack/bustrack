@@ -29,38 +29,13 @@
      <height>700</height>
     </size>
    </property>
-   <widget class="QSlider" name="zoomSlider">
-    <property name="geometry">
-     <rect>
-      <x>1130</x>
-      <y>530</y>
-      <width>31</width>
-      <height>181</height>
-     </rect>
-    </property>
-    <property name="minimum">
-     <number>0</number>
-    </property>
-    <property name="maximum">
-     <number>5</number>
-    </property>
-    <property name="pageStep">
-     <number>1</number>
-    </property>
-    <property name="value">
-     <number>0</number>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
    <widget class="MapView" name="mapView">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>1200</width>
-      <height>760</height>
+      <width>1221</width>
+      <height>791</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -85,87 +60,240 @@
      <enum>QGraphicsView::AnchorUnderMouse</enum>
     </property>
    </widget>
-   <widget class="QLineEdit" name="searchLineEdit">
+   <widget class="QWidget" name="searchBarWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>40</y>
-      <width>191</width>
-      <height>32</height>
+      <x>36</x>
+      <y>26</y>
+      <width>393</width>
+      <height>43</height>
      </rect>
-    </property>
-    <property name="minimumSize">
-     <size>
-      <width>0</width>
-      <height>0</height>
-     </size>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-color: rgb(43, 62, 81);
-border-width: 3px;
+     <string notr="true">background-color: rgb(43, 62, 81);</string>
+    </property>
+    <widget class="QPushButton" name="searchButton">
+     <property name="geometry">
+      <rect>
+       <x>354</x>
+       <y>4</y>
+       <width>35</width>
+       <height>35</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="bustrack.qrc">
+       <normaloff>:/resources/search.png</normaloff>:/resources/search.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>35</width>
+       <height>35</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="searchLineEdit">
+     <property name="geometry">
+      <rect>
+       <x>43</x>
+       <y>4</y>
+       <width>311</width>
+       <height>35</height>
+      </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 255);
+border-width: 0px;
+border-radius: 0px;</string>
+     </property>
+     <property name="inputMask">
+      <string/>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="maxLength">
+      <number>50</number>
+     </property>
+     <property name="placeholderText">
+      <string>Enter bus or bus stop...</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="searchwBusIcon">
+     <property name="geometry">
+      <rect>
+       <x>4</x>
+       <y>4</y>
+       <width>35</width>
+       <height>35</height>
+      </rect>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::AutoText</enum>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="bustrack.qrc">:/resources/searchwBus.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <zorder>searchButton</zorder>
+    <zorder>searchwBusIcon</zorder>
+    <zorder>searchLineEdit</zorder>
+   </widget>
+   <widget class="QWidget" name="sideBarWidget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>36</x>
+      <y>80</y>
+      <width>42</width>
+      <height>110</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(43, 62, 81);</string>
+    </property>
+    <widget class="QPushButton" name="searchBus">
+     <property name="geometry">
+      <rect>
+       <x>1</x>
+       <y>8</y>
+       <width>40</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="bustrack.qrc">
+       <normaloff>:/resources/searchBus.png</normaloff>:/resources/searchBus.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>40</width>
+       <height>40</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="searchStops">
+     <property name="geometry">
+      <rect>
+       <x>1</x>
+       <y>61</y>
+       <width>40</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="bustrack.qrc">
+       <normaloff>:/resources/searchStop.png</normaloff>:/resources/searchStop.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>40</width>
+       <height>40</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="zoomSliderWidget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>1130</x>
+      <y>490</y>
+      <width>40</width>
+      <height>230</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(43, 62, 81);</string>
+    </property>
+    <widget class="QSlider" name="zoomSlider">
+     <property name="geometry">
+      <rect>
+       <x>5</x>
+       <y>5</y>
+       <width>31</width>
+       <height>221</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 255);
+QSlider::handle:horizontal {
+	background: rgb(43, 62, 81);
+}
 
 </string>
-    </property>
-    <property name="inputMask">
-     <string/>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="maxLength">
-     <number>50</number>
-    </property>
-    <property name="placeholderText">
-     <string>Enter bus or bus stop...</string>
-    </property>
+     </property>
+     <property name="minimum">
+      <number>0</number>
+     </property>
+     <property name="maximum">
+      <number>5</number>
+     </property>
+     <property name="pageStep">
+      <number>1</number>
+     </property>
+     <property name="value">
+      <number>0</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
    </widget>
-   <widget class="QLabel" name="searchwBusIcon">
+   <widget class="QWidget" name="searchResultsWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>40</y>
-      <width>30</width>
-      <height>30</height>
+      <x>79</x>
+      <y>69</y>
+      <width>350</width>
+      <height>251</height>
      </rect>
     </property>
-    <property name="text">
-     <string/>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(43, 62, 81);
+border-top-color: rgb(255, 255, 255);</string>
     </property>
-    <property name="pixmap">
-     <pixmap resource="bustrack.qrc">:/resources/searchwBus.png</pixmap>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
-    </property>
+    <widget class="QListWidget" name="searchResultsList">
+     <property name="geometry">
+      <rect>
+       <x>4</x>
+       <y>-5</y>
+       <width>341</width>
+       <height>251</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 255);</string>
+     </property>
+    </widget>
    </widget>
-   <widget class="QPushButton" name="searchButton">
-    <property name="geometry">
-     <rect>
-      <x>260</x>
-      <y>40</y>
-      <width>30</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset resource="bustrack.qrc">
-      <normaloff>:/resources/search.png</normaloff>:/resources/search.png</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>30</width>
-      <height>30</height>
-     </size>
-    </property>
-   </widget>
-   <zorder>mapView</zorder>
-   <zorder>zoomSlider</zorder>
-   <zorder>searchLineEdit</zorder>
-   <zorder>searchwBusIcon</zorder>
-   <zorder>searchButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
