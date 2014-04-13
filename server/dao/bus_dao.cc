@@ -46,7 +46,7 @@ namespace bustrack {
       // Write out buses, line by line.
       for (pair<string, Bus> bus_pair : items_) {
         Bus bus = bus_pair.second;
-        *file_stream << bus.getId() << endl;
+        *file_stream << bus.toString() << endl;
       }
 
       closeCommit();
@@ -62,20 +62,7 @@ namespace bustrack {
       // Read in buses, line by line.
       // Each line should have the format: bus_id
       for (std::string line; getline(*file_stream, line);) {
-        QString q_line (line.c_str());
-        QStringList tokens = q_line.split("|");
-
-        if (tokens.size() != NUM_FIELDS) {
-          qWarning() << "One of the buses in file has insufficient number of "
-            "fields.";
-          continue;
-        }
-
-        // Create the bus object.
-        Bus bus;
-        bus.setId(tokens[0].toStdString());
-
-        // Stuff the bus object into our list.
+        Bus bus (Bus::fromString(line));
         items_.insert(std::make_pair(bus.getId(), bus));
       }
 

@@ -17,9 +17,17 @@
  * limitations under the License.
  * ========================================================================= */
 
+#include <sstream>
+
+#include <QString>
+#include <QStringList>
+#include <QDebug>
+
 #include "bustrack/bus_stop.h"
 
 namespace bustrack {
+
+  const std::string BusStop::TAG ("BusStop");
 
   std::string BusStop::getId() {
     return id_;
@@ -35,6 +43,46 @@ namespace bustrack {
 
   void BusStop::setName(const std::string& name) {
     name_ = name;
+  }
+
+  BusStop BusStop::fromString(const std::string& serialized) {
+    QString q_serialized (serialized.c_str());
+    QStringList tokens = q_serialized.split("|");
+
+    if (tokens.size() != NUM_SERIALIZED_FIELDS) {
+      qWarning("%s: Insufficient number of fields! (%s)", TAG.c_str(),
+         serialized.c_str());
+      return BusStop();
+    }
+
+    // Create the bus stop object.
+    BusStop bus_stop;
+    bus_stop.setId(tokens[0].toStdString());
+    bus_stop.setName(tokens[1].toStdString());
+
+    // Convert the coordinates.
+    bool parsing_ok = false;
+    bus_stop.setLatitude(tokens[2].toFloat(&parsing_ok));
+    if (!parsing_ok) {
+      qWarning("%s: Unable to parse latitude for bus stop with ID %s",
+          TAG.c_str(), bus_stop.getId().c_str());
+    }
+
+    bus_stop.setLongitude(tokens[3].toFloat(&parsing_ok));
+    if (!parsing_ok) {
+      qWarning("%s Unable to parse longitude for bus stop with ID %s",
+          TAG.c_str(), bus_stop.getId().c_str());
+    }
+
+    return bus_stop;
+  }
+ 
+  std::string BusStop::toString() {
+    std::stringstream serialized_ss;
+    serialized_ss << getId() << "|" << getName() << "|" <<
+          getLatitude() << "|" << getLongitude() << std::endl;
+
+    return serialized_ss.str();
   }
 
 }

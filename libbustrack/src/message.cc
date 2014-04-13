@@ -18,7 +18,7 @@
  * ========================================================================= */
 
 #include <sstream>
-#include "message.h"
+#include "bustrack/message.h"
 
 namespace bustrack {
 

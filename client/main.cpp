@@ -1,15 +1,23 @@
-#include "bustrackwindow.h"
 #include <QApplication>
+#include "bustrackwindow.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    // Prepare application stylesheet.
     QFile styleFile(":/resources/BustrackStylesheet.qss");
     styleFile.open(QFile::ReadOnly);
     QString style(styleFile.readAll());
-    a.setStyleSheet(style);
-    BusTrackWindow w;
-    w.show();
 
-    return a.exec();
+    // Create the application and set the style sheet.
+    QApplication app(argc, argv);
+    app.setStyleSheet(style);
+
+    // Create the main BusTrack window.
+    BusTrackWindow window;
+    window.show();
+
+    // Run the app.
+    return app.exec();
 }
+
+// vim: set ts=4 sw=4 et:

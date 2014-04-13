@@ -32,7 +32,13 @@ namespace bustrack {
     std::string getName();
     void setName(const std::string& name);
 
+    static BusStop fromString(const std::string& serialized);
+    std::string toString();
+
   private:
+    static const std::string TAG;
+    static const int NUM_SERIALIZED_FIELDS = 4;
+
     std::string id_;
     std::string name_;
   };

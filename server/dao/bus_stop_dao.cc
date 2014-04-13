@@ -20,8 +20,6 @@
 #include <iostream>
 #include <fstream>
 
-#include <QDebug>
-
 #include "bus_stop_dao.h"
 
 namespace bustrack {
@@ -49,8 +47,7 @@ namespace bustrack {
       // Write out bus stops, line by line.
       for (pair<string, BusStop> bus_stop_pair : items_) {
         BusStop bus_stop = bus_stop_pair.second;
-        *file_stream << bus_stop.getId() << "|" << bus_stop.getName() << "|" <<
-          bus_stop.getLatitude() << "|" << bus_stop.getLongitude() << endl;
+        *file_stream << bus_stop.toString() << endl;
       }
 
       closeCommit();
@@ -63,40 +60,8 @@ namespace bustrack {
 
     shared_ptr<fstream> file_stream (prepareRollback());
     if (file_stream != nullptr) {
-      // Read in bus stops, line by line.
-      // Each line should have the format: stop_id|stop_name|lat|lng
       for (std::string line; getline(*file_stream, line);) {
-        QString q_line (line.c_str());
-        QStringList tokens = q_line.split("|");
-
-        if (tokens.size() != NUM_FIELDS) {
-          qWarning() << "One of the bus stops in file has insufficient number "
-            "of fields.";
-          continue;
-        }
-
-        // Create the bus stop object.
-        BusStop bus_stop;
-        bus_stop.setId(tokens[0].toStdString());
-        bus_stop.setName(tokens[1].toStdString());
-
-        // Convert the coordinates.
-        bool parsing_ok = false;
-        bus_stop.setLatitude(tokens[2].toFloat(&parsing_ok));
-        if (!parsing_ok) {
-          qWarning() << "Unable to parse latitude for bus stop with ID " << 
-            QString(bus_stop.getId().c_str());
-          continue;
-        }
-
-        bus_stop.setLongitude(tokens[3].toFloat(&parsing_ok));
-        if (!parsing_ok) {
-          qWarning() << "Unable to parse longitude for bus stop with ID " <<
-            QString(bus_stop.getId().c_str());
-          continue;
-        }
-
-        // Stuff the bus stop object into our list.
+        BusStop bus_stop (BusStop::fromString(line));
         items_.insert(std::make_pair(bus_stop.getId(), bus_stop));
       }
 

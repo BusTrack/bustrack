@@ -21,6 +21,7 @@ namespace Ui {
 class BusTrackWindow;
 }
 
+class BusTrackService;
 class BusTrackWindow : public QMainWindow
 {
     Q_OBJECT
@@ -57,6 +58,7 @@ private:
     QMenu *fileMenu;
     QAction *hideAction;
     QAction *dispatchAction;
+    BusTrackService* busTrackService;
 
     float currentZoom;
     int slideValue;
@@ -87,3 +89,5 @@ private:
 };
 
 #endif // BUSTRACKWINDOW_H
+
+// vim: set ts=4 sw=4 et:

@@ -1,3 +1,4 @@
+#include "bustrackservice.h"
 #include "bustrackwindow.h"
 #include "ui_bustrackwindow.h"
 
@@ -563,3 +564,5 @@ QImage BusTrackWindow::determineBusPNG(QString busService){
 	}
 	return background;
 }
+
+// vim: set ts=4 sw=4 et:

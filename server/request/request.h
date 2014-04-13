@@ -21,7 +21,7 @@
 #define BUSTRACK_REQUEST_H_
 
 #include <string>
-#include "message.h"
+#include "bustrack/message.h"
 
 class QTcpSocket;
 namespace bustrack {

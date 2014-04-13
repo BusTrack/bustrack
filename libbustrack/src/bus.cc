@@ -17,9 +17,17 @@
  * limitations under the License.
  * ========================================================================= */
 
+#include <stdexcept>
+
+#include <QString>
+#include <QStringList>
+#include <QDebug>
+
 #include "bustrack/bus.h"
 
 namespace bustrack {
+  
+  const std::string Bus::TAG ("BusStop");
 
   std::string Bus::getId() {
     return id_;
@@ -35,6 +43,26 @@ namespace bustrack {
 
   void Bus::setService(BusService service) {
     service_ = service;
+  }
+
+  Bus Bus::fromString(const std::string& serialized) {
+    QString q_serialized (serialized.c_str());
+    QStringList tokens = q_serialized.split("|");
+
+    if (tokens.size() != NUM_SERIALIZED_FIELDS) {
+      qWarning("%s: Insufficient number of fields! (%s)", TAG.c_str(),
+          serialized.c_str());
+      return Bus();
+    }
+
+    Bus bus;
+    bus.setId(tokens[0].toStdString());
+
+    return bus;
+  }
+
+  std::string Bus::toString() {
+    return id_;
   }
 
 }

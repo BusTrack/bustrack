@@ -25,7 +25,7 @@
 #include "dao/bus_stop_dao.h"
 #include "request/request.h"
 
-#include "message.h"
+#include "bustrack/message.h"
 
 class QTcpSocket;
 namespace bustrack {

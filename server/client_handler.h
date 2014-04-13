@@ -22,7 +22,7 @@
 
 #include <memory>
 #include <QTcpSocket>
-#include "message.h"
+#include "bustrack/message.h"
 
 namespace bustrack {
 
