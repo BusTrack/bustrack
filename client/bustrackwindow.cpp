@@ -5,8 +5,6 @@ const float ZOOM_FACTOR = 1.2;
 const float MIN_ZOOM = 1.0;
 const float MAX_ZOOM = 6.0;
 const float MAX_NUM_PEOPLE_BUS = 50;
-const float BUS_LOW_OCCUPANCY = 0.3;
-const float BUS_HIGH_OCCUPANCY = 0.7;
 
 BusTrackWindow::BusTrackWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,12 +15,17 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     initializeConnections();
     initializeValues();
 
-    drawStop(100,100,1);
-    drawStop(800,900,10);
-    drawStop(1000,300,16);
+    setMouseTracking(true);
+
+    drawStop(100,100,0);
+    drawStop(800,900,1);
+    drawStop(1000,300,15);
     
-    drawBus("A1", 500, 300, 10);
-    drawBus("C", 10, 400, 35);
+    drawBus("A1", 500, 400, 60);
+    drawBus("B", 300, 400, 59);
+    drawBus("A2", 200, 400, 30);
+    drawBus("C", 100, 400, 2);
+    drawBus("D2", 10, 400, 0);
 }
 
 BusTrackWindow::~BusTrackWindow()
@@ -63,6 +66,22 @@ void BusTrackWindow::mousePressEvent( QMouseEvent* event )
                 childList[i]->hide();
             } else {
                 childList[i]->show();
+            }
+        }
+    }
+}
+
+void BusTrackWindow::mouseMoveEvent(QMouseEvent* event)
+{
+	if (QGraphicsItem *item = ui->mapView->itemAt(event->pos())) {
+        qDebug() << "You hovered" << item;
+        QList<QGraphicsItem *> childList = item->childItems();
+        qDebug() << childList;
+        for (int i = 0; i < childList.size(); i++){
+            if (childList[i]->contains(event->pos())){
+                qDebug() << "hover";
+            } else {
+                qDebug() << "nope";
             }
         }
     }
@@ -263,62 +282,66 @@ void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)
 void BusTrackWindow::drawBus(QString busService, float offsetx, float offsety, int numPeople)
 {
 	float percentageNumPeople = (numPeople * 1.0)/MAX_NUM_PEOPLE_BUS;
-	QPixmap busPixmap;
-	
-	if (busService == "A1"){
-		if (percentageNumPeople < BUS_LOW_OCCUPANCY){
-			busPixmap = QPixmap(":/resources/busA1Red.png");
-		} else if (percentageNumPeople < BUS_HIGH_OCCUPANCY){
-			busPixmap = QPixmap(":/resources/busA1Red.png");
-		} else{
-			busPixmap = QPixmap(":/resources/busA1Red.png");
-		}
-	} else if (busService == "A2"){
-		if (percentageNumPeople < BUS_LOW_OCCUPANCY){
-			busPixmap = QPixmap(":/resources/busA2Red.png");
-		} else if (percentageNumPeople < BUS_HIGH_OCCUPANCY){
-			busPixmap = QPixmap(":/resources/busA2Red.png");
-		} else{
-			busPixmap = QPixmap(":/resources/busA2Red.png");
-		}
-	} else if (busService == "B"){
-		if (percentageNumPeople < BUS_LOW_OCCUPANCY){
-			busPixmap = QPixmap(":/resources/busBGreen.png");
-		} else if (percentageNumPeople < BUS_HIGH_OCCUPANCY){
-			busPixmap = QPixmap(":/resources/busBGreen.png");
-		} else{
-			busPixmap = QPixmap(":/resources/busBGreen.png");
-		}
-	} else if (busService == "C"){
-		if (percentageNumPeople < BUS_LOW_OCCUPANCY){
-			busPixmap = QPixmap(":/resources/busCYellow.png");
-		} else if (percentageNumPeople < BUS_HIGH_OCCUPANCY){
-			busPixmap = QPixmap(":/resources/busCYellow.png");
-		} else{
-			busPixmap = QPixmap(":/resources/busCYellow.png");
-		}
-	} else if (busService == "D1"){
-		if (percentageNumPeople < BUS_LOW_OCCUPANCY){
-			busPixmap = QPixmap(":/resources/busD1.png");
-		} else if (percentageNumPeople < BUS_HIGH_OCCUPANCY){
-			busPixmap = QPixmap(":/resources/busD1.png");
-		} else{
-			busPixmap = QPixmap(":/resources/busD1.png");
-		}
-	} else if (busService == "D2"){
-		if (percentageNumPeople < BUS_LOW_OCCUPANCY){
-			busPixmap = QPixmap(":/resources/busD2.png");
-		} else if (percentageNumPeople < BUS_HIGH_OCCUPANCY){
-			busPixmap = QPixmap(":/resources/busD2.png");
-		} else{
-			busPixmap = QPixmap(":/resources/busD2.png");
-		}
-	} 
+	//Color transitioning from red to yellow to green	
+	QColor repaintBusColor;
+	repaintBusColor.setRgb(255,0,36);	
+	if (numPeople < 30 && numPeople > 15) {
+		repaintBusColor.setRgb(240.0/(numPeople-15), 
+			240.0/(numPeople-15), 36);
+	} else if (numPeople > 0) {
+		repaintBusColor.setRgb(240 - (240.0/numPeople), 
+			(210.0/numPeople), 36);
+	} else if (numPeople <= 0) {
+		repaintBusColor.setRgb(0,210,36);
+	}	
 
-	busPixmap = busPixmap.scaledToHeight(30, Qt::SmoothTransformation);	
-  	QGraphicsPixmapItem* busGraphics = new QGraphicsPixmapItem(busPixmap);
+	//Locating pixels to be painted and replacing them with new color
+	QImage world(2359, 1738, QImage::Format_RGB32);
+	QSize sizeImage;
+	int r,g,b,alpha;
+	QRgb color;
+	int height, width;
+	QImage background = determineBusPNG(busService);
+	world.fill(1);	 
+	QPainter painter(&world);
+	sizeImage = background.size();
+	width = sizeImage.width();
+	height = sizeImage.height();	 
+	for(int y = 0; y < height; y++) {
+		for(int x = 0; x < width; x++) {
+		    color = background.pixel(x,y);
+		    if (qRed(color) == 255 && qGreen(color) == 0 && qBlue(color) == 36) {
+		 	  background.setPixel(x,y,repaintBusColor.rgb());
+		    }
+		}
+	}
+	painter.drawImage(0,0,background);
+
+	//Conversion of image to pixmap and scale
+	QPixmap busPixmap;
+	busPixmap.convertFromImage(background);
+	busPixmap = busPixmap.scaledToHeight(30, Qt::SmoothTransformation);
+	QGraphicsPixmapItem* busGraphics = new QGraphicsPixmapItem(busPixmap);
 	busGraphics->setOffset(offsetx, offsety);
-    mapScene.addItem(busGraphics);
+   	mapScene.addItem(busGraphics);
 }
 
+QImage BusTrackWindow::determineBusPNG(QString busService){
+	QImage background;
+	
+	if (busService == "A1"){
+		background.load(":/resources/A1.png");	
+	} else if (busService == "A2"){
+		background.load(":/resources/A2.png");	
+	} else if (busService == "B"){
+		background.load(":/resources/B.png");	
+	} else if (busService == "C"){
+		background.load(":/resources/C.png");	
+	} else if (busService == "D1"){
+		background.load(":/resources/D1.png");	
+	} else {
+		background.load(":/resources/D2.png");	
+	}
 
+	return background;
+}

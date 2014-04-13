@@ -20,6 +20,9 @@ void MapView::wheelEvent(QWheelEvent *event)
     event->ignore();
 }
 
+void hoverEnterEvent(QHoverEnter *event) {
+    
+}
 /*
 void MapView::mouseMoveEvent(QMouseEvent* event)
 {

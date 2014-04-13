@@ -9,7 +9,7 @@
 #include <QPixmap>
 #include <QDebug>
 #include <QStandardItemModel>
-#include <string>
+#include <QHoverEvent>
 
 namespace Ui {
 class BusTrackWindow;
@@ -26,7 +26,8 @@ public:
 protected:
     void wheelEvent(QWheelEvent *event);
     void resizeEvent(QResizeEvent *event);
-    void mousePressEvent( QMouseEvent* event);
+    void mousePressEvent(QMouseEvent* event);
+    void mouseMoveEvent(QMouseEvent* event);
 
 private slots:
     void zoomSlide(int newZoom);
@@ -51,6 +52,7 @@ private:
     void scaleMap(float zoom);
     void drawStop(int offsetx, int offsety, int numPeople);
     void drawBus(QString busService, float offsetx, float offsety, int numPeople);
+    QImage determineBusPNG(QString busService);
 };
 
 #endif // BUSTRACKWINDOW_H

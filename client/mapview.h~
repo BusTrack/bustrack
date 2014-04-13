@@ -2,6 +2,7 @@
 #define MAPVIEW_H
 
 #include <QGraphicsView>
+#include <QHoverEvent>
 
 class MapView : public QGraphicsView
 {
@@ -14,7 +15,7 @@ signals:
 public slots:
     void mousePressEvent(QMouseEvent* event);
     void wheelEvent(QWheelEvent *event);
-
+    void hoverEnterEvent(QHoverEnter *event);
  //   void mouseMoveEvent(QMouseEvent* event);
     
 };
