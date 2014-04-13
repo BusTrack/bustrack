@@ -51,7 +51,8 @@ private slots:
 private:
     Ui::BusTrackWindow *ui;
     QGraphicsScene mapScene;
-    QPixmap mapPixmap;
+    QGraphicsPixmapItem* mapPixmap;
+    QPixmap map;
     QMenu *fileMenu;
     QAction *hideAction;
     QAction *dispatchAction;
