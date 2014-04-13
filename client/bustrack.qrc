@@ -17,5 +17,12 @@
         <file>resources/searchwBus.png</file>
         <file>resources/searchStopSel.png</file>
         <file>resources/searchBusSel.png</file>
+        <file>resources/A1.png</file>
+        <file>resources/A2.png</file>
+        <file>resources/B.png</file>
+        <file>resources/C.png</file>
+        <file>resources/D1.png</file>
+        <file>resources/D2.png</file>
+        <file>resources/occupancy.png</file>
     </qresource>
 </RCC>
