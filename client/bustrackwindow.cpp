@@ -103,8 +103,10 @@ void BusTrackWindow::resizeEvent(QResizeEvent *event)
 
 void BusTrackWindow::setMap()
 {
-    mapPixmap = QPixmap(":/resources/map.png");
-    mapScene.addPixmap(mapPixmap);
+    map = QPixmap(":/resources/map.png");
+    mapPixmap = new QGraphicsPixmapItem(map);
+    mapPixmap->setTransformationMode(Qt::SmoothTransformation);
+    mapScene.addItem(mapPixmap);
     ui->mapView->setScene(&mapScene);
 }
 
@@ -329,6 +331,7 @@ void BusTrackWindow::drawStop(QString name, int offsetx, int offsety, int numPeo
     busstopPixmap.convertFromImage(busstop);
     busstopPixmap = busstopPixmap.scaledToHeight(30, Qt::SmoothTransformation);
     QGraphicsPixmapItem* busstopGraphics = new QGraphicsPixmapItem(busstopPixmap);
+    busstopGraphics->setTransformationMode(Qt::SmoothTransformation);
     busstopGraphics->setOffset(offsetx, offsety);
     mapScene.addItem(busstopGraphics);
     busstopHash.insert(name, busstopGraphics);
@@ -382,6 +385,7 @@ void BusTrackWindow::drawStop(QString name, int offsetx, int offsety, int numPeo
     busstopoccupancyPixmap.convertFromImage(busstopoccupancy);
     busstopoccupancyPixmap = busstopoccupancyPixmap.scaledToHeight(60, Qt::SmoothTransformation);
     QGraphicsPixmapItem* busstopoccupancyGraphics = new QGraphicsPixmapItem(busstopoccupancyPixmap);
+    busstopoccupancyGraphics->setTransformationMode(Qt::SmoothTransformation);
     busstopoccupancyGraphics->setParentItem(busstopGraphics);
     busstopoccupancyGraphics->hide();
     busstopoccupancyGraphics->setOffset(offsetx-30, offsety+30);
@@ -455,6 +459,7 @@ void BusTrackWindow::drawBus(QString busService, float offsetx, float offsety, i
 	busPixmap.convertFromImage(background);
 	busPixmap = busPixmap.scaledToHeight(50, Qt::SmoothTransformation);
 	QGraphicsPixmapItem* busGraphics = new QGraphicsPixmapItem(busPixmap);
+    busGraphics->setTransformationMode(Qt::SmoothTransformation);
 	busGraphics->setOffset(offsetx, offsety);
    	mapScene.addItem(busGraphics);
 
@@ -480,6 +485,7 @@ void BusTrackWindow::drawBus(QString busService, float offsetx, float offsety, i
     busoccupancyPixmap.convertFromImage(busoccupancy);
     busoccupancyPixmap = busoccupancyPixmap.scaledToHeight(60, Qt::SmoothTransformation);
     QGraphicsPixmapItem* busoccupancyGraphics = new QGraphicsPixmapItem(busoccupancyPixmap);
+    busoccupancyGraphics->setTransformationMode(Qt::SmoothTransformation);
     busoccupancyGraphics->setParentItem(busGraphics);
     busoccupancyGraphics->hide();
     busoccupancyGraphics->setOffset(offsetx-30, offsety+30);
