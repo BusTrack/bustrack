@@ -121,7 +121,7 @@ void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)
     mapScene.addItem(busstopGraphics);
 }
 
-void BusTrackWindow::drawBus(QString busService, float offsetx, float offsety, int numPeople)
+void BusTrackWindow::drawBus(float offsetx, float offsety, int numPeople)
 {
 	static float maxNumPeople = 50;
 	float percentageNumPeople = (numPeople * 1.0)/maxNumPeople;
