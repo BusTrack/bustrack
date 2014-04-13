@@ -22,5 +22,7 @@
         <file>resources/D1.png</file>
         <file>resources/D2.png</file>
         <file>resources/occupancy.png</file>
+        <file>resources/mapOverlay.png</file>
+        <file>resources/BustrackStylesheet.qss</file>
     </qresource>
 </RCC>

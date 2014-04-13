@@ -228,8 +228,8 @@ border-radius: 0px;</string>
    <widget class="QWidget" name="zoomSliderWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>1130</x>
-      <y>490</y>
+      <x>1100</x>
+      <y>480</y>
       <width>40</width>
       <height>230</height>
      </rect>
@@ -299,6 +299,12 @@ border-top-color: rgb(255, 255, 255);</string>
      <property name="styleSheet">
       <string notr="true">background-color: rgb(255, 255, 255);</string>
      </property>
+     <property name="uniformItemSizes">
+      <bool>true</bool>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
     </widget>
    </widget>
    <widget class="QWidget" name="infoListWidget" native="true">
@@ -324,6 +330,15 @@ border-top-color: rgb(255, 255, 255);</string>
      </property>
      <property name="styleSheet">
       <string notr="true">background-color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <property name="uniformItemSizes">
+      <bool>true</bool>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
    </widget>

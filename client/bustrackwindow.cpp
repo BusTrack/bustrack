@@ -15,6 +15,10 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     initializeConnections();
     initializeValues();
 
+    ui->infoList->addItem("hello");
+    ui->infoList->addItem("fawef");
+    ui->infoList->addItem("auer");
+
     setMouseTracking(true);
 
     drawStop(100,100,0);
@@ -169,11 +173,39 @@ void BusTrackWindow::onStopInfoBtnClicked()
     }
 }
 
+void BusTrackWindow::toggleElementsVisibility()
+{
+    if(!hidden)
+    {
+        ui->infoListWidget->setVisible(false);
+        ui->zoomSliderWidget->setVisible(false);
+        ui->searchResultsWidget->setVisible(false);
+        ui->searchBarWidget->setVisible(false);
+        ui->sideBarWidget->setVisible(false);
+        hidden = true;
+    }
+    else
+    {
+        ui->infoListWidget->setVisible(true);
+        ui->zoomSliderWidget->setVisible(true);
+        ui->searchResultsWidget->setVisible(true);
+        ui->searchBarWidget->setVisible(true);
+        ui->sideBarWidget->setVisible(true);
+        hidden = false;
+    }
+}
+
 void BusTrackWindow::initializeWidgets()
 {
     ui->searchResultsWidget->setVisible(false);
     ui->infoListWidget->setVisible(false);
     setMap();
+
+    hideAction = new QAction(tr("&Hide Elements"), this);
+    hideAction->setShortcut(tr("Ctrl+H"));
+
+    fileMenu = menuBar()->addMenu(tr("&File"));
+    fileMenu->addAction(hideAction);
 }
 
 void BusTrackWindow::initializeConnections()
@@ -182,6 +214,7 @@ void BusTrackWindow::initializeConnections()
     connect(ui->searchLineEdit, SIGNAL(textChanged(QString)), this, SLOT(toggleSearchResultsWidget(QString)));
     connect(ui->busInfoBtn, SIGNAL(clicked()), this, SLOT(onBusInfoBtnClicked()));
     connect(ui->stopInfoBtn, SIGNAL(clicked()), this, SLOT(onStopInfoBtnClicked()));
+    connect(hideAction, SIGNAL(triggered()), this, SLOT(toggleElementsVisibility()));
 }
 
 void BusTrackWindow::initializeValues()
@@ -190,6 +223,7 @@ void BusTrackWindow::initializeValues()
     slideValue = 1.0;
     busInfoBtnClicked = false;
     stopInfoBtnClicked = false;
+    hidden = false;
 }
 
 void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)

@@ -1,0 +1,21 @@
+QSlider::handle:vertical
+{
+	background-color: rgb(220, 109, 0);
+	width: 0px;
+}
+
+QSlider::add-page:vertical
+{
+	background-color: rgb(43, 62, 81);
+}
+
+QListWidget
+{
+	font: 11pt;
+	padding: 5px;
+}
+
+QListWidget::item:selected
+{
+	background-color: rgb(43, 62, 81);
+}

@@ -34,6 +34,7 @@ private slots:
     void toggleSearchResultsWidget(QString query);
     void onBusInfoBtnClicked();
     void onStopInfoBtnClicked();
+    void toggleElementsVisibility();
 
 private:
     Ui::BusTrackWindow *ui;
@@ -43,6 +44,9 @@ private:
     int slideValue;
     bool busInfoBtnClicked;
     bool stopInfoBtnClicked;
+    QMenu *fileMenu;
+    QAction *hideAction;
+    bool hidden;
 
     // supporting methods
     void initializeWidgets();
