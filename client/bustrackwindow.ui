@@ -32,9 +32,9 @@
    <widget class="MapView" name="mapView">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>-120</x>
       <y>0</y>
-      <width>1221</width>
+      <width>1351</width>
       <height>791</height>
      </rect>
     </property>
@@ -168,7 +168,7 @@ border-radius: 0px;</string>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(43, 62, 81);</string>
     </property>
-    <widget class="QPushButton" name="searchBus">
+    <widget class="QPushButton" name="busInfoBtn">
      <property name="geometry">
       <rect>
        <x>1</x>
@@ -182,7 +182,9 @@ border-radius: 0px;</string>
      </property>
      <property name="icon">
       <iconset resource="bustrack.qrc">
-       <normaloff>:/resources/searchBus.png</normaloff>:/resources/searchBus.png</iconset>
+       <normaloff>:/resources/searchBus.png</normaloff>
+       <selectedoff>:/resources/searchBus.png</selectedoff>
+       <selectedon>:/resources/searchBus.png</selectedon>:/resources/searchBus.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -194,10 +196,10 @@ border-radius: 0px;</string>
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QPushButton" name="searchStops">
+    <widget class="QPushButton" name="stopInfoBtn">
      <property name="geometry">
       <rect>
-       <x>1</x>
+       <x>0</x>
        <y>61</y>
        <width>40</width>
        <height>40</height>
@@ -208,7 +210,9 @@ border-radius: 0px;</string>
      </property>
      <property name="icon">
       <iconset resource="bustrack.qrc">
-       <normaloff>:/resources/searchStop.png</normaloff>:/resources/searchStop.png</iconset>
+       <normaloff>:/resources/searchStop.png</normaloff>
+       <selectedoff>:/resources/searchStop.png</selectedoff>
+       <selectedon>:/resources/searchStop.png</selectedon>:/resources/searchStop.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -273,7 +277,7 @@ QSlider::handle:horizontal {
       <x>79</x>
       <y>69</y>
       <width>350</width>
-      <height>251</height>
+      <height>241</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -281,12 +285,41 @@ QSlider::handle:horizontal {
 border-top-color: rgb(255, 255, 255);</string>
     </property>
     <widget class="QListWidget" name="searchResultsList">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>4</x>
-       <y>-5</y>
+       <y>4</y>
        <width>341</width>
-       <height>251</height>
+       <height>232</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 255);</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="infoListWidget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>140</y>
+      <width>350</width>
+      <height>251</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(43, 62, 81);</string>
+    </property>
+    <widget class="QListWidget" name="infoList">
+     <property name="geometry">
+      <rect>
+       <x>4</x>
+       <y>4</y>
+       <width>341</width>
+       <height>242</height>
       </rect>
      </property>
      <property name="styleSheet">

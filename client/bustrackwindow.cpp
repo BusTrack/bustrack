@@ -11,10 +11,9 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     ui(new Ui::BusTrackWindow)
 {
     ui->setupUi(this);
-    setMap();
-    currentZoom = 1.0;
-    slideValue = 1.0;
-    connect(ui->zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(zoomSlide(int)));
+    initializeWidgets();
+    initializeConnections();
+    initializeValues();
 
 	setMouseTracking(true);
 
@@ -117,6 +116,80 @@ void BusTrackWindow::zoomSlide(int newZoom)
         currentZoom /= ZOOM_FACTOR;
     }
     slideValue = newZoom;
+}
+
+void BusTrackWindow::toggleSearchResultsWidget(QString query)
+{
+    if(query.length() > 0)
+    {
+        ui->searchResultsWidget->setVisible(true);
+    }
+    else
+    {
+        ui->searchResultsWidget->setVisible(false);
+    }
+}
+
+void BusTrackWindow::onBusInfoBtnClicked()
+{
+
+    if(!busInfoBtnClicked)
+    {
+        ui->busInfoBtn->setIcon(QIcon(":/resources/searchBusSel.png"));
+        ui->stopInfoBtn->setIcon(QIcon(":/resources/searchStop.png"));
+        ui->infoListWidget->move(79, 80);
+        ui->infoListWidget->setVisible(true);
+        busInfoBtnClicked = true;
+    }
+    else
+    {
+        ui->busInfoBtn->setIcon(QIcon(":/resources/searchBus.png"));
+        busInfoBtnClicked = false;
+        ui->infoListWidget->setVisible(false);
+    }
+
+}
+
+void BusTrackWindow::onStopInfoBtnClicked()
+{
+    if(!stopInfoBtnClicked)
+    {
+        ui->stopInfoBtn->setIcon(QIcon(":/resources/searchStopSel.png"));
+        ui->busInfoBtn->setIcon(QIcon(":/resources/searchBus.png"));
+        ui->infoListWidget->move(79, 140);
+        ui->infoListWidget->setVisible(true);
+        stopInfoBtnClicked = true;
+    }
+    else
+    {
+        ui->stopInfoBtn->setIcon(QIcon(":/resources/searchStop.png"));
+        ui->infoListWidget->setVisible(false);
+        stopInfoBtnClicked = false;
+
+    }
+}
+
+void BusTrackWindow::initializeWidgets()
+{
+    ui->searchResultsWidget->setVisible(false);
+    ui->infoListWidget->setVisible(false);
+    setMap();
+}
+
+void BusTrackWindow::initializeConnections()
+{
+    connect(ui->zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(zoomSlide(int)));
+    connect(ui->searchLineEdit, SIGNAL(textChanged(QString)), this, SLOT(toggleSearchResultsWidget(QString)));
+    connect(ui->busInfoBtn, SIGNAL(clicked()), this, SLOT(onBusInfoBtnClicked()));
+    connect(ui->stopInfoBtn, SIGNAL(clicked()), this, SLOT(onStopInfoBtnClicked()));
+}
+
+void BusTrackWindow::initializeValues()
+{
+    currentZoom = 1.0;
+    slideValue = 1.0;
+    busInfoBtnClicked = false;
+    stopInfoBtnClicked = false;
 }
 
 void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)
