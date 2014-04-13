@@ -12,6 +12,9 @@
 #include <QHoverEvent>
 #include <QCalendarWidget>
 #include <QDateTimeEdit>
+#include <QSignalMapper>
+#include <QList>
+#include <QPushButton>
 
 namespace Ui {
 class BusTrackWindow;
@@ -31,6 +34,8 @@ protected:
     void mousePressEvent(QMouseEvent* event);
     void mouseMoveEvent(QMouseEvent* event);
 
+signals:
+
 private slots:
     void zoomSlide(int newZoom);
     void toggleSearchResultsWidget(QString query);
@@ -40,6 +45,8 @@ private slots:
     void toggleDispatchWidget();
     void createCalendarWidget();
     void createTimeWidget();
+    void calendarSelectionChanged(int i);
+    void timeSelectionChanged(int i);
 
 private:
     Ui::BusTrackWindow *ui;
@@ -58,8 +65,14 @@ private:
     QHash<QString,QGraphicsItem*> busstopHash;
     bool searchActive;
     QGraphicsPathItem* searchOverlay;
+    QList<QPushButton*> calButtonList;
+    QList<QPushButton*> clockButtonList;
+    QList<QLabel*> calTickList;
+    QList<QLabel*> clockTickList;
+    QSignalMapper *signalMapper;
 
     // supporting methods
+    void initializeLists();
     void initializeWidgets();
     void initializeConnections();
     void initializeValues();
