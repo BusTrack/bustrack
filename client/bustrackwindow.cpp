@@ -62,6 +62,12 @@ void BusTrackWindow::wheelEvent(QWheelEvent *event)
 
 void BusTrackWindow::mousePressEvent( QMouseEvent* event )
 {
+    if (searchActive) {
+        searchOverlay->hide();
+        searchActive = false;
+        return;
+    }
+
     if (QGraphicsItem *item = ui->mapView->itemAt(event->pos())) {
         QList<QGraphicsItem *> childList = item->childItems();
         for (int i = 0; i < childList.size(); i++){
@@ -72,7 +78,6 @@ void BusTrackWindow::mousePressEvent( QMouseEvent* event )
             }
         }
     }
-    searchOverlay->hide();
 }
 
 void BusTrackWindow::mouseMoveEvent(QMouseEvent* event)
@@ -398,6 +403,39 @@ void BusTrackWindow::drawBus(QString busService, float offsetx, float offsety, i
 	QGraphicsPixmapItem* busGraphics = new QGraphicsPixmapItem(busPixmap);
 	busGraphics->setOffset(offsetx, offsety);
    	mapScene.addItem(busGraphics);
+
+
+    QImage busoccupancy;
+    busoccupancy.load(":/resources/occupancy.png");
+    QImage world2(2359, 1738, QImage::Format_RGB32);
+    world2.fill(1);	 
+    QPainter painter2(&world2);
+    sizeImage = busoccupancy.size();
+    width = sizeImage.width();
+    height = sizeImage.height();	 
+    for(int y = 0; y < height; y++) {
+        for(int x = 0; x < width; x++) {
+            color = busoccupancy.pixel(x,y);
+            if (qRed(color) == 255 && qGreen(color) == 0 && qBlue(color) == 36) {
+         	  busoccupancy.setPixel(x,y,repaintBusColor.rgb());
+   	    }
+        }
+    }
+    painter2.drawImage(0,0,busoccupancy);
+    QPixmap busoccupancyPixmap;
+    busoccupancyPixmap.convertFromImage(busoccupancy);
+    busoccupancyPixmap = busoccupancyPixmap.scaledToHeight(60, Qt::SmoothTransformation);
+    QGraphicsPixmapItem* busoccupancyGraphics = new QGraphicsPixmapItem(busoccupancyPixmap);
+    busoccupancyGraphics->setParentItem(busGraphics);
+    busoccupancyGraphics->hide();
+    busoccupancyGraphics->setOffset(offsetx-30, offsety+30);
+    //Busstop occupancy
+    QGraphicsSimpleTextItem* busoccupancyNumber = new QGraphicsSimpleTextItem(QString::number(numPeople*100/MAX_NUM_PEOPLE_BUS));
+    busoccupancyNumber-> setPos(offsetx+5,offsety+47);
+    busoccupancyNumber->setParentItem(busGraphics);
+    busoccupancyNumber->setBrush(Qt::white);
+    busoccupancyNumber->hide();
+
 }
 
 QImage BusTrackWindow::determineBusPNG(QString busService){
@@ -416,6 +454,5 @@ QImage BusTrackWindow::determineBusPNG(QString busService){
 	} else {
 		background.load(":/resources/D2.png");	
 	}
-
 	return background;
 }
