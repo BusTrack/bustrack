@@ -182,6 +182,9 @@ void BusTrackWindow::toggleElementsVisibility()
         ui->searchResultsWidget->setVisible(false);
         ui->searchBarWidget->setVisible(false);
         ui->sideBarWidget->setVisible(false);
+        ui->dispatchWidget->setVisible(false);
+        ui->calendarWidget->setVisible(false);
+        ui->timeEdit->setVisible(false);
         hidden = true;
     }
     else
@@ -191,21 +194,57 @@ void BusTrackWindow::toggleElementsVisibility()
         ui->searchResultsWidget->setVisible(true);
         ui->searchBarWidget->setVisible(true);
         ui->sideBarWidget->setVisible(true);
+        ui->dispatchWidget->setVisible(true);
+        ui->calendarWidget->setVisible(true);
+        ui->timeEdit->setVisible(true);
         hidden = false;
     }
+}
+
+void BusTrackWindow::toggleDispatchWidget()
+{
+    if(!dispatchWidgetVisible)
+    {
+        ui->dispatchWidget->setVisible(true);
+        dispatchWidgetVisible = true;
+    }
+    else
+    {
+        ui->dispatchWidget->setVisible(false);
+        dispatchWidgetVisible = false;
+    }
+}
+
+void BusTrackWindow::createCalendarWidget()
+{
+    ui->calendarWidget->move(QCursor::pos()-QPoint(30, 30));
+    ui->calendarWidget->setVisible(true);
+}
+
+void BusTrackWindow::createTimeWidget()
+{
+    ui->timeEdit->move(QCursor::pos()-QPoint(30, 30));
+    ui->timeEdit->setVisible(true);
 }
 
 void BusTrackWindow::initializeWidgets()
 {
     ui->searchResultsWidget->setVisible(false);
     ui->infoListWidget->setVisible(false);
+    ui->dispatchWidget->setVisible(false);
+    ui->calendarWidget->setVisible(false);
+    ui->timeEdit->setVisible(false);
+
     setMap();
 
     hideAction = new QAction(tr("&Hide Elements"), this);
     hideAction->setShortcut(tr("Ctrl+H"));
+    dispatchAction = new QAction(tr("Dispatch"), this);
+    dispatchAction->setShortcut(tr("Ctrl+D"));
 
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(hideAction);
+    fileMenu->addAction(dispatchAction);
 
     ui->infoListWidget->move(79, 140);
 }
@@ -217,6 +256,21 @@ void BusTrackWindow::initializeConnections()
     connect(ui->busInfoBtn, SIGNAL(clicked()), this, SLOT(onBusInfoBtnClicked()));
     connect(ui->stopInfoBtn, SIGNAL(clicked()), this, SLOT(onStopInfoBtnClicked()));
     connect(hideAction, SIGNAL(triggered()), this, SLOT(toggleElementsVisibility()));
+    connect(dispatchAction, SIGNAL(triggered()), this, SLOT(toggleDispatchWidget()));
+
+    connect(ui->A1CalButton, SIGNAL(clicked()), this, SLOT(createCalendarWidget()));
+    connect(ui->A2CalButton, SIGNAL(clicked()), this, SLOT(createCalendarWidget()));
+    connect(ui->BCalButton, SIGNAL(clicked()), this, SLOT(createCalendarWidget()));
+    connect(ui->CCalButton, SIGNAL(clicked()), this, SLOT(createCalendarWidget()));
+    connect(ui->D1CalButton, SIGNAL(clicked()), this, SLOT(createCalendarWidget()));
+    connect(ui->D2CalButton, SIGNAL(clicked()), this, SLOT(createCalendarWidget()));
+
+    connect(ui->A1ClockButton, SIGNAL(clicked()), this, SLOT(createTimeWidget()));
+    connect(ui->A2ClockButton, SIGNAL(clicked()), this, SLOT(createTimeWidget()));
+    connect(ui->BClockButton, SIGNAL(clicked()), this, SLOT(createTimeWidget()));
+    connect(ui->CClockButton, SIGNAL(clicked()), this, SLOT(createTimeWidget()));
+    connect(ui->D1ClockButton, SIGNAL(clicked()), this, SLOT(createTimeWidget()));
+    connect(ui->D2ClockButton, SIGNAL(clicked()), this, SLOT(createTimeWidget()));
 }
 
 void BusTrackWindow::initializeValues()
@@ -226,6 +280,7 @@ void BusTrackWindow::initializeValues()
     busInfoBtnClicked = false;
     stopInfoBtnClicked = false;
     hidden = false;
+    dispatchWidgetVisible = false;
 }
 
 void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)

@@ -10,6 +10,8 @@
 #include <QDebug>
 #include <QStandardItemModel>
 #include <QHoverEvent>
+#include <QCalendarWidget>
+#include <QDateTimeEdit>
 
 namespace Ui {
 class BusTrackWindow;
@@ -35,18 +37,24 @@ private slots:
     void onBusInfoBtnClicked();
     void onStopInfoBtnClicked();
     void toggleElementsVisibility();
+    void toggleDispatchWidget();
+    void createCalendarWidget();
+    void createTimeWidget();
 
 private:
     Ui::BusTrackWindow *ui;
     QGraphicsScene mapScene;
     QPixmap mapPixmap;
+    QMenu *fileMenu;
+    QAction *hideAction;
+    QAction *dispatchAction;
+
     float currentZoom;
     int slideValue;
     bool busInfoBtnClicked;
     bool stopInfoBtnClicked;
-    QMenu *fileMenu;
-    QAction *hideAction;
     bool hidden;
+    bool dispatchWidgetVisible;
 
     // supporting methods
     void initializeWidgets();
