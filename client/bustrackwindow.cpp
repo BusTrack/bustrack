@@ -15,14 +15,14 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     slideValue = 1.0;
     connect(ui->zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(zoomSlide(int)));
 
-    drawStop(100,100,30);
+    drawStop(100,100,0);
     drawStop(800,900,10);
-    drawStop(1000,300,20);
+    drawStop(1000,300,16);
+    
 }
 
 BusTrackWindow::~BusTrackWindow()
 {
-    //testing commit //terence
     delete ui;
 }
 
@@ -97,16 +97,45 @@ void BusTrackWindow::zoomSlide(int newZoom)
 
 void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)
 {
-    QPixmap busstopPixmap;
-    if (numPeople >= 20) {
-	busstopPixmap = QPixmap(":/resources/stopA.png");
-    } else if (numPeople >= 10) {
-	busstopPixmap = QPixmap(":/resources/stopC.png");
-    } else
-        busstopPixmap = QPixmap(":/resources/stopB.png");
-    busstopPixmap = busstopPixmap.scaledToHeight(30, Qt::SmoothTransformation);
-    QGraphicsPixmapItem* busstopGraphics = new QGraphicsPixmapItem(busstopPixmap);
+    QColor repaintColor;
+    repaintColor.setRgb(0,0,0);
+    if (numPeople < 30 && numPeople > 15) {
+        repaintColor.setRgb(240.0/(numPeople-15), 240.0/(numPeople-15), 36);
+    } else if (numPeople > 0) {
+        repaintColor.setRgb(240 - (240.0/numPeople), (210.0/numPeople), 36);
+    } else if (numPeople == 0) {
+        repaintColor.setRgb(0,210,36);
+    }
 
+    QImage background;
+    QImage world(2359, 1738, QImage::Format_RGB32);
+    QSize sizeImage;
+    int r,g,b,alpha;
+    QRgb color;
+    int height, width;
+    background.load(":/resources/stopA.png");
+    world.fill(1);
+	 
+    QPainter painter(&world);
+    sizeImage = background.size();
+    width = sizeImage.width();
+    height = sizeImage.height();
+	 
+    for(int y = 0; y < height; y++) {
+        for(int x = 0; x < width; x++) {
+            color = background.pixel(x,y);
+            if (qRed(color) == 255 && qGreen(color) == 0 && qBlue(color) == 36) {
+         	  background.setPixel(x,y,repaintColor.rgb());
+   	    }
+        }
+    }
+ 
+    painter.drawImage(0,0,background);
+    QPixmap busstopPixmap;
+    busstopPixmap.convertFromImage(background);
+    busstopPixmap = busstopPixmap.scaledToHeight(30, Qt::SmoothTransformation);
+
+    QGraphicsPixmapItem* busstopGraphics = new QGraphicsPixmapItem(busstopPixmap);
     QGraphicsRectItem* busstopinfoGraphics = new QGraphicsRectItem(offsetx+40, offsety-25, 150, 180);
     busstopinfoGraphics->setBrush(Qt::cyan);
     QGraphicsSimpleTextItem* busstopName = new QGraphicsSimpleTextItem("COM2");
