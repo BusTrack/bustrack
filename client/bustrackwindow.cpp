@@ -21,15 +21,17 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
 
     setMouseTracking(true);
 
-    drawStop(100,100,0);
-    drawStop(800,900,1);
-    drawStop(1000,300,15);
+    drawStop("Stop1",100,100,0);
+    drawStop("Stop2",800,900,1);
+    drawStop("Stop3",1000,300,15);
     
     drawBus("A1", 500, 400, 60);
     drawBus("B", 300, 400, 59);
     drawBus("A2", 200, 400, 30);
     drawBus("C", 100, 400, 2);
     drawBus("D2", 10, 400, 0);
+
+    searchStop("Stop1");
 }
 
 BusTrackWindow::~BusTrackWindow()
@@ -56,15 +58,12 @@ void BusTrackWindow::wheelEvent(QWheelEvent *event)
         ui->zoomSlider->setValue(ui->zoomSlider->value()-1);
         currentZoom /= ZOOM_FACTOR;
     }
-
 }
 
 void BusTrackWindow::mousePressEvent( QMouseEvent* event )
 {
     if (QGraphicsItem *item = ui->mapView->itemAt(event->pos())) {
-        qDebug() << "You clicked on item" << item;
         QList<QGraphicsItem *> childList = item->childItems();
-        qDebug() << childList;
         for (int i = 0; i < childList.size(); i++){
             if (childList[i]->isVisible()){
                 childList[i]->hide();
@@ -73,6 +72,7 @@ void BusTrackWindow::mousePressEvent( QMouseEvent* event )
             }
         }
     }
+    searchOverlay->hide();
 }
 
 void BusTrackWindow::mouseMoveEvent(QMouseEvent* event)
@@ -223,10 +223,11 @@ void BusTrackWindow::initializeValues()
     slideValue = 1.0;
     busInfoBtnClicked = false;
     stopInfoBtnClicked = false;
-    hidden = false;
+    hidden = false; 
+    searchActive = false;
 }
 
-void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)
+void BusTrackWindow::drawStop(QString name, int offsetx, int offsety, int numPeople)
 {
     //Color transitioning from red to yellow to green
     QColor repaintColor;
@@ -269,6 +270,7 @@ void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)
     QGraphicsPixmapItem* busstopGraphics = new QGraphicsPixmapItem(busstopPixmap);
     busstopGraphics->setOffset(offsetx, offsety);
     mapScene.addItem(busstopGraphics);
+    busstopHash.insert(name, busstopGraphics);
 
     //Generation of child graphics (toggle-able additional info)
     QGraphicsRectItem* busstopinfoGraphics = new QGraphicsRectItem(offsetx+40, offsety-25, 150, 180);
@@ -283,7 +285,7 @@ void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)
     busstopinfoGraphics->setBrush(Qt::white);
     QFont boldFont;
     boldFont.setBold(true);
-    QGraphicsSimpleTextItem* busstopName = new QGraphicsSimpleTextItem("COM2");
+    QGraphicsSimpleTextItem* busstopName = new QGraphicsSimpleTextItem(name);
     busstopName->setFont(boldFont);
     busstopName->setPos(offsetx+50,offsety-15);
     busstopName->setParentItem(busstopGraphics);
@@ -330,6 +332,25 @@ void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)
     busstopoccupancyNumber->hide();
 }
 
+void BusTrackWindow::searchStop(QString name)
+{
+    searchActive = true;
+    int offsetx = 1000, offsety = 300, radius = 50;
+
+    QColor overlayColor;
+    overlayColor.setRgb(1,1,1,100);
+    searchOverlay = new QGraphicsPathItem(0);
+    QPainterPath path1;
+    path1.addRect(0,0,1920,1080);
+    path1.addEllipse(offsetx-radius+15, offsety-radius+17, 2*radius, 2*radius);
+    path1.addEllipse(offsetx-radius+90, offsety-radius+90, 2*radius, 2*radius);
+    path1.setFillRule(Qt::OddEvenFill);
+    searchOverlay->setBrush(overlayColor);
+    searchOverlay->setOpacity(1);
+    searchOverlay->setPath(path1);
+    mapScene.addItem(searchOverlay);
+}
+
 void BusTrackWindow::drawBus(QString busService, float offsetx, float offsety, int numPeople)
 {
 	float percentageNumPeople = (numPeople * 1.0)/MAX_NUM_PEOPLE_BUS;
@@ -371,7 +392,7 @@ void BusTrackWindow::drawBus(QString busService, float offsetx, float offsety, i
 	//Conversion of image to pixmap and scale
 	QPixmap busPixmap;
 	busPixmap.convertFromImage(background);
-	busPixmap = busPixmap.scaledToHeight(30, Qt::SmoothTransformation);
+	busPixmap = busPixmap.scaledToHeight(50, Qt::SmoothTransformation);
 	QGraphicsPixmapItem* busGraphics = new QGraphicsPixmapItem(busPixmap);
 	busGraphics->setOffset(offsetx, offsety);
    	mapScene.addItem(busGraphics);
