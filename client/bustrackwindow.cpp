@@ -268,7 +268,7 @@ void BusTrackWindow::initializeLists()
     clockTickList.append(ui->A1Tick2);
     clockTickList.append(ui->A2Tick2);
     clockTickList.append(ui->BTick2);
-    clockTickList.append(ui->C1Tick2);
+    clockTickList.append(ui->CTick2);
     clockTickList.append(ui->D1Tick2);
     clockTickList.append(ui->D2Tick2);
 }

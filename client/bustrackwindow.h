@@ -15,6 +15,7 @@
 #include <QSignalMapper>
 #include <QList>
 #include <QPushButton>
+#include <QLabel>
 
 namespace Ui {
 class BusTrackWindow;
