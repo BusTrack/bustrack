@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QSlider>
 #include <QStandardItemModel>
+#include <string>
 
 namespace Ui {
 class BusTrackWindow;
@@ -42,7 +43,8 @@ private:
     void setMap();
     void scaleMap(float zoom);
     void drawStop(int offsetx, int offsety, int numPeople);
-    void drawBus(float offsetx, float offsety, int numPeople);
+    void drawBus(QString busService, float offsetx, float offsety, int numPeople);
+ //   QPixmap drawBusColour(QString busService, float percentageOccupied);
 };
 
 #endif // BUSTRACKWINDOW_H

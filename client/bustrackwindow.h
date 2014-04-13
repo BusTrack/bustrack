@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QSlider>
 #include <QStandardItemModel>
+#include <string>
 
 namespace Ui {
 class BusTrackWindow;

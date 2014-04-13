@@ -4,6 +4,9 @@
 const float ZOOM_FACTOR = 1.2;
 const float MIN_ZOOM = 1.0;
 const float MAX_ZOOM = 6.0;
+const float MAX_NUM_PEOPLE_BUS = 50;
+const float BUS_LOW_OCCUPANCY = 0.3;
+const float BUS_HIGH_OCCUPANCY = 0.7;
 
 BusTrackWindow::BusTrackWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -18,7 +21,8 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     drawStop(100,100,30);
     drawStop(800,900,10);
     drawStop(1000,300,20);
-    drawBus(500, 300, 10);
+    drawBus("A1", 500, 300, 10);
+    drawBus("C", 10, 400, 35);
 }
 
 BusTrackWindow::~BusTrackWindow()
@@ -123,21 +127,62 @@ void BusTrackWindow::drawStop(int offsetx, int offsety, int numPeople)
 
 void BusTrackWindow::drawBus(QString busService, float offsetx, float offsety, int numPeople)
 {
-	static float maxNumPeople = 50;
-	float percentageNumPeople = (numPeople * 1.0)/maxNumPeople;
-	
+	float percentageNumPeople = (numPeople * 1.0)/MAX_NUM_PEOPLE_BUS;
 	QPixmap busPixmap;
-	// TODO: determine bus service and route
-	if (percentageNumPeople < 0.3){
-		busPixmap = QPixmap(":/resources/busA1.png");
-	} else if (percentageNumPeople < 0.7){
-		busPixmap = QPixmap(":/resources/busC.png");
-	} else{
-		busPixmap = QPixmap(":/resources/busB.png");
-	}
 	
-	busPixmap = busPixmap.scaledToHeight(30, Qt::SmoothTransformation);
+	if (busService == "A1"){
+		if (percentageNumPeople < BUS_LOW_OCCUPANCY){
+			busPixmap = QPixmap(":/resources/busA1Red.png");
+		} else if (percentageNumPeople < BUS_HIGH_OCCUPANCY){
+			busPixmap = QPixmap(":/resources/busA1Red.png");
+		} else{
+			busPixmap = QPixmap(":/resources/busA1Red.png");
+		}
+	} else if (busService == "A2"){
+		if (percentageNumPeople < BUS_LOW_OCCUPANCY){
+			busPixmap = QPixmap(":/resources/busA2Red.png");
+		} else if (percentageNumPeople < BUS_HIGH_OCCUPANCY){
+			busPixmap = QPixmap(":/resources/busA2Red.png");
+		} else{
+			busPixmap = QPixmap(":/resources/busA2Red.png");
+		}
+	} else if (busService == "B"){
+		if (percentageNumPeople < BUS_LOW_OCCUPANCY){
+			busPixmap = QPixmap(":/resources/busBGreen.png");
+		} else if (percentageNumPeople < BUS_HIGH_OCCUPANCY){
+			busPixmap = QPixmap(":/resources/busBGreen.png");
+		} else{
+			busPixmap = QPixmap(":/resources/busBGreen.png");
+		}
+	} else if (busService == "C"){
+		if (percentageNumPeople < BUS_LOW_OCCUPANCY){
+			busPixmap = QPixmap(":/resources/busCYellow.png");
+		} else if (percentageNumPeople < BUS_HIGH_OCCUPANCY){
+			busPixmap = QPixmap(":/resources/busCYellow.png");
+		} else{
+			busPixmap = QPixmap(":/resources/busCYellow.png");
+		}
+	} else if (busService == "D1"){
+		if (percentageNumPeople < BUS_LOW_OCCUPANCY){
+			busPixmap = QPixmap(":/resources/busD1.png");
+		} else if (percentageNumPeople < BUS_HIGH_OCCUPANCY){
+			busPixmap = QPixmap(":/resources/busD1.png");
+		} else{
+			busPixmap = QPixmap(":/resources/busD1.png");
+		}
+	} else if (busService == "D2"){
+		if (percentageNumPeople < BUS_LOW_OCCUPANCY){
+			busPixmap = QPixmap(":/resources/busD2.png");
+		} else if (percentageNumPeople < BUS_HIGH_OCCUPANCY){
+			busPixmap = QPixmap(":/resources/busD2.png");
+		} else{
+			busPixmap = QPixmap(":/resources/busD2.png");
+		}
+	} 
+
+	busPixmap = busPixmap.scaledToHeight(30, Qt::SmoothTransformation);	
   	QGraphicsPixmapItem* busGraphics = new QGraphicsPixmapItem(busPixmap);
 	busGraphics->setOffset(offsetx, offsety);
    	mapScene.addItem(busGraphics);
 }
+
