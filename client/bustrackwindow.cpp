@@ -5,19 +5,18 @@ const float ZOOM_FACTOR = 1.2;
 const float MIN_ZOOM = 1.0;
 const float MAX_ZOOM = 6.0;
 const float MAX_NUM_PEOPLE_BUS = 50;
+const float BUS_NUM = 6;
 
 BusTrackWindow::BusTrackWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::BusTrackWindow)
 {
     ui->setupUi(this);
+
+    initializeLists();
     initializeWidgets();
     initializeConnections();
     initializeValues();
-
-    ui->infoList->addItem("hello");
-    ui->infoList->addItem("fawef");
-    ui->infoList->addItem("auer");
 
     setMouseTracking(true);
 
@@ -234,6 +233,32 @@ void BusTrackWindow::createTimeWidget()
     ui->timeEdit->setVisible(true);
 }
 
+void BusTrackWindow::calendarSelectionChanged()
+{
+
+}
+
+void BusTrackWindow::timeSelectionChanged()
+{
+}
+
+void BusTrackWindow::initializeLists()
+{
+    calButtonList.append(ui->A1CalButton);
+    calButtonList.append(ui->A2CalButton);
+    calButtonList.append(ui->BCalButton);
+    calButtonList.append(ui->CCalButton);
+    calButtonList.append(ui->D1CalButton);
+    calButtonList.append(ui->D2CalButton);
+
+    clockButtonList.append(ui->A1ClockButton);
+    clockButtonList.append(ui->A2ClockButton);
+    clockButtonList.append(ui->BClockButton);
+    clockButtonList.append(ui->CClockButton);
+    clockButtonList.append(ui->D1ClockButton);
+    clockButtonList.append(ui->D2ClockButton);
+}
+
 void BusTrackWindow::initializeWidgets()
 {
     ui->searchResultsWidget->setVisible(false);
@@ -241,6 +266,20 @@ void BusTrackWindow::initializeWidgets()
     ui->dispatchWidget->setVisible(false);
     ui->calendarWidget->setVisible(false);
     ui->timeEdit->setVisible(false);
+
+    ui->A1Tick->setVisible(false);
+    ui->A2Tick->setVisible(false);
+    ui->BTick->setVisible(false);
+    ui->CTick->setVisible(false);
+    ui->D1Tick->setVisible(false);
+    ui->D2Tick->setVisible(false);
+
+    ui->A1Tick2->setVisible(false);
+    ui->A2Tick2->setVisible(false);
+    ui->BTick2->setVisible(false);
+    ui->CTick2->setVisible(false);
+    ui->D1Tick2->setVisible(false);
+    ui->D2Tick2->setVisible(false);
 
     setMap();
 
@@ -265,19 +304,23 @@ void BusTrackWindow::initializeConnections()
     connect(hideAction, SIGNAL(triggered()), this, SLOT(toggleElementsVisibility()));
     connect(dispatchAction, SIGNAL(triggered()), this, SLOT(toggleDispatchWidget()));
 
-    connect(ui->A1CalButton, SIGNAL(clicked()), this, SLOT(createCalendarWidget()));
-    connect(ui->A2CalButton, SIGNAL(clicked()), this, SLOT(createCalendarWidget()));
-    connect(ui->BCalButton, SIGNAL(clicked()), this, SLOT(createCalendarWidget()));
-    connect(ui->CCalButton, SIGNAL(clicked()), this, SLOT(createCalendarWidget()));
-    connect(ui->D1CalButton, SIGNAL(clicked()), this, SLOT(createCalendarWidget()));
-    connect(ui->D2CalButton, SIGNAL(clicked()), this, SLOT(createCalendarWidget()));
+    signalMapper = new QSignalMapper(this);
+    for(int i=0; i<BUS_NUM; i++)
+    {
+        signalMapper->setMapping(calButtonList[i], calButtonList[i]);
+        connect(calButtonList[i], SIGNAL(clicked()), signalMapper, SLOT(map()));
+    }
+    connect(signalMapper, SIGNAL(mapped(QWidget*)), this, SLOT(createCalendarWidget()));
 
-    connect(ui->A1ClockButton, SIGNAL(clicked()), this, SLOT(createTimeWidget()));
-    connect(ui->A2ClockButton, SIGNAL(clicked()), this, SLOT(createTimeWidget()));
-    connect(ui->BClockButton, SIGNAL(clicked()), this, SLOT(createTimeWidget()));
-    connect(ui->CClockButton, SIGNAL(clicked()), this, SLOT(createTimeWidget()));
-    connect(ui->D1ClockButton, SIGNAL(clicked()), this, SLOT(createTimeWidget()));
-    connect(ui->D2ClockButton, SIGNAL(clicked()), this, SLOT(createTimeWidget()));
+    signalMapper = new QSignalMapper(this);
+    for(int i=0; i<BUS_NUM; i++)
+    {
+        signalMapper->setMapping(clockButtonList[i], clockButtonList[i]);
+        connect(clockButtonList[i], SIGNAL(clicked()), signalMapper, SLOT(map()));
+    }
+    connect(signalMapper, SIGNAL(mapped(QWidget*)), this, SLOT(createTimeWidget()));
+
+
 }
 
 void BusTrackWindow::initializeValues()

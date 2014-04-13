@@ -32,7 +32,7 @@
    <widget class="MapView" name="mapView">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>-90</x>
       <y>10</y>
       <width>1351</width>
       <height>791</height>
@@ -306,6 +306,8 @@ border-top-color: rgb(255, 255, 255);</string>
       <bool>true</bool>
      </property>
     </widget>
+    <zorder>searchResultsList</zorder>
+    <zorder>mapView</zorder>
    </widget>
    <widget class="QWidget" name="infoListWidget" native="true">
     <property name="geometry">
@@ -840,6 +842,234 @@ font-size: 35pt;</string>
        <string>D2</string>
       </property>
      </widget>
+     <widget class="QLabel" name="A1Tick">
+      <property name="geometry">
+       <rect>
+        <x>32</x>
+        <y>123</y>
+        <width>25</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="A1Tick2">
+      <property name="geometry">
+       <rect>
+        <x>93</x>
+        <y>123</y>
+        <width>25</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="A2Tick2">
+      <property name="geometry">
+       <rect>
+        <x>233</x>
+        <y>123</y>
+        <width>25</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="A2Tick">
+      <property name="geometry">
+       <rect>
+        <x>172</x>
+        <y>123</y>
+        <width>25</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="BTick">
+      <property name="geometry">
+       <rect>
+        <x>313</x>
+        <y>123</y>
+        <width>25</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="BTick2">
+      <property name="geometry">
+       <rect>
+        <x>374</x>
+        <y>123</y>
+        <width>25</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="CTick">
+      <property name="geometry">
+       <rect>
+        <x>452</x>
+        <y>123</y>
+        <width>25</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="CTick2">
+      <property name="geometry">
+       <rect>
+        <x>513</x>
+        <y>123</y>
+        <width>25</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="D1Tick">
+      <property name="geometry">
+       <rect>
+        <x>593</x>
+        <y>123</y>
+        <width>25</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="D1Tick2">
+      <property name="geometry">
+       <rect>
+        <x>653</x>
+        <y>123</y>
+        <width>25</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="D2Tick2">
+      <property name="geometry">
+       <rect>
+        <x>793</x>
+        <y>123</y>
+        <width>25</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="D2Tick">
+      <property name="geometry">
+       <rect>
+        <x>733</x>
+        <y>123</y>
+        <width>25</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
      <zorder>D2Label</zorder>
      <zorder>D1Label</zorder>
      <zorder>CLabel</zorder>
@@ -860,6 +1090,18 @@ font-size: 35pt;</string>
      <zorder>D1ClockButton</zorder>
      <zorder>D2CalButton</zorder>
      <zorder>D2ClockButton</zorder>
+     <zorder>A1Tick</zorder>
+     <zorder>A1Tick2</zorder>
+     <zorder>A2Tick2</zorder>
+     <zorder>A2Tick</zorder>
+     <zorder>BTick</zorder>
+     <zorder>BTick2</zorder>
+     <zorder>CTick</zorder>
+     <zorder>CTick2</zorder>
+     <zorder>D1Tick</zorder>
+     <zorder>D1Tick2</zorder>
+     <zorder>D2Tick2</zorder>
+     <zorder>D2Tick</zorder>
     </widget>
    </widget>
    <widget class="QCalendarWidget" name="calendarWidget">
@@ -884,8 +1126,8 @@ font-size: 35pt;</string>
    <widget class="QTimeEdit" name="timeEdit">
     <property name="geometry">
      <rect>
-      <x>450</x>
-      <y>373</y>
+      <x>480</x>
+      <y>430</y>
       <width>121</width>
       <height>21</height>
      </rect>
