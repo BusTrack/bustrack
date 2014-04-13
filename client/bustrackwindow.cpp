@@ -15,8 +15,8 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
 
     initializeLists();
     initializeWidgets();
-    initializeConnections();
     initializeValues();
+    initializeConnections();
 
     setMouseTracking(true);
 
@@ -231,12 +231,12 @@ void BusTrackWindow::createTimeWidget()
     ui->timeEdit->setVisible(true);
 }
 
-void BusTrackWindow::calendarSelectionChanged()
+void BusTrackWindow::calendarSelectionChanged(int i)
 {
 
 }
 
-void BusTrackWindow::timeSelectionChanged()
+void BusTrackWindow::timeSelectionChanged(int i)
 {
 }
 
@@ -255,6 +255,20 @@ void BusTrackWindow::initializeLists()
     clockButtonList.append(ui->CClockButton);
     clockButtonList.append(ui->D1ClockButton);
     clockButtonList.append(ui->D2ClockButton);
+
+    calTickList.append(ui->A1Tick);
+    calTickList.append(ui->A2Tick);
+    calTickList.append(ui->BTick);
+    calTickList.append(ui->CTick);
+    calTickList.append(ui->D1Tick);
+    calTickList.append(ui->D2Tick);
+
+    clockTickList.append(ui->A1Tick2);
+    clockTickList.append(ui->A2Tick2);
+    clockTickList.append(ui->BTick2);
+    clockTickList.append(ui->C1Tick2);
+    clockTickList.append(ui->D1Tick2);
+    clockTickList.append(ui->D2Tick2);
 }
 
 void BusTrackWindow::initializeWidgets()
@@ -293,6 +307,16 @@ void BusTrackWindow::initializeWidgets()
     ui->infoListWidget->move(79, 140);
 }
 
+void BusTrackWindow::initializeValues()
+{
+    currentZoom = 1.0;
+    slideValue = 1.0;
+    busInfoBtnClicked = false;
+    stopInfoBtnClicked = false;
+    dispatchWidgetVisible = false;
+    searchActive = false;
+}
+
 void BusTrackWindow::initializeConnections()
 {
     connect(ui->zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(zoomSlide(int)));
@@ -317,18 +341,6 @@ void BusTrackWindow::initializeConnections()
         connect(clockButtonList[i], SIGNAL(clicked()), signalMapper, SLOT(map()));
     }
     connect(signalMapper, SIGNAL(mapped(QWidget*)), this, SLOT(createTimeWidget()));
-
-
-}
-
-void BusTrackWindow::initializeValues()
-{
-    currentZoom = 1.0;
-    slideValue = 1.0;
-    busInfoBtnClicked = false;
-    stopInfoBtnClicked = false;
-    dispatchWidgetVisible = false;
-    searchActive = false;
 }
 
 void BusTrackWindow::drawStop(QString name, int offsetx, int offsety, int numPeople)
