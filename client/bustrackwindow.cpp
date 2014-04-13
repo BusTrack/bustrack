@@ -206,6 +206,8 @@ void BusTrackWindow::initializeWidgets()
 
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(hideAction);
+
+    ui->infoListWidget->move(79, 140);
 }
 
 void BusTrackWindow::initializeConnections()

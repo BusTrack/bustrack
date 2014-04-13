@@ -24,5 +24,9 @@
         <file>resources/occupancy.png</file>
         <file>resources/mapOverlay.png</file>
         <file>resources/BustrackStylesheet.qss</file>
+        <file>resources/calWhite.png</file>
+        <file>resources/calBlue.png</file>
+        <file>resources/clockWhite.png</file>
+        <file>resources/clockBlue.png</file>
     </qresource>
 </RCC>
