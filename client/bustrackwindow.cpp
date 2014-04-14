@@ -219,6 +219,23 @@ void BusTrackWindow::toggleSearchResultsWidget(QString query)
     }
 }
 
+void BusTrackWindow::setSearchTextFromBuses(QListWidgetItem* item){
+    for (int i = 0; i < busList->count() ; i++){
+        if (busList->item(i) == item){
+            ui->searchLineEdit->setPlaceholderText(item.text());
+        }
+    }
+}
+
+void BusTrackWindow::setSearchTextFromBusStops(QListWidgetItem* item){
+     for (int i = 0; i < busStopList->count() ; i++){
+        if (busStopList->item(i) == item){
+            ui->searchLineEdit->setPlaceholderText(item->text());
+             
+        }
+    }
+}
+
 void BusTrackWindow::onBusInfoBtnClicked()
 {
 
@@ -364,6 +381,11 @@ void BusTrackWindow::initializeConnections()
     connect(ui->stopInfoBtn, SIGNAL(clicked()), this, SLOT(onStopInfoBtnClicked()));
     connect(hideAction, SIGNAL(triggered()), this, SLOT(toggleElementsVisibility()));
     connect(dispatchAction, SIGNAL(triggered()), this, SLOT(toggleDispatchWidget()));
+    
+    connect(busList, SIGNAL(itemClicked(QListWidgetItem*)), 
+        this, SLOT(setSearchTextFromBuses(QListWidgetItem*))); 
+    connect(busStopList, SIGNAL(itemClicked(QListWidgetItem*)), 
+        this, SLOT(setSearchTextFromBusStops(QListWidgetItem*)));   
 
     // Receive events from BusTrackService.
     connect(busTrackService, SIGNAL(connected()), this, SLOT(btsConnected()));
