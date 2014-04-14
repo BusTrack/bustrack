@@ -31,16 +31,32 @@ namespace bustrack {
 
     BusService getService();
     void setService(BusService service);
+    
+    unsigned int getOccupancy();
+    void setOccupancy(unsigned int occupancy);
+    
+    float getLatitude();
+    void setLatitude(float latitude);
+    
+    float getLongitude();
+    void setLongitude(float longitude);
 
     static Bus fromString(const std::string& serialized);
+    static Bus fromStringAll(const std::string& serialized);
     std::string toString();
+    std::string toStringAll();
 
   private:
     static const std::string TAG;
     static const int NUM_SERIALIZED_FIELDS = 1;
+    static const int NUM_ALL_FIELDS = 4;
 
     std::string id_;
     BusService service_;
+    
+    unsigned int occupancy_;
+    float longitude_;
+    float latitude_;
   };
 
 }
