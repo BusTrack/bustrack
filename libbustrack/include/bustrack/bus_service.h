@@ -28,8 +28,14 @@ namespace bustrack {
   public:
     std::string getCode();
     void setCode(std::string code);
+    
+    static BusService fromString(const std::string& serialized);
+    std::string toString();
 
   private:
+    static const std::string TAG;
+    static const int NUM_SERIALIZED_FIELDS = 1;
+    
     std::string code_;
   };
 
