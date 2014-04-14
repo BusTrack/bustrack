@@ -17,6 +17,7 @@
  * limitations under the License.
  * ========================================================================= */
 
+#include <sstream>
 #include <stdexcept>
 
 #include <QString>
@@ -62,7 +63,10 @@ namespace bustrack {
   }
 
   std::string Bus::toString() {
-    return id_;
+    std::stringstream serialized_ss;
+    serialized_ss << getId();
+
+    return serialized_ss.str();
   }
 
 }
