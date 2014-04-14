@@ -26,15 +26,8 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
 
     setMouseTracking(true);
 
-    drawStop("Stop1",100,100,0);
-    drawStop("Stop2",800,900,1);
-    drawStop("Stop3",1000,300,15);
-    
-    drawBus("A1", 500, 400, 60);
-    drawBus("B", 300, 400, 59);
-    drawBus("A2", 200, 400, 30);
-    drawBus("C", 100, 400, 2);
-    drawBus("D2", 10, 400, 0);
+    drawStop("Stop1",1.297970,103.770000,0);
+
 
     searchStop("Stop1");
 }
@@ -376,8 +369,15 @@ void BusTrackWindow::initializeConnections()
     );
 }
 
-void BusTrackWindow::drawStop(QString name, int offsetx, int offsety, int numPeople)
+void BusTrackWindow::drawStop(QString name, float latitude, float longitude, int numPeople)
 {
+    if (latitude > 1.297982 || longitude < 103.769741 || latitude < 1.292964 || longitude >  103.778872)
+         return;
+    int offsetx = 1080 * (latitude-1.292964)/(1.297982-1.292964);
+    int offsety = 1920 * (longitude-103.769741)/(103.778872-103.769741);
+    qDebug() << offsetx;
+    qDebug() << offsety;
+
     //Color transitioning from red to yellow to green
     QColor repaintColor;
     repaintColor.setRgb(255,0,36);
