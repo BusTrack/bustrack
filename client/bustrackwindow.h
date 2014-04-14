@@ -98,6 +98,7 @@ private:
     void drawBus(QString busService, float offsetx, float offsety, int numPeople);
     QImage determineBusPNG(QString busService);
     void searchStop(QString name);
+    void searchBus(QString name);
 };
 
 }

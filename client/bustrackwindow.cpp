@@ -481,6 +481,8 @@ void BusTrackWindow::drawStop(QString name, float latitude, float longitude, int
 void BusTrackWindow::searchStop(QString name)
 {
     searchActive = true;
+
+
     int offsetx = 1000, offsety = 300, radius = 50;
 
     QColor overlayColor;
@@ -489,7 +491,26 @@ void BusTrackWindow::searchStop(QString name)
     QPainterPath path1;
     path1.addRect(0,0,1920,1080);
     path1.addEllipse(offsetx-radius+15, offsety-radius+17, 2*radius, 2*radius);
-    path1.addEllipse(offsetx-radius+90, offsety-radius+90, 2*radius, 2*radius);
+    path1.setFillRule(Qt::OddEvenFill);
+    searchOverlay->setBrush(overlayColor);
+    searchOverlay->setOpacity(1);
+    searchOverlay->setPath(path1);
+    mapScene.addItem(searchOverlay);
+}
+
+void BusTrackWindow::searchBus(QString name)
+{
+    searchActive = true;
+
+
+    int offsetx = 1000, offsety = 300, radius = 50;
+
+    QColor overlayColor;
+    overlayColor.setRgb(1,1,1,100);
+    searchOverlay = new QGraphicsPathItem(0);
+    QPainterPath path1;
+    path1.addRect(0,0,1920,1080);
+    path1.addEllipse(offsetx-radius+15, offsety-radius+17, 2*radius, 2*radius);
     path1.setFillRule(Qt::OddEvenFill);
     searchOverlay->setBrush(overlayColor);
     searchOverlay->setOpacity(1);
