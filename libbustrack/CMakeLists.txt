@@ -24,7 +24,6 @@ add_library (bustrack
   src/bus.cc
   src/bus_service.cc
   src/bus_stop.cc
-  src/coords.cc
   src/waypoint.cc
   src/message.cc
 )
