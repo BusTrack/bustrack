@@ -101,7 +101,8 @@ void BusTrackService::handleReadyRead() {
             }
 
             emit getBusServicesComplete(bus_services);
-        },
+        }
+
         case BUS_STOPS_REQUEST: {
             QStringList bus_stops_line = decoded_payload.split("\n");
             std::vector<BusStop> bus_stops;
@@ -112,6 +113,7 @@ void BusTrackService::handleReadyRead() {
             emit getBusStopsComplete(bus_stops);
             break;
         }
+
         case BUSES_REQUEST: {
             QStringList buses_line = decoded_payload.split("\n");
             std::vector<Bus> buses;
@@ -120,7 +122,7 @@ void BusTrackService::handleReadyRead() {
             }
 
             emit getBusesComplete(buses);
-        },
+        }
         default:
             break;
     }
