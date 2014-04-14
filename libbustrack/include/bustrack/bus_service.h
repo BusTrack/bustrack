@@ -20,7 +20,10 @@
 #ifndef BUSTRACK_BUS_SERVICE_H_
 #define BUSTRACK_BUS_SERVICE_H_
 
+#include <vector>
 #include <string>
+
+#include "waypoint.h"
 
 namespace bustrack {
 
@@ -32,11 +35,15 @@ namespace bustrack {
     static BusService fromString(const std::string& serialized);
     std::string toString();
 
+    std::vector<Waypoint> getRoute();
+    void setRoute(std::vector<Waypoint> route);
+
   private:
     static const std::string TAG;
     static const int NUM_SERIALIZED_FIELDS = 1;
     
     std::string code_;
+    std::vector<Waypoint> route_;
   };
 
 }

@@ -22,7 +22,6 @@
 # could be listed here.
 add_library (bustrack
   src/bus.cc
-  src/bus_route.cc
   src/bus_service.cc
   src/bus_stop.cc
   src/coords.cc

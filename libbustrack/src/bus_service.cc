@@ -36,6 +36,14 @@ namespace bustrack {
   void BusService::setCode(std::string code) {
     code_ = code;
   }
+
+  std::vector<Waypoint> BusService::getRoute() {
+    return route_;
+  }
+
+  void BusService::setRoute(std::vector<Waypoint> route) {
+    route_ = route;
+  }
   
   BusService BusService::fromString(const std::string& serialized) {
     QString q_serialized (serialized.c_str());
