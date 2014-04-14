@@ -34,6 +34,8 @@ namespace bustrack {
     static const std::string TYPE_BUS_STOP;
 
     Waypoint();
+    virtual ~Waypoint();
+
     std::string getType();
 
     float getLatitude();

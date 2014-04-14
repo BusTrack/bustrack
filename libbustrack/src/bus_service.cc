@@ -23,6 +23,7 @@
 #include <QStringList>
 #include <QDebug>
 
+#include "bustrack/bus_stop.h"
 #include "bustrack/bus_service.h"
 
 namespace bustrack {
@@ -49,7 +50,7 @@ namespace bustrack {
     QString q_serialized (serialized.c_str());
     QStringList tokens = q_serialized.split("|");
 
-    if (tokens.size() != NUM_SERIALIZED_FIELDS) {
+    if (tokens.size() < NUM_SERIALIZED_FIELDS) {
       qWarning("%s: Insufficient number of fields! (%s)", TAG.c_str(),
          serialized.c_str());
       return BusService();
@@ -59,12 +60,87 @@ namespace bustrack {
     BusService service;
     service.setCode(tokens[0].toStdString());
 
+    // Create the routes.
+    std::vector<std::shared_ptr<Waypoint>> route;
+    for (int i = 1; i < tokens.size(); i++) {
+      QString waypoint_str (tokens[i]);
+      QStringList waypoint_tokens = waypoint_str.split(",");
+
+      if (waypoint_tokens.size() < 1) {
+        qWarning("%s: Invalid waypoint found for bus service %s", TAG.c_str(),
+            service.getCode().c_str());
+        continue;
+      }
+
+      // Determine if we have a NORMAL waypoint or BUS_STOP.
+      if (waypoint_tokens[0].toStdString() == Waypoint::TYPE_NORMAL) {
+        std::shared_ptr<Waypoint> waypoint = std::make_shared<Waypoint>();
+
+        // Parse the other tokens.
+        if (waypoint_tokens.size() < 3) {
+          qWarning("%s: Normal waypoint does not have sufficient tokens",
+              TAG.c_str());
+          continue;
+        }
+
+        // Convert the coordinates.
+        bool parsing_ok = false;
+        waypoint->setLatitude(tokens[1].toFloat(&parsing_ok));
+        if (!parsing_ok) {
+          qWarning("%s: Unable to parse latitude for waypoint", TAG.c_str());
+          continue;
+        }
+
+        waypoint->setLongitude(tokens[2].toFloat(&parsing_ok));
+        if (!parsing_ok) {
+          qWarning("%s: Unable to parse longitude for waypoint", TAG.c_str());
+          continue;
+        }
+
+        route.push_back(waypoint);
+
+      } else if (waypoint_tokens[0].toStdString() == Waypoint::TYPE_BUS_STOP) {
+        std::shared_ptr<BusStop> bus_stop = std::make_shared<BusStop>();
+
+        // Parse the other tokens.
+        if (waypoint_tokens.size() < 2) {
+          qWarning("%s: Bus stop waypoint does not have sufficient tokens",
+              TAG.c_str());
+          continue;
+        }
+
+        bus_stop->setId(waypoint_tokens[1].toStdString());
+        route.push_back(bus_stop);
+
+      } else {
+        qWarning("%s: Invalid waypoint type found for bus service %s",
+            TAG.c_str(), service.getCode().c_str());
+        continue;
+      }
+    }
+
     return service;
   }
  
   std::string BusService::toString() {
     std::stringstream serialized_ss;
-    serialized_ss << getCode();
+    serialized_ss << getCode() << "|";
+
+    // Write the routes too.
+    for (std::shared_ptr<Waypoint> waypoint : route_) {
+      serialized_ss << waypoint->getType();
+
+      if (waypoint->getType() == Waypoint::TYPE_NORMAL) {
+        serialized_ss << "," << waypoint->getLatitude() << "," <<
+          waypoint->getLongitude();
+      } else if (waypoint->getType() == Waypoint::TYPE_BUS_STOP) {
+        std::shared_ptr<BusStop> bus_stop =
+          std::dynamic_pointer_cast<BusStop>(waypoint);
+        serialized_ss << "," << bus_stop->getId();
+      }
+
+      serialized_ss << "|";
+    }
 
     return serialized_ss.str();
   }
