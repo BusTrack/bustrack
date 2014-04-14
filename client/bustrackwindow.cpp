@@ -553,7 +553,7 @@ void BusTrackWindow::drawStop(int index)
     QRgb color;
     int height, width;
     busstop.load(":/resources/stopA.png");
-    world.fill(1);	 
+//    world.fill(1);	 
     QPainter painter(&world);
     sizeImage = busstop.size();
     width = sizeImage.width();
@@ -561,7 +561,7 @@ void BusTrackWindow::drawStop(int index)
     for(int y = 0; y < height; y++) {
         for(int x = 0; x < width; x++) {
             color = busstop.pixel(x,y);
-            if (qRed(color) == 255 && qGreen(color) == 0 && qBlue(color) == 36) {
+            if (qRed(color) == 0 && qGreen(color) == 0 && qBlue(color) == 0) {
          	  busstop.setPixel(x,y,repaintColor.rgb());
             }
         }
@@ -580,7 +580,7 @@ void BusTrackWindow::drawStop(int index)
 
     //Generation of child graphics (toggle-able additional info)
     int rectHeight = 60 + 15*busServiceList.size();
-    QGraphicsRectItem* busstopinfoGraphics = new QGraphicsRectItem(offsetx+40, offsety-25, 150, rectHeight);
+    QGraphicsRectItem* busstopinfoGraphics = new QGraphicsRectItem(offsetx+40, offsety-25, 250, rectHeight);
     QColor windowBorderColor;
     windowBorderColor.setRgb(43,61,83);
     QPen windowPen;
@@ -809,7 +809,7 @@ void BusTrackWindow::drawBus(int index)
 	for(int y = 0; y < height; y++) {
 		for(int x = 0; x < width; x++) {
 		    color = background.pixel(x,y);
-		    if (qRed(color) == 255 && qGreen(color) == 0 && qBlue(color) == 36) {
+		    if (qRed(color) == 255 && qGreen(color) == 255 && qBlue(color) == 255) {
 		 	  background.setPixel(x,y,repaintBusColor.rgb());
 		    }
 		}
