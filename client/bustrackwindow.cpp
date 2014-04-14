@@ -245,7 +245,7 @@ void BusTrackWindow::toggleSearchResultsWidget(QString query)
 void BusTrackWindow::setSearchTextFromBuses(QListWidgetItem* item){
     for (int i = 0; i < busList->count() ; i++){
         if (busList->item(i) == item){
-            ui->searchLineEdit->setPlaceholderText(item.text());
+            ui->searchLineEdit->setPlaceholderText(item->text());
         }
     }
 }
