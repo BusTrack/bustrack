@@ -25,8 +25,6 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     initializeValues();
     initializeConnections();
 
-    setMouseTracking(true);
-    
     BusStop tempStop;
     tempStop.setId("Qweq");
     tempStop.setName("bobabobo");
@@ -131,25 +129,11 @@ void BusTrackWindow::mousePressEvent( QMouseEvent* event )
     }
 }
 
-void BusTrackWindow::mouseMoveEvent(QMouseEvent* event)
-{
-	if (QGraphicsItem *item = ui->mapView->itemAt(event->pos())) {
-        qDebug() << "You hovered" << item;
-        QList<QGraphicsItem *> childList = item->childItems();
-        qDebug() << childList;
-        for (int i = 0; i < childList.size(); i++){
-            if (childList[i]->contains(event->pos())){
-                qDebug() << "hover";
-            } else {
-                qDebug() << "nope";
-            }
-        }
-    }
-}
-
 void BusTrackWindow::resizeEvent(QResizeEvent *event)
 {
-
+    QSize currentSize = size();
+    ui->zoomSliderWidget->move(currentSize.width()*0.93, currentSize.height()*0.6);
+    ui->dispatchWidget->move(currentSize.width()*0.12, currentSize.height()*0.55);
 }
 
 void BusTrackWindow::setMap()

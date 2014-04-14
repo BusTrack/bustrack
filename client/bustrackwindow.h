@@ -43,7 +43,6 @@ protected:
     void wheelEvent(QWheelEvent *event);
     void resizeEvent(QResizeEvent *event);
     void mousePressEvent(QMouseEvent* event);
-    void mouseMoveEvent(QMouseEvent* event);
 
 signals:
 

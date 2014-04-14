@@ -19,10 +19,3 @@ void MapView::wheelEvent(QWheelEvent *event)
 {
     event->ignore();
 }
-
-/*
-void MapView::mouseMoveEvent(QMouseEvent* event)
-{
-   qDebug() << "You hovered";
-}
-*/
