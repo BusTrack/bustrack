@@ -88,8 +88,10 @@ private:
     QList<QLabel*> calTickList;
     QList<QLabel*> clockTickList;
     QSignalMapper *signalMapper;
-    QList<QString> busStopListComplete;
-    QList<QString> busListComplete;
+
+    // models equivalent
+    QList<BusStop> busStopListComplete;
+    QList<Bus> busListComplete;
 
     // supporting methods
     void initializeLists();
@@ -98,8 +100,8 @@ private:
     void initializeValues();
     void setMap();
     void scaleMap(float zoom);
-    void drawStop(QString index,float offsetx, float offsety, int numPeople);
-    void drawBus(QString busService, float offsetx, float offsety, int numPeople);
+    void drawStop(int index);
+    void drawBus(int index);
     QImage determineBusPNG(QString busService);
     void searchStop(QString name);
     void searchBus(QString name);

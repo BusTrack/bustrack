@@ -27,12 +27,35 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     initializeConnections();
 
     setMouseTracking(true);
+    
+    BusStop tempStop;
+    tempStop.setId("Qweq");
+    tempStop.setName("bobobobo");
+    tempStop.setOccupancy(10);
+    busStopListComplete.append(tempStop);
+    drawStop(0);
 
+    Bus tempBus;
+    tempBus.setId("ASDF");
+    BusService tempService;
+    tempService.setCode("A1");
+    tempBus.setService(tempService);
+    tempBus.setOccupancy(35);
+    tempBus.setLatitude(1.297970);
+    tempBus.setLongitude(103.772000);
+    busListComplete.append(tempBus);
+    drawBus(0);
+   
+
+
+/*
     drawBus("D1",1.297970,103.770000,50);
     drawBus("A1",1.297974,103.772000,30);
     drawBus("A1",1.297974,103.773000,20);
     drawBus("D2",1.297973,103.775000,10);
     drawBus("D2",1.297973,103.774000,0);
+*/
+
 }
 
 BusTrackWindow::~BusTrackWindow()
@@ -50,31 +73,30 @@ void BusTrackWindow::btsConnected()
 void BusTrackWindow::btsGetBusStopsComplete(std::vector<BusStop> bus_stops)
 {
     for (BusStop bus_stop : bus_stops) {
-        qDebug("%s: Found bus stop: %s", TAG.c_str(),
-            bus_stop.getName().c_str());
-        busStopListComplete.append(bus_stop.getName().c_str());
-
-        drawStop(QString(bus_stop.getName().c_str()), bus_stop.getLatitude(),
-                bus_stop.getLongitude(), bus_stop.getOccupancy());
+        qDebug("%s: Found bus stop: %s", TAG.c_str(),bus_stop.getName().c_str());
+  //      busStopListComplete.append(bus_stop.getName().c_str());
     }
 
+/*
     for(int i=0; i<busStopListComplete.length(); i++)
     {
         ui->busStopList->addItem(busStopListComplete[i]);
     }
+*/
 }
 
 void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
 {
     for (Bus bus : buses) {
         qDebug("%s: Found bus: %s", TAG.c_str(), bus.getId().c_str());
-        busListComplete.append(bus.getId().c_str());
+ //       busListComplete.append(bus.getId().c_str());
     }
-
+/*
     for(int i=0; i<busListComplete.length(); i++)
     {
         ui->busInfoList->addItem(busListComplete[i]);
     }
+*/
 }
 
 // override default mouse behaviour to implement zoom
@@ -397,8 +419,15 @@ void BusTrackWindow::initializeConnections()
     );
 }
 
-void BusTrackWindow::drawStop(QString name, float latitude, float longitude, int numPeople)
+void BusTrackWindow::drawStop(int index)
 {
+    //interim long-lat as not implemented in bus_stop
+    BusStop temp = busStopListComplete.at(index);
+    float latitude = 1.295000;
+    float longitude = 103.770000;
+    QString name= QString::fromStdString(temp.getName());
+    int numPeople = temp.getOccupancy();
+    
     // 1.298037, 103.769591 (Top-left)
     // 1.292223, 103.780003 (Bottom-right)
     if (latitude > 1.298037 || longitude < 103.769591 ||
@@ -553,8 +582,14 @@ void BusTrackWindow::searchBus(QString name)
     mapScene.addItem(searchOverlay);
 }
 
-void BusTrackWindow::drawBus(QString busService, float latitude, float longitude, int numPeople)
+void BusTrackWindow::drawBus(int index)
 {
+    Bus temp = busListComplete.at(index);
+    float latitude = temp.getLatitude();
+    float longitude = temp.getLongitude();
+    int numPeople = temp.getOccupancy();
+    QString busService = QString::fromStdString(temp.getService().getCode());
+
     // 1.298037, 103.769591 (Top-left)
     // 1.292223, 103.780003 (Bottom-right)
     if (latitude > 1.298037 || longitude < 103.769591 ||
