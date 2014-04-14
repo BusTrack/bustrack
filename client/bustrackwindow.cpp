@@ -45,8 +45,6 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     tempBus.setLongitude(103.772000);
     busListComplete.append(tempBus);
     drawBus(0);
-   
-
 
 /*
     drawBus("D1",1.297970,103.770000,50);
@@ -74,7 +72,7 @@ void BusTrackWindow::btsGetBusStopsComplete(std::vector<BusStop> bus_stops)
 {
     for (BusStop bus_stop : bus_stops) {
         qDebug("%s: Found bus stop: %s", TAG.c_str(),bus_stop.getName().c_str());
-  //      busStopListComplete.append(bus_stop.getName().c_str());
+        busStopListComplete.append(bus_stop);
     }
 
 /*
@@ -89,7 +87,7 @@ void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
 {
     for (Bus bus : buses) {
         qDebug("%s: Found bus: %s", TAG.c_str(), bus.getId().c_str());
- //       busListComplete.append(bus.getId().c_str());
+        busListComplete.append(bus);
     }
 /*
     for(int i=0; i<busListComplete.length(); i++)
@@ -120,12 +118,6 @@ void BusTrackWindow::wheelEvent(QWheelEvent *event)
 
 void BusTrackWindow::mousePressEvent( QMouseEvent* event )
 {
-    if (searchActive) {
-        searchOverlay->hide();
-        searchActive = false;
-        return;
-    }
-
     if (QGraphicsItem *item = ui->mapView->itemAt(event->pos())) {
         QList<QGraphicsItem *> childList = item->childItems();
         for (int i = 0; i < childList.size(); i++){
@@ -192,10 +184,12 @@ void BusTrackWindow::toggleSearchResultsWidget(QString query)
     if(query.length() > 0)
     {
         ui->searchResultsWidget->setVisible(true);
+        searchStop(query);
     }
     else
     {
         ui->searchResultsWidget->setVisible(false);
+        resetSearch();
     }
 }
 
@@ -542,12 +536,47 @@ void BusTrackWindow::drawStop(int index)
     busstopoccupancyNumber->hide();
 }
 
+void BusTrackWindow::resetSearch()
+{
+    searchActive = false;
+    searchOverlay->hide();
+}
+
 void BusTrackWindow::searchStop(QString name)
 {
+    resetSearch();
+
+    bool resultFound = false;
+    int resultIndex;
+    for (int i = 0 ; i < busStopListComplete.size(); i++) {
+        BusStop curStop = busStopListComplete.at(i);
+        qDebug() << QString::fromStdString(curStop.getName());
+        if (QString::fromStdString(curStop.getName()).contains(name)){
+            resultFound = true;
+            resultIndex = i;
+        }
+    }
+   
+    if (!resultFound)
+        return;
+
     searchActive = true;
+    //interim long-lat as not implemented in bus_stop
+    BusStop temp = busStopListComplete.at(resultIndex);
+    float latitude = 1.295000;
+    float longitude = 103.770000;
+    int numPeople = temp.getOccupancy();
+    
+    // 1.298037, 103.769591 (Top-left)
+    // 1.292223, 103.780003 (Bottom-right)
+    if (latitude > 1.298037 || longitude < 103.769591 ||
+        latitude < 1.292223 || longitude > 103.780003)
+        return;
 
+    int offsetx = 1080 * (latitude-1.292223)/(1.298037-1.292223);
+    int offsety = 1920 * (longitude-103.769591)/(103.780003-103.769591);
 
-    int offsetx = 1000, offsety = 300, radius = 50;
+    int radius = 50;
 
     QColor overlayColor;
     overlayColor.setRgb(1,1,1,100);

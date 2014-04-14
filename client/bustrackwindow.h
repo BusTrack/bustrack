@@ -103,6 +103,7 @@ private:
     void drawStop(int index);
     void drawBus(int index);
     QImage determineBusPNG(QString busService);
+    void resetSearch();
     void searchStop(QString name);
     void searchBus(QString name);
 };
