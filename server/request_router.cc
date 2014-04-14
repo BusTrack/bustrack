@@ -17,9 +17,11 @@
  * limitations under the License.
  * ========================================================================= */
 
-#include "request/buses_request.h"
+#include "request/bus_services_request.h"
 #include "request/bus_stops_request.h"
+#include "request/buses_request.h"
 #include "request/invalid_request.h"
+
 #include "server_context.h"
 
 #include "request_router.h"
@@ -27,6 +29,7 @@
 namespace bustrack {
 
   const std::string RequestRouter::TAG ("RequestRouter");
+  const std::string RequestRouter::REQUEST_BUS_SERVICES_TAG ("BUS_SERVICES");
   const std::string RequestRouter::REQUEST_BUS_STOPS_TAG ("BUS_STOPS");
   const std::string RequestRouter::REQUEST_BUSES_TAG ("BUSES");
 
@@ -48,7 +51,9 @@ namespace bustrack {
   }
 
   std::unique_ptr<Request> RequestRouter::getActualRequest(Message request) {
-    if (request.getTag() == REQUEST_BUS_STOPS_TAG) {
+    if (request.getTag() == REQUEST_BUS_SERVICES_TAG) {
+      return std::unique_ptr<Request>(new BusServicesRequest(context_));
+    } else if (request.getTag() == REQUEST_BUS_STOPS_TAG) {
       return std::unique_ptr<Request>(new BusStopsRequest(context_));
     } else if (request.getTag() == REQUEST_BUSES_TAG) {
       return std::unique_ptr<Request>(new BusesRequest(context_));

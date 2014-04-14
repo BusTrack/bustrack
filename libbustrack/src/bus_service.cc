@@ -119,6 +119,7 @@ namespace bustrack {
       }
     }
 
+    service.setRoute(route);
     return service;
   }
  
@@ -127,7 +128,7 @@ namespace bustrack {
     serialized_ss << getCode() << "|";
 
     // Write the routes too.
-    for (std::shared_ptr<Waypoint> waypoint : route_) {
+    for (std::shared_ptr<Waypoint> waypoint : getRoute()) {
       serialized_ss << waypoint->getType();
 
       if (waypoint->getType() == Waypoint::TYPE_NORMAL) {
