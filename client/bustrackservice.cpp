@@ -1,4 +1,4 @@
-/* ========================================================================= 
+/* =========================================================================
  * BusTrack Bus Tracking System
  * CS3249 User Interface Development
  * =========================================================================
@@ -68,7 +68,7 @@ void BusTrackService::handleReadyRead() {
 
     QString line = QString(buf).trimmed();
     Message message = Message::decodeFromString(line.toStdString());
-    qDebug("%s: Message with tag %s id %d received", TAG.c_str(), 
+    qDebug("%s: Message with tag %s id %d received", TAG.c_str(),
         message.getTag().c_str(), message.getId());
 
     // Throw it into the sorting house!

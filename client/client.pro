@@ -13,9 +13,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        bustrackwindow.cpp
+        bustrackwindow.cpp\
+        mapview.cpp
 
-HEADERS  += bustrackwindow.h
+HEADERS  += bustrackwindow.h\
+            mapview.h
 
 FORMS    += bustrackwindow.ui
 

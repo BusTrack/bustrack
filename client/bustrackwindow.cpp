@@ -299,6 +299,10 @@ void BusTrackWindow::initializeLists()
 
 void BusTrackWindow::initializeWidgets()
 {
+    ui->zoomSliderWidget->setVisible(true);
+    ui->searchBarWidget->setVisible(true);
+    ui->sideBarWidget->setVisible(true);
+
     ui->searchResultsWidget->setVisible(false);
     ui->infoListWidget->setVisible(false);
     ui->dispatchWidget->setVisible(false);
