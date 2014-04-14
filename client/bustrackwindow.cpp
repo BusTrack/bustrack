@@ -30,8 +30,10 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     
     BusStop tempStop;
     tempStop.setId("Qweq");
-    tempStop.setName("bobobobo");
+    tempStop.setName("bobabobo");
     tempStop.setOccupancy(10);
+    tempStop.setLatitude(1.297970);
+    tempStop.setLongitude(103.770000);
     busStopListComplete.append(tempStop);
     drawStop(0);
 
@@ -72,7 +74,7 @@ void BusTrackWindow::btsGetBusStopsComplete(std::vector<BusStop> bus_stops)
 {
     for (BusStop bus_stop : bus_stops) {
         qDebug("%s: Found bus stop: %s", TAG.c_str(),bus_stop.getName().c_str());
-        busStopListComplete.append(bus_stop);
+ //       busStopListComplete.append(bus_stop);
     }
 
 /*
@@ -87,7 +89,7 @@ void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
 {
     for (Bus bus : buses) {
         qDebug("%s: Found bus: %s", TAG.c_str(), bus.getId().c_str());
-        busListComplete.append(bus);
+//        busListComplete.append(bus);
     }
 /*
     for(int i=0; i<busListComplete.length(); i++)
@@ -417,10 +419,9 @@ void BusTrackWindow::initializeConnections()
 
 void BusTrackWindow::drawStop(int index)
 {
-    //interim long-lat as not implemented in bus_stop
     BusStop temp = busStopListComplete.at(index);
-    float latitude = 1.295000;
-    float longitude = 103.770000;
+    float latitude = temp.getLatitude();
+    float longitude = temp.getLongitude();
     QString name= QString::fromStdString(temp.getName());
     int numPeople = temp.getOccupancy();
     
@@ -547,7 +548,7 @@ void BusTrackWindow::resetSearch()
 void BusTrackWindow::runSearch(QString query)
 {
     resetSearch();
-
+    qDebug() << query;
     bool resultsFound = false;
     QList<int> stopResultIndex;
     for (int i = 0 ; i < busStopListComplete.size(); i++) {
@@ -586,10 +587,9 @@ void BusTrackWindow::runSearch(QString query)
     mapScene.addItem(searchOverlay);
 
     for (int i = 0; i < stopResultIndex.size(); i++){
-        //interim long-lat as not implemented in bus_stop
         BusStop temp = busStopListComplete.at(stopResultIndex.at(i));
-        float latitude = 1.295000;
-        float longitude = 103.770000;
+        float latitude = temp.getLatitude();
+        float longitude = temp.getLongitude();
         // 1.298037, 103.769591 (Top-left)
         // 1.292223, 103.780003 (Bottom-right)
         if (latitude > 1.298037 || longitude < 103.769591 ||
@@ -601,7 +601,6 @@ void BusTrackWindow::runSearch(QString query)
     }
 
     for (int i = 0; i < busResultIndex.size(); i++){
-        //interim long-lat as not implemented in bus_stop
         Bus temp = busListComplete.at(busResultIndex.at(i));
         float latitude = temp.getLatitude();
         float longitude = temp.getLongitude();
