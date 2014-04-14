@@ -26,10 +26,7 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
 
     setMouseTracking(true);
 
-    drawStop("Stop1",1.297970,103.770000,0);
-
-
-    searchStop("Stop1");
+    drawBus("D1",1.297970,103.770000,0);
 }
 
 BusTrackWindow::~BusTrackWindow()
@@ -375,8 +372,6 @@ void BusTrackWindow::drawStop(QString name, float latitude, float longitude, int
          return;
     int offsetx = 1080 * (latitude-1.292964)/(1.297982-1.292964);
     int offsety = 1920 * (longitude-103.769741)/(103.778872-103.769741);
-    qDebug() << offsetx;
-    qDebug() << offsety;
 
     //Color transitioning from red to yellow to green
     QColor repaintColor;
@@ -502,8 +497,13 @@ void BusTrackWindow::searchStop(QString name)
     mapScene.addItem(searchOverlay);
 }
 
-void BusTrackWindow::drawBus(QString busService, float offsetx, float offsety, int numPeople)
+void BusTrackWindow::drawBus(QString busService, float latitude, float longitude, int numPeople)
 {
+    if (latitude > 1.297982 || longitude < 103.769741 || latitude < 1.292964 || longitude >  103.778872)
+         return;
+    int offsetx = 1080 * (latitude-1.292964)/(1.297982-1.292964);
+    int offsety = 1920 * (longitude-103.769741)/(103.778872-103.769741);
+
 	float percentageNumPeople = (numPeople * 1.0)/MAX_NUM_PEOPLE_BUS;
 	//Color transitioning from red to yellow to green	
 	QColor repaintBusColor;
