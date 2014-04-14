@@ -118,6 +118,9 @@ void BusTrackWindow::wheelEvent(QWheelEvent *event)
 
 void BusTrackWindow::mousePressEvent( QMouseEvent* event )
 {
+    if (searchActive && event->button() == Qt::RightButton)
+        resetSearch();
+
     if (QGraphicsItem *item = ui->mapView->itemAt(event->pos())) {
         QList<QGraphicsItem *> childList = item->childItems();
         for (int i = 0; i < childList.size(); i++){
@@ -184,7 +187,7 @@ void BusTrackWindow::toggleSearchResultsWidget(QString query)
     if(query.length() > 0)
     {
         ui->searchResultsWidget->setVisible(true);
-        searchStop(query);
+        runSearch(query);
     }
     else
     {
@@ -228,7 +231,6 @@ void BusTrackWindow::onStopInfoBtnClicked()
         ui->stopInfoBtn->setIcon(QIcon(":/resources/searchStop.png"));
         ui->busStopInfoListWidget->setVisible(false);
         stopInfoBtnClicked = false;
-
     }
 }
 
@@ -460,7 +462,7 @@ void BusTrackWindow::drawStop(int index)
             color = busstop.pixel(x,y);
             if (qRed(color) == 255 && qGreen(color) == 0 && qBlue(color) == 36) {
          	  busstop.setPixel(x,y,repaintColor.rgb());
-   	    }
+            }
         }
     }
     painter.drawImage(0,0,busstop);
@@ -542,73 +544,77 @@ void BusTrackWindow::resetSearch()
     searchOverlay->hide();
 }
 
-void BusTrackWindow::searchStop(QString name)
+void BusTrackWindow::runSearch(QString query)
 {
     resetSearch();
 
-    bool resultFound = false;
-    int resultIndex;
+    bool resultsFound = false;
+    QList<int> stopResultIndex;
     for (int i = 0 ; i < busStopListComplete.size(); i++) {
         BusStop curStop = busStopListComplete.at(i);
         qDebug() << QString::fromStdString(curStop.getName());
-        if (QString::fromStdString(curStop.getName()).contains(name)){
-            resultFound = true;
-            resultIndex = i;
+        if (QString::fromStdString(curStop.getName()).contains(query,Qt::CaseInsensitive)){
+            resultsFound = true;
+            stopResultIndex.append(i);
+        }
+    }
+
+    QList<int> busResultIndex;
+    for (int i = 0 ; i < busListComplete.size(); i++) {
+        Bus curBus = busListComplete.at(i);
+        qDebug() << QString::fromStdString(curBus.getService().getCode());
+        if (QString::fromStdString(curBus.getService().getCode()).contains(query,Qt::CaseInsensitive)){
+            resultsFound = true;
+            busResultIndex.append(i);
         }
     }
    
-    if (!resultFound)
+    if (!resultsFound)
         return;
 
     searchActive = true;
-    //interim long-lat as not implemented in bus_stop
-    BusStop temp = busStopListComplete.at(resultIndex);
-    float latitude = 1.295000;
-    float longitude = 103.770000;
-    int numPeople = temp.getOccupancy();
-    
-    // 1.298037, 103.769591 (Top-left)
-    // 1.292223, 103.780003 (Bottom-right)
-    if (latitude > 1.298037 || longitude < 103.769591 ||
-        latitude < 1.292223 || longitude > 103.780003)
-        return;
-
-    int offsetx = 1080 * (latitude-1.292223)/(1.298037-1.292223);
-    int offsety = 1920 * (longitude-103.769591)/(103.780003-103.769591);
 
     int radius = 50;
-
     QColor overlayColor;
     overlayColor.setRgb(1,1,1,100);
     searchOverlay = new QGraphicsPathItem(0);
     QPainterPath path1;
     path1.addRect(0,0,1920,1080);
-    path1.addEllipse(offsetx-radius+15, offsety-radius+17, 2*radius, 2*radius);
     path1.setFillRule(Qt::OddEvenFill);
     searchOverlay->setBrush(overlayColor);
     searchOverlay->setOpacity(1);
-    searchOverlay->setPath(path1);
     mapScene.addItem(searchOverlay);
-}
 
-void BusTrackWindow::searchBus(QString name)
-{
-    searchActive = true;
+    for (int i = 0; i < stopResultIndex.size(); i++){
+        //interim long-lat as not implemented in bus_stop
+        BusStop temp = busStopListComplete.at(stopResultIndex.at(i));
+        float latitude = 1.295000;
+        float longitude = 103.770000;
+        // 1.298037, 103.769591 (Top-left)
+        // 1.292223, 103.780003 (Bottom-right)
+        if (latitude > 1.298037 || longitude < 103.769591 ||
+            latitude < 1.292223 || longitude > 103.780003)
+            return;
+        int offsetx = 1080 * (latitude-1.292223)/(1.298037-1.292223);
+        int offsety = 1920 * (longitude-103.769591)/(103.780003-103.769591);
+        path1.addEllipse(offsetx-radius+15, offsety-radius+17, 2*radius, 2*radius);
+    }
 
-
-    int offsetx = 1000, offsety = 300, radius = 50;
-
-    QColor overlayColor;
-    overlayColor.setRgb(1,1,1,100);
-    searchOverlay = new QGraphicsPathItem(0);
-    QPainterPath path1;
-    path1.addRect(0,0,1920,1080);
-    path1.addEllipse(offsetx-radius+15, offsety-radius+17, 2*radius, 2*radius);
-    path1.setFillRule(Qt::OddEvenFill);
-    searchOverlay->setBrush(overlayColor);
-    searchOverlay->setOpacity(1);
+    for (int i = 0; i < busResultIndex.size(); i++){
+        //interim long-lat as not implemented in bus_stop
+        Bus temp = busListComplete.at(busResultIndex.at(i));
+        float latitude = temp.getLatitude();
+        float longitude = temp.getLongitude();
+        // 1.298037, 103.769591 (Top-left)
+        // 1.292223, 103.780003 (Bottom-right)
+        if (latitude > 1.298037 || longitude < 103.769591 ||
+            latitude < 1.292223 || longitude > 103.780003)
+            return;
+        int offsetx = 1080 * (latitude-1.292223)/(1.298037-1.292223);
+        int offsety = 1920 * (longitude-103.769591)/(103.780003-103.769591);
+        path1.addEllipse(offsetx-radius+33, offsety-radius+25, 2*radius, 2*radius);
+    }
     searchOverlay->setPath(path1);
-    mapScene.addItem(searchOverlay);
 }
 
 void BusTrackWindow::drawBus(int index)

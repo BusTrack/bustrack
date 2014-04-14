@@ -9,7 +9,7 @@ MapView::MapView(QWidget *parent) :
 
 void MapView::mousePressEvent(QMouseEvent* event)
 {
-    if (event->button() == Qt::LeftButton){
+    if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton){
         QGraphicsView::mousePressEvent(event);
         event->ignore();
     }
