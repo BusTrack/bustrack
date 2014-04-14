@@ -56,12 +56,12 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     Bus tempBus;
     tempBus.setId("ASDF");
     BusService tempService;
-    tempService.setCode("A1");
+    tempService.setCode("A2");
     tempBus.setService(tempService);
     tempBus.setOccupancy(35);
     tempBus.setLatitude(1.297970);
     tempBus.setLongitude(103.772000);
-    tempBus.setDestination(tempStop);
+    tempBus.setDestination(tempStop2);
     busListComplete.append(tempBus);
     drawBus(0);
 
@@ -553,7 +553,7 @@ void BusTrackWindow::drawStop(int index)
     QRgb color;
     int height, width;
     busstop.load(":/resources/stopA.png");
-//    world.fill(1);	 
+    world.fill(1);	 
     QPainter painter(&world);
     sizeImage = busstop.size();
     width = sizeImage.width();
@@ -695,7 +695,6 @@ void BusTrackWindow::resetSearch()
 void BusTrackWindow::runSearch(QString query)
 {
     resetSearch();
-    qDebug() << query;
     bool resultsFound = false;
     QList<int> stopResultIndex;
     for (int i = 0 ; i < busStopListComplete.size(); i++) {
@@ -716,7 +715,6 @@ void BusTrackWindow::runSearch(QString query)
             busResultIndex.append(i);
         }
     }
-    qDebug() << resultsFound;
     if (!resultsFound)
         return;
 
@@ -782,6 +780,14 @@ void BusTrackWindow::drawBus(int index)
     int offsety = 2617 * (1.304444-latitude)/(1.304444-1.290457);
     int offsetx = 3205 * (longitude-103.769694)/(103.786843-103.769694);
 	float percentageNumPeople = (numPeople * 1.0)/MAX_NUM_PEOPLE_BUS;
+    
+    int rotationDegree = qAtan((latitude-(temp.getDestination().getLatitude()))/(longitude-(temp.getDestination().getLongitude())))/3.142*180;
+    qDebug() << (latitude-(temp.getDestination().getLatitude()));
+    qDebug() << (longitude-(temp.getDestination().getLongitude()));
+    qDebug() << rotationDegree;
+    QMatrix rotateMatrix;
+    rotateMatrix.rotate(rotationDegree*-1 -145);
+
 
     //Color transitioning from red to yellow to green
     QColor repaintBusColor;
@@ -820,6 +826,7 @@ void BusTrackWindow::drawBus(int index)
 	QPixmap busPixmap;
 	busPixmap.convertFromImage(background);
 	busPixmap = busPixmap.scaledToHeight(50, Qt::SmoothTransformation);
+    busPixmap = busPixmap.transformed(rotateMatrix);
 	QGraphicsPixmapItem* busGraphics = new QGraphicsPixmapItem(busPixmap);
     busGraphics->setTransformationMode(Qt::SmoothTransformation);
 	busGraphics->setOffset(offsetx, offsety);

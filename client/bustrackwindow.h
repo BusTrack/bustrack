@@ -17,6 +17,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QListWidget>
+#include <QtCore/qmath.h>
 
 #include "bustrack/bus.h"
 #include "bustrack/bus_stop.h"
