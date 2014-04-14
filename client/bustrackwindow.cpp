@@ -132,6 +132,22 @@ void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
     }
 }
 
+void BusTrackWindow::updateMap()
+{
+    for (QGraphicsItem* item : paintedObjects) {
+        mapScene.removeItem(item);
+    }
+    paintedObjects.clear();
+    for(int i=0; i<busStopListComplete.length(); i++)
+    {
+        drawStop(i);
+    }
+    for(int i=0; i<busListComplete.length(); i++)
+    {
+        drawBus(i);
+    }
+}
+
 void BusTrackWindow::initializeLists()
 {
     for(int i=0; i<BUS_NUM; i++)
@@ -349,7 +365,10 @@ void BusTrackWindow::toggleDispatchButtons(int index)
 }
 
 void BusTrackWindow::dispatchBus()
-{
+{   
+    //testing updateMap() function
+    updateMap();
+
     QString buses = "Bus(es) ";
     for(int i=0; i<BUS_NUM; i++)
     {
@@ -424,7 +443,7 @@ void BusTrackWindow::initializeWidgets()
 void BusTrackWindow::initializeValues()
 {
     //qDebug() << "in initializeValues()";
-    currentZoom = 0.7;
+    currentZoom = 1.0;
     slideValue = 1.0;
     busInfoBtnClicked = false;
     stopInfoBtnClicked = false;
@@ -557,7 +576,7 @@ void BusTrackWindow::drawStop(int index)
     busstopGraphics->setTransformationMode(Qt::SmoothTransformation);
     busstopGraphics->setOffset(offsetx, offsety);
     mapScene.addItem(busstopGraphics);
-    busstopHash.insert(name, busstopGraphics);
+    paintedObjects.append(busstopGraphics);
 
     //Generation of child graphics (toggle-able additional info)
     int rectHeight = 60 + 15*busServiceList.size();
@@ -805,6 +824,7 @@ void BusTrackWindow::drawBus(int index)
     busGraphics->setTransformationMode(Qt::SmoothTransformation);
 	busGraphics->setOffset(offsetx, offsety);
    	mapScene.addItem(busGraphics);
+    paintedObjects.append(busGraphics);
 
 
     QImage busoccupancy;

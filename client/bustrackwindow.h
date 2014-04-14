@@ -82,7 +82,7 @@ private:
     bool hidden;
     bool dispatchWidgetVisible;
 
-    QHash<QString,QGraphicsItem*> busstopHash;
+    QList<QGraphicsItem*> paintedObjects;
     bool searchActive;
     QGraphicsPathItem* searchOverlay;
     QSignalMapper *signalMapper;
@@ -118,6 +118,7 @@ private:
     QImage determineBusPNG(QString busService);
     void resetSearch();
     void runSearch(QString query);
+    void updateMap();
 };
 
 }
