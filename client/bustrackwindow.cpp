@@ -50,11 +50,17 @@ void BusTrackWindow::btsConnected()
     busTrackService->getBusStops();
 }
 
-void BusTrackWindow::btsGetBusStopsComplete(
-        std::vector<BusStop> bus_stops)
+void BusTrackWindow::btsGetBusStopsComplete(std::vector<BusStop> bus_stops)
 {
     for (BusStop bus_stop : bus_stops) {
         qDebug() << bus_stop.getName().c_str();
+    }
+}
+
+void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
+{
+    for (Bus bus : buses) {
+        qDebug() << bus.getId().c_str();
     }
 }
 
@@ -361,6 +367,12 @@ void BusTrackWindow::initializeConnections()
         SIGNAL(getBusStopsComplete(std::vector<BusStop>)),
         this,
         SLOT(btsGetBusStopsComplete(std::vector<BusStop>))
+    );
+    connect(
+        busTrackService,
+        SIGNAL(getBusesComplete(std::vector<Bus>)),
+        this,
+        SLOT(btsGetBusesComplete(std::vector<Bus>))
     );
 }
 

@@ -24,6 +24,7 @@
 #include <QTcpSocket>
 
 #include "bustrack/message.h"
+#include "bustrack/bus.h"
 #include "bustrack/bus_stop.h"
 
 namespace bustrack {
@@ -36,12 +37,14 @@ public:
     BusTrackService(QObject* parent = 0);
     
     void getBusStops();
+    void getBuses();
 
 signals:
     void connected();
     void error();
 
     void getBusStopsComplete(std::vector<BusStop> busStops);
+    void getBusesComplete(std::vector<Bus> buses);
 
 private slots:
     void handleError(QAbstractSocket::SocketError socketError);
@@ -50,7 +53,8 @@ private slots:
 
 private:
     enum RequestType {
-        BUS_STOPS_REQUEST
+        BUS_STOPS_REQUEST,
+        BUSES_REQUEST
     };
 
     static const std::string TAG;

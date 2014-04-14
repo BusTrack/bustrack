@@ -37,8 +37,14 @@ void BusTrackService::getBusStops() {
     Message request;
     request.setId(nextRequestId_);
     request.setTag("BUS_STOPS");
-
     sendRequest_(request, BUS_STOPS_REQUEST);
+}
+
+void BusTrackService::getBuses() {
+    Message request;
+    request.setId(nextRequestId_);
+    request.setTag("BUSES");
+    sendRequest_(request, BUSES_REQUEST);
 }
 
 void BusTrackService::handleError(QAbstractSocket::SocketError) {
@@ -85,6 +91,15 @@ void BusTrackService::handleReadyRead() {
 
             emit getBusStopsComplete(bus_stops);
             break;
+        }
+        case BUSES_REQUEST: {
+            QStringList buses_line = decoded_payload.split("\n");
+            std::vector<Bus> buses;
+            for (QString bus : buses_line) {
+                buses.push_back(Bus::fromString(bus.toStdString()));
+            }
+
+            emit getBusesComplete(buses);
         }
         default:
             break;
