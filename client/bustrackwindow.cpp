@@ -85,6 +85,11 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     tempService.setRoute(route);
     busServiceListComplete.append(tempService);
 
+    busStopList->addItem(tempStop.getName().c_str());
+    busStopList->addItem(tempStop2.getName().c_str());
+    busStopList->addItem(tempStop3.getName().c_str());
+
+    busList->addItem(tempBus.getService().getCode().c_str());
 /*
     drawBus("D1",1.297970,103.770000,50);
     drawBus("A1",1.297974,103.772000,30);
