@@ -17,6 +17,7 @@
 #include <QPushButton>
 #include <QLabel>
 
+#include "bustrack/bus.h"
 #include "bustrack/bus_stop.h"
 
 namespace Ui {
@@ -59,6 +60,7 @@ private slots:
 
     void btsConnected();
     void btsGetBusStopsComplete(std::vector<BusStop> bus_stops);
+    void btsGetBusesComplete(std::vector<Bus> buses);
 
 private:
     Ui::BusTrackWindow *ui;
