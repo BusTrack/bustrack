@@ -25,6 +25,7 @@ set (server_SOURCES
   dao/dao_manager.cc
   request/request.cc
   request/buses_request.cc
+  request/bus_services_request.cc
   request/bus_stops_request.cc
   request/invalid_request.cc
   client_handler.cc
