@@ -21,6 +21,7 @@
 #define BUSTRACK_BUS_H_
 
 #include "bus_service.h"
+#include "bus_stop.h"
 
 namespace bustrack {
 
@@ -33,6 +34,9 @@ namespace bustrack {
 
     BusService getService();
     void setService(BusService service);
+   
+    BusStop getDestination();
+    void setDestination(BusStop destination);
     
     unsigned int getOccupancy();
     void setOccupancy(unsigned int occupancy);
@@ -55,6 +59,7 @@ namespace bustrack {
 
     std::string id_;
     BusService service_;
+    BusStop destination_;
     
     unsigned int occupancy_;
     float longitude_;

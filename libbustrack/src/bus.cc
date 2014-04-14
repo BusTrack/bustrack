@@ -49,6 +49,14 @@ namespace bustrack {
   void Bus::setService(BusService service) {
     service_ = service;
   }
+
+  BusStop Bus::getDestination() {
+    return destination_;
+  }
+
+  void Bus::setDestination(BusStop destination) {
+    destination_ = destination;
+  }
   
   unsigned int Bus::getOccupancy() {
     return occupancy_;

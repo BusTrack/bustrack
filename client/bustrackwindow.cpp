@@ -417,7 +417,6 @@ void BusTrackWindow::drawStop(int index)
     BusStop temp = busStopListComplete.at(index);
     float latitude = temp.getLatitude();
     float longitude = temp.getLongitude();
-    qDebug() << latitude;
     QString name= QString::fromStdString(temp.getName());
     int numPeople = temp.getOccupancy();
     
