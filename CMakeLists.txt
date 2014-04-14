@@ -32,10 +32,6 @@ if (CMAKE_COMPILER_IS_GNUCXX)
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX11_COMPILER_FLAGS}")
 endif (CMAKE_COMPILER_IS_GNUCXX)
 
-# Require Qt4 to build the project.
-set (QT_USE_QTNETWORK true)
-find_package (Qt4 REQUIRED)
-
 # Add the bustrack library headers to the global include path.
 include_directories (${CMAKE_SOURCE_DIR}/libbustrack/include)
 
