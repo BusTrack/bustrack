@@ -48,6 +48,7 @@ void BusTrackWindow::btsGetBusStopsComplete(std::vector<BusStop> bus_stops)
     for (BusStop bus_stop : bus_stops) {
         qDebug("%s: Found bus stop: %s", TAG.c_str(),
             bus_stop.getName().c_str());
+        busStopListComplete.append(bus_stop.getName().c_str());
     }
 }
 
@@ -55,6 +56,7 @@ void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
 {
     for (Bus bus : buses) {
         qDebug("%s: Found bus: %s", TAG.c_str(), bus.getId().c_str());
+        busListComplete.append(bus.getId().c_str());
     }
 }
 
@@ -165,15 +167,15 @@ void BusTrackWindow::onBusInfoBtnClicked()
     {
         ui->busInfoBtn->setIcon(QIcon(":/resources/searchBusSel.png"));
         ui->stopInfoBtn->setIcon(QIcon(":/resources/searchStop.png"));
-        ui->infoListWidget->move(79, 80);
-        ui->infoListWidget->setVisible(true);
+        //ui->infoListWidget->move(79, 80);
+        ui->busInfoListWidget->setVisible(true);
         busInfoBtnClicked = true;
     }
     else
     {
         ui->busInfoBtn->setIcon(QIcon(":/resources/searchBus.png"));
         busInfoBtnClicked = false;
-        ui->infoListWidget->setVisible(false);
+        ui->busInfoListWidget->setVisible(false);
     }
 
 }
@@ -184,14 +186,14 @@ void BusTrackWindow::onStopInfoBtnClicked()
     {
         ui->stopInfoBtn->setIcon(QIcon(":/resources/searchStopSel.png"));
         ui->busInfoBtn->setIcon(QIcon(":/resources/searchBus.png"));
-        ui->infoListWidget->move(79, 140);
-        ui->infoListWidget->setVisible(true);
+        //ui->infoListWidget->move(79, 140);
+        ui->busStopInfoListWidget->setVisible(true);
         stopInfoBtnClicked = true;
     }
     else
     {
         ui->stopInfoBtn->setIcon(QIcon(":/resources/searchStop.png"));
-        ui->infoListWidget->setVisible(false);
+        ui->busStopInfoListWidget->setVisible(false);
         stopInfoBtnClicked = false;
 
     }
@@ -201,7 +203,8 @@ void BusTrackWindow::toggleElementsVisibility()
 {
     if(!hidden)
     {
-        ui->infoListWidget->setVisible(false);
+        ui->busInfoListWidget->setVisible(false);
+        ui->busStopInfoListWidget->setVisible(false);
         ui->zoomSliderWidget->setVisible(false);
         ui->searchResultsWidget->setVisible(false);
         ui->searchBarWidget->setVisible(false);
@@ -213,7 +216,8 @@ void BusTrackWindow::toggleElementsVisibility()
     }
     else
     {
-        ui->infoListWidget->setVisible(true);
+        ui->busInfoListWidget->setVisible(true);
+        ui->busStopInfoListWidget->setVisible(true);
         ui->zoomSliderWidget->setVisible(true);
         ui->searchResultsWidget->setVisible(true);
         ui->searchBarWidget->setVisible(true);
@@ -298,7 +302,8 @@ void BusTrackWindow::initializeWidgets()
     ui->sideBarWidget->setVisible(true);
 
     ui->searchResultsWidget->setVisible(false);
-    ui->infoListWidget->setVisible(false);
+    ui->busInfoListWidget->setVisible(false);
+    ui->busStopInfoListWidget->setVisible(false);
     ui->dispatchWidget->setVisible(false);
     ui->calendarWidget->setVisible(false);
     ui->timeEdit->setVisible(false);
@@ -320,7 +325,17 @@ void BusTrackWindow::initializeWidgets()
     fileMenu->addAction(hideAction);
     fileMenu->addAction(dispatchAction);
 
-    ui->infoListWidget->move(79, 140);
+    ui->busInfoListWidget->move(79, 80);
+    ui->busStopInfoListWidget->move(79, 140);
+
+    for(int i=0; i<busListComplete.length(); i++)
+    {
+        ui->busInfoList->addItem(busListComplete[i]);
+    }
+    for(int i=0; i<busStopListComplete.length(); i++)
+    {
+        ui->busStopList->addItem(busStopListComplete[i]);
+    }
 }
 
 void BusTrackWindow::initializeValues()

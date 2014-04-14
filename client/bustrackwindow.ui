@@ -307,7 +307,7 @@ border-top-color: rgb(255, 255, 255);</string>
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="infoListWidget" native="true">
+   <widget class="QWidget" name="busInfoListWidget" native="true">
     <property name="geometry">
      <rect>
       <x>440</x>
@@ -319,7 +319,7 @@ border-top-color: rgb(255, 255, 255);</string>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(43, 62, 81);</string>
     </property>
-    <widget class="QListWidget" name="infoList">
+    <widget class="QListWidget" name="busInfoList">
      <property name="geometry">
       <rect>
        <x>4</x>
@@ -1133,6 +1133,41 @@ font-size: 35pt;</string>
     <property name="calendarPopup">
      <bool>false</bool>
     </property>
+   </widget>
+   <widget class="QWidget" name="busStopInfoListWidget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>-10</y>
+      <width>350</width>
+      <height>251</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(43, 62, 81);</string>
+    </property>
+    <widget class="QListWidget" name="busStopList">
+     <property name="geometry">
+      <rect>
+       <x>4</x>
+       <y>4</y>
+       <width>341</width>
+       <height>242</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <property name="uniformItemSizes">
+      <bool>true</bool>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">

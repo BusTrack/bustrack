@@ -88,6 +88,8 @@ private:
     QList<QLabel*> calTickList;
     QList<QLabel*> clockTickList;
     QSignalMapper *signalMapper;
+    QList<QString> busStopListComplete;
+    QList<QString> busListComplete;
 
     // supporting methods
     void initializeLists();
