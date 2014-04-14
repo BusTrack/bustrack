@@ -1,3 +1,43 @@
+QWidget
+{
+	background-color: rgb(43, 62, 81);
+	border-style: none;
+}
+
+QListWidget
+{
+	font: 11pt;
+	padding: 5px;
+	background-color: rgb(255, 255, 255);
+	border-style: none;
+}
+
+QListWidget::item:selected
+{
+	background-color: rgb(43, 62, 81);
+}
+
+QScrollBar:vertical
+{
+	background: rgb(205, 201, 201);
+	border-style: none;
+}
+
+QScrollBar::handle:vertical
+{
+	background: rgb(220, 109, 0);
+}
+
+QScrollBar::add-line:vertical
+{
+	border: 2px rgb(43, 62, 81);
+}
+
+QScrollBar::sub-line:vertical
+{
+	background: rgb(205, 201, 201);
+}
+
 QSlider::handle:vertical
 {
 	background-color: rgb(220, 109, 0);
@@ -5,17 +45,6 @@ QSlider::handle:vertical
 }
 
 QSlider::add-page:vertical
-{
-	background-color: rgb(43, 62, 81);
-}
-
-QListWidget
-{
-	font: 11pt;
-	padding: 5px;
-}
-
-QListWidget::item:selected
 {
 	background-color: rgb(43, 62, 81);
 }

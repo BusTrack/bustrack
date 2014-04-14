@@ -21,7 +21,6 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
 
     ui->setupUi(this);
 
-    initializeLists();
     initializeWidgets();
     initializeValues();
     initializeConnections();
@@ -112,6 +111,7 @@ void BusTrackWindow::btsGetBusStopsComplete(std::vector<BusStop> bus_stops)
     for (BusStop bus_stop : bus_stops) {
         qDebug("%s: Found bus stop: %s", TAG.c_str(),bus_stop.getName().c_str());
         busStopListComplete.append(bus_stop);
+        busStopList->addItem(bus_stop.getName().c_str());
     }
 
     if (!initializedBusStopServices) {
@@ -128,6 +128,7 @@ void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
     for (Bus bus : buses) {
         qDebug("%s: Found bus: %s", TAG.c_str(), bus.getId().c_str());
         busListComplete.append(bus);
+        busList->addItem(bus.getId().c_str());
     }
     for(int i=0; i<busListComplete.length(); i++)
     {
@@ -224,12 +225,12 @@ void BusTrackWindow::toggleSearchResultsWidget(QString query)
 {
     if(query.length() > 0)
     {
-        ui->searchResultsWidget->setVisible(true);
+        searchResultsWidget->setVisible(true);
         runSearch(query);
     }
     else
     {
-        ui->searchResultsWidget->setVisible(false);
+        searchResultsWidget->setVisible(false);
         resetSearch();
     }
 }
@@ -241,15 +242,16 @@ void BusTrackWindow::onBusInfoBtnClicked()
     {
         ui->busInfoBtn->setIcon(QIcon(":/resources/searchBusSel.png"));
         ui->stopInfoBtn->setIcon(QIcon(":/resources/searchStop.png"));
-        //ui->infoListWidget->move(79, 80);
-        ui->busInfoListWidget->setVisible(true);
+        busListWidget->setVisible(true);
+        busStopListWidget->setVisible(false);
         busInfoBtnClicked = true;
+        stopInfoBtnClicked = false;
     }
     else
     {
         ui->busInfoBtn->setIcon(QIcon(":/resources/searchBus.png"));
         busInfoBtnClicked = false;
-        ui->busInfoListWidget->setVisible(false);
+        busListWidget->setVisible(false);
     }
 
 }
@@ -260,14 +262,15 @@ void BusTrackWindow::onStopInfoBtnClicked()
     {
         ui->stopInfoBtn->setIcon(QIcon(":/resources/searchStopSel.png"));
         ui->busInfoBtn->setIcon(QIcon(":/resources/searchBus.png"));
-        //ui->infoListWidget->move(79, 140);
-        ui->busStopInfoListWidget->setVisible(true);
+        busStopListWidget->setVisible(true);
+        busListWidget->setVisible(false);
         stopInfoBtnClicked = true;
+        busInfoBtnClicked = false;
     }
     else
     {
         ui->stopInfoBtn->setIcon(QIcon(":/resources/searchStop.png"));
-        ui->busStopInfoListWidget->setVisible(false);
+        busStopListWidget->setVisible(false);
         stopInfoBtnClicked = false;
     }
 }
@@ -276,28 +279,24 @@ void BusTrackWindow::toggleElementsVisibility()
 {
     if(!hidden)
     {
-        ui->busInfoListWidget->setVisible(false);
-        ui->busStopInfoListWidget->setVisible(false);
+        busListWidget->setVisible(false);
+        busStopListWidget->setVisible(false);
         ui->zoomSliderWidget->setVisible(false);
-        ui->searchResultsWidget->setVisible(false);
+        searchResultsWidget->setVisible(false);
         ui->searchBarWidget->setVisible(false);
         ui->sideBarWidget->setVisible(false);
         ui->dispatchWidget->setVisible(false);
-        ui->calendarWidget->setVisible(false);
-        ui->timeEdit->setVisible(false);
         hidden = true;
     }
     else
     {
-        ui->busInfoListWidget->setVisible(true);
-        ui->busStopInfoListWidget->setVisible(true);
+        busListWidget->setVisible(true);
+        busStopListWidget->setVisible(true);
         ui->zoomSliderWidget->setVisible(true);
-        ui->searchResultsWidget->setVisible(true);
+        searchResultsWidget->setVisible(true);
         ui->searchBarWidget->setVisible(true);
         ui->sideBarWidget->setVisible(true);
         ui->dispatchWidget->setVisible(true);
-        ui->calendarWidget->setVisible(true);
-        ui->timeEdit->setVisible(true);
         hidden = false;
     }
 }
@@ -316,76 +315,38 @@ void BusTrackWindow::toggleDispatchWidget()
     }
 }
 
-void BusTrackWindow::createCalendarWidget()
-{
-    ui->calendarWidget->move(QCursor::pos()-QPoint(30, 30));
-    ui->calendarWidget->setVisible(true);
-}
-
-void BusTrackWindow::createTimeWidget()
-{
-    ui->timeEdit->move(QCursor::pos()-QPoint(30, 30));
-    ui->timeEdit->setVisible(true);
-}
-
-void BusTrackWindow::calendarSelectionChanged(int i)
-{
-
-}
-
-void BusTrackWindow::timeSelectionChanged(int i)
-{
-}
-
-void BusTrackWindow::initializeLists()
-{
-    calButtonList.append(ui->A1CalButton);
-    calButtonList.append(ui->A2CalButton);
-    calButtonList.append(ui->BCalButton);
-    calButtonList.append(ui->CCalButton);
-    calButtonList.append(ui->D1CalButton);
-    calButtonList.append(ui->D2CalButton);
-
-    clockButtonList.append(ui->A1ClockButton);
-    clockButtonList.append(ui->A2ClockButton);
-    clockButtonList.append(ui->BClockButton);
-    clockButtonList.append(ui->CClockButton);
-    clockButtonList.append(ui->D1ClockButton);
-    clockButtonList.append(ui->D2ClockButton);
-
-    calTickList.append(ui->A1Tick);
-    calTickList.append(ui->A2Tick);
-    calTickList.append(ui->BTick);
-    calTickList.append(ui->CTick);
-    calTickList.append(ui->D1Tick);
-    calTickList.append(ui->D2Tick);
-
-    clockTickList.append(ui->A1Tick2);
-    clockTickList.append(ui->A2Tick2);
-    clockTickList.append(ui->BTick2);
-    clockTickList.append(ui->CTick2);
-    clockTickList.append(ui->D1Tick2);
-    clockTickList.append(ui->D2Tick2);
-}
-
 void BusTrackWindow::initializeWidgets()
 {
-    ui->zoomSliderWidget->setVisible(true);
-    ui->searchBarWidget->setVisible(true);
-    ui->sideBarWidget->setVisible(true);
+    searchResultsWidget = new QWidget(this);
+    searchResultsWidget->setGeometry(79, 69, 350, 241);
+    searchResultsList = new QListWidget(searchResultsWidget);
+    searchResultsList->setGeometry(4, 4, 341, 232);
+    searchResultsList->setGeometry(4, 4, 341, 242);
+    searchResultsList->setViewMode(QListView::ListMode);
+    searchResultsList->setFlow(QListView::TopToBottom);
+    searchResultsList->setUniformItemSizes(true);
+    searchResultsWidget->setVisible(false);
 
-    ui->searchResultsWidget->setVisible(false);
-    ui->busInfoListWidget->setVisible(false);
-    ui->busStopInfoListWidget->setVisible(false);
+    busListWidget = new QWidget(this);
+    busListWidget->setGeometry(80, 80, 350, 251);
+    busList = new QListWidget(busListWidget);
+    busList->setGeometry(4, 4, 341, 242);
+    busList->setViewMode(QListView::ListMode);
+    busList->setFlow(QListView::TopToBottom);
+    busList->setUniformItemSizes(true);
+    busListWidget->setVisible(false);
+
+    busStopListWidget = new QWidget(this);
+    busStopListWidget->setGeometry(80, 130, 350, 251);
+    busStopList = new QListWidget(busStopListWidget);
+    busStopList->setGeometry(4, 4, 341, 232);
+    busStopList->setGeometry(4, 4, 341, 242);
+    busStopList->setViewMode(QListView::ListMode);
+    busStopList->setFlow(QListView::TopToBottom);
+    busStopList->setUniformItemSizes(true);
+    busStopListWidget->setVisible(false);
+
     ui->dispatchWidget->setVisible(false);
-    ui->calendarWidget->setVisible(false);
-    ui->timeEdit->setVisible(false);
-
-    for(int i=0; i<BUS_NUM; i++)
-    {
-        calTickList[i]->setVisible(false);
-        clockTickList[i]->setVisible(false);
-    }
 
     setMap();
 
@@ -397,9 +358,6 @@ void BusTrackWindow::initializeWidgets()
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(hideAction);
     fileMenu->addAction(dispatchAction);
-
-    ui->busInfoListWidget->move(79, 80);
-    ui->busStopInfoListWidget->move(79, 140);
 }
 
 void BusTrackWindow::initializeValues()
@@ -421,22 +379,6 @@ void BusTrackWindow::initializeConnections()
     connect(ui->stopInfoBtn, SIGNAL(clicked()), this, SLOT(onStopInfoBtnClicked()));
     connect(hideAction, SIGNAL(triggered()), this, SLOT(toggleElementsVisibility()));
     connect(dispatchAction, SIGNAL(triggered()), this, SLOT(toggleDispatchWidget()));
-
-    signalMapper = new QSignalMapper(this);
-    for(int i=0; i<BUS_NUM; i++)
-    {
-        signalMapper->setMapping(calButtonList[i], calButtonList[i]);
-        connect(calButtonList[i], SIGNAL(clicked()), signalMapper, SLOT(map()));
-    }
-    connect(signalMapper, SIGNAL(mapped(QWidget*)), this, SLOT(createCalendarWidget()));
-
-    signalMapper = new QSignalMapper(this);
-    for(int i=0; i<BUS_NUM; i++)
-    {
-        signalMapper->setMapping(clockButtonList[i], clockButtonList[i]);
-        connect(clockButtonList[i], SIGNAL(clicked()), signalMapper, SLOT(map()));
-    }
-    connect(signalMapper, SIGNAL(mapped(QWidget*)), this, SLOT(createTimeWidget()));
 
     // Receive events from BusTrackService.
     connect(busTrackService, SIGNAL(connected()), this, SLOT(btsConnected()));
