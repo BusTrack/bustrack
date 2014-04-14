@@ -88,16 +88,20 @@ private:
     QList<QLabel*> calTickList;
     QList<QLabel*> clockTickList;
     QSignalMapper *signalMapper;
+    bool initializedBusStopServices;
 
     // models equivalent
     QList<BusStop> busStopListComplete;
     QList<Bus> busListComplete;
+    QHash<int, QList<BusService>> busStopServices;
+    QList<BusService> busServiceListComplete;
 
     // supporting methods
     void initializeLists();
     void initializeWidgets();
     void initializeConnections();
     void initializeValues();
+    void initializeBusStopServices();
     void setMap();
     void scaleMap(float zoom);
     void drawStop(int index);
