@@ -26,7 +26,7 @@ namespace bustrack {
   }
 
   void Waypoint::setLatitude(float latitude) {
-    latitude = latitude_;
+    latitude_ = latitude;
   }
 
   float Waypoint::getLongitude() {
@@ -34,7 +34,7 @@ namespace bustrack {
   }
 
   void Waypoint::setLongitude(float longitude) {
-    longitude = longitude_;
+    longitude_ = longitude;
   }
 
 }
