@@ -10,6 +10,8 @@ const float BUS_NUM = 6;
 
 namespace bustrack {
 
+const std::string BusTrackWindow::TAG ("BusTrackWindow");
+
 BusTrackWindow::BusTrackWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::BusTrackWindow)
@@ -26,17 +28,7 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
 
     setMouseTracking(true);
 
-    drawStop("Stop1",100,100,0);
-    drawStop("Stop2",800,900,1);
-    drawStop("Stop3",1000,300,15);
-    
-    drawBus("A1", 500, 400, 60);
-    drawBus("B", 300, 400, 59);
-    drawBus("A2", 200, 400, 30);
-    drawBus("C", 100, 400, 2);
-    drawBus("D2", 10, 400, 0);
-
-    searchStop("Stop1");
+    drawBus("D1",1.297970,103.770000,0);
 }
 
 BusTrackWindow::~BusTrackWindow()
@@ -48,19 +40,21 @@ BusTrackWindow::~BusTrackWindow()
 void BusTrackWindow::btsConnected()
 {
     busTrackService->getBusStops();
+    busTrackService->getBuses();
 }
 
 void BusTrackWindow::btsGetBusStopsComplete(std::vector<BusStop> bus_stops)
 {
     for (BusStop bus_stop : bus_stops) {
-        qDebug() << bus_stop.getName().c_str();
+        qDebug("%s: Found bus stop: %s", TAG.c_str(),
+            bus_stop.getName().c_str());
     }
 }
 
 void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
 {
     for (Bus bus : buses) {
-        qDebug() << bus.getId().c_str();
+        qDebug("%s: Found bus: %s", TAG.c_str(), bus.getId().c_str());
     }
 }
 
@@ -380,8 +374,13 @@ void BusTrackWindow::initializeConnections()
     );
 }
 
-void BusTrackWindow::drawStop(QString name, int offsetx, int offsety, int numPeople)
+void BusTrackWindow::drawStop(QString name, float latitude, float longitude, int numPeople)
 {
+    if (latitude > 1.297982 || longitude < 103.769741 || latitude < 1.292964 || longitude >  103.778872)
+         return;
+    int offsetx = 1080 * (latitude-1.292964)/(1.297982-1.292964);
+    int offsety = 1920 * (longitude-103.769741)/(103.778872-103.769741);
+
     //Color transitioning from red to yellow to green
     QColor repaintColor;
     repaintColor.setRgb(255,0,36);
@@ -490,6 +489,8 @@ void BusTrackWindow::drawStop(QString name, int offsetx, int offsety, int numPeo
 void BusTrackWindow::searchStop(QString name)
 {
     searchActive = true;
+
+
     int offsetx = 1000, offsety = 300, radius = 50;
 
     QColor overlayColor;
@@ -498,7 +499,6 @@ void BusTrackWindow::searchStop(QString name)
     QPainterPath path1;
     path1.addRect(0,0,1920,1080);
     path1.addEllipse(offsetx-radius+15, offsety-radius+17, 2*radius, 2*radius);
-    path1.addEllipse(offsetx-radius+90, offsety-radius+90, 2*radius, 2*radius);
     path1.setFillRule(Qt::OddEvenFill);
     searchOverlay->setBrush(overlayColor);
     searchOverlay->setOpacity(1);
@@ -506,8 +506,33 @@ void BusTrackWindow::searchStop(QString name)
     mapScene.addItem(searchOverlay);
 }
 
-void BusTrackWindow::drawBus(QString busService, float offsetx, float offsety, int numPeople)
+void BusTrackWindow::searchBus(QString name)
 {
+    searchActive = true;
+
+
+    int offsetx = 1000, offsety = 300, radius = 50;
+
+    QColor overlayColor;
+    overlayColor.setRgb(1,1,1,100);
+    searchOverlay = new QGraphicsPathItem(0);
+    QPainterPath path1;
+    path1.addRect(0,0,1920,1080);
+    path1.addEllipse(offsetx-radius+15, offsety-radius+17, 2*radius, 2*radius);
+    path1.setFillRule(Qt::OddEvenFill);
+    searchOverlay->setBrush(overlayColor);
+    searchOverlay->setOpacity(1);
+    searchOverlay->setPath(path1);
+    mapScene.addItem(searchOverlay);
+}
+
+void BusTrackWindow::drawBus(QString busService, float latitude, float longitude, int numPeople)
+{
+    if (latitude > 1.297982 || longitude < 103.769741 || latitude < 1.292964 || longitude >  103.778872)
+         return;
+    int offsetx = 1080 * (latitude-1.292964)/(1.297982-1.292964);
+    int offsety = 1920 * (longitude-103.769741)/(103.778872-103.769741);
+
 	float percentageNumPeople = (numPeople * 1.0)/MAX_NUM_PEOPLE_BUS;
 	//Color transitioning from red to yellow to green	
 	QColor repaintBusColor;

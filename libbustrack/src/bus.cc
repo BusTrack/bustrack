@@ -17,6 +17,7 @@
  * limitations under the License.
  * ========================================================================= */
 
+#include <sstream>
 #include <stdexcept>
 
 #include <QString>
@@ -44,12 +45,36 @@ namespace bustrack {
   void Bus::setService(BusService service) {
     service_ = service;
   }
+  
+  unsigned int Bus::getOccupancy() {
+    return occupancy_;
+  }
+  
+  void Bus::setOccupancy(unsigned int occupancy) {
+    occupancy_ = occupancy;
+  }
+  
+  float Bus::getLatitude() {
+    return latitude_;
+  }
+  
+  void Bus::setLatitude(float latitude) {
+    latitude_ = latitude;
+  }
+  
+  float Bus::getLongitude() {
+    return longitude_;
+  }
+  
+  void Bus::setLongitude(float longitude) {
+    longitude_ = longitude;
+  }
 
   Bus Bus::fromString(const std::string& serialized) {
     QString q_serialized (serialized.c_str());
     QStringList tokens = q_serialized.split("|");
 
-    if (tokens.size() != NUM_SERIALIZED_FIELDS) {
+    if (tokens.size() < NUM_SERIALIZED_FIELDS) {
       qWarning("%s: Insufficient number of fields! (%s)", TAG.c_str(),
           serialized.c_str());
       return Bus();
@@ -60,9 +85,50 @@ namespace bustrack {
 
     return bus;
   }
+  
+  Bus Bus::fromStringAll(const std::string& serialized) {
+    QString q_serialized (serialized.c_str());
+    QStringList tokens = q_serialized.split("|");
+    Bus bus = fromString(serialized);
+    
+    if (tokens.size() < NUM_ALL_FIELDS) {
+      qWarning("%s: Insufficient number of all fields! (%s)", TAG.c_str(),
+          serialized.c_str());
+      return bus;
+    }
+    
+    bus.setOccupancy(tokens[1].toUInt());
+    
+    // Convert the coordinates.
+    bool parsing_ok = false;
+    bus.setLatitude(tokens[2].toFloat(&parsing_ok));
+    if (!parsing_ok) {
+      qWarning("%s: Unable to parse latitude for bus with ID %s", TAG.c_str(),
+        bus.getId().c_str());
+    }
+
+    bus.setLongitude(tokens[3].toFloat(&parsing_ok));
+    if (!parsing_ok) {
+      qWarning("%s Unable to parse longitude for bus with ID %s", TAG.c_str(),
+        bus.getId().c_str());
+    }
+    
+    return bus;
+  }
 
   std::string Bus::toString() {
-    return id_;
+    std::stringstream serialized_ss;
+    serialized_ss << getId();
+
+    return serialized_ss.str();
+  }
+  
+  std::string Bus::toStringAll() {
+    std::stringstream serialized_all_ss (toString());
+    serialized_all_ss << "|" << getOccupancy() << "|" << getLatitude() <<
+      getLongitude();
+    
+    return serialized_all_ss.str();
   }
 
 }

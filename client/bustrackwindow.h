@@ -63,6 +63,8 @@ private slots:
     void btsGetBusesComplete(std::vector<Bus> buses);
 
 private:
+    static const std::string TAG;
+    
     Ui::BusTrackWindow *ui;
     QGraphicsScene mapScene;
     QGraphicsPixmapItem* mapPixmap;
@@ -94,10 +96,11 @@ private:
     void initializeValues();
     void setMap();
     void scaleMap(float zoom);
-    void drawStop(QString name,int offsetx, int offsety, int numPeople);
+    void drawStop(QString index,float offsetx, float offsety, int numPeople);
     void drawBus(QString busService, float offsetx, float offsety, int numPeople);
     QImage determineBusPNG(QString busService);
     void searchStop(QString name);
+    void searchBus(QString name);
 };
 
 }
