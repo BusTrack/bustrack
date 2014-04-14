@@ -26,6 +26,8 @@ namespace bustrack {
 
   class Bus {
   public:
+    Bus();
+
     std::string getId();
     void setId(const std::string& id);
 

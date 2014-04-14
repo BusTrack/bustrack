@@ -26,6 +26,8 @@ namespace bustrack {
 
   class BusStop : public Waypoint {
   public:
+    BusStop();
+
     std::string getId();
     void setId(const std::string& id);
 

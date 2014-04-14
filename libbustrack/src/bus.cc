@@ -28,7 +28,11 @@
 
 namespace bustrack {
   
-  const std::string Bus::TAG ("BusStop");
+  const std::string Bus::TAG ("Bus");
+
+  Bus::Bus() :
+      id_("Unknown ID"), occupancy_(0), longitude_(0), latitude_(0) {
+  }
 
   std::string Bus::getId() {
     return id_;
@@ -123,10 +127,10 @@ namespace bustrack {
   }
   
   std::string Bus::toStringAll() {
-    std::stringstream serialized_all_ss (toString(), std::stringstream::ate);
+    std::stringstream serialized_all_ss (toString(),
+        std::stringstream::out | std::stringstream::ate);
     serialized_all_ss << "|" << getOccupancy() << "|" << getLatitude() <<
       getLongitude();
-    
     return serialized_all_ss.str();
   }
 
