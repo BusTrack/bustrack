@@ -27,6 +27,9 @@ namespace bustrack {
   Waypoint::Waypoint() : type_(TYPE_NORMAL) {
   }
 
+  Waypoint::~Waypoint() {
+  }
+
   std::string Waypoint::getType() {
     return type_;
   }
