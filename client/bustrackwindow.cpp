@@ -32,10 +32,28 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     tempStop.setId("Qweq");
     tempStop.setName("bobabobo");
     tempStop.setOccupancy(10);
-    tempStop.setLatitude(1.297970);
-    tempStop.setLongitude(103.770000);
+    tempStop.setLatitude(1.296970);
+    tempStop.setLongitude(103.772000);
     busStopListComplete.append(tempStop);
     drawStop(0);
+
+    BusStop tempStop2;
+    tempStop2.setId("Qweq");
+    tempStop2.setName("aeiou");
+    tempStop2.setOccupancy(20);
+    tempStop2.setLatitude(1.296970);
+    tempStop2.setLongitude(103.777000);
+    busStopListComplete.append(tempStop2);
+    drawStop(1);
+
+    BusStop tempStop3;
+    tempStop3.setId("Qweq");
+    tempStop3.setName("qwezxcqwec");
+    tempStop3.setOccupancy(30);
+    tempStop3.setLatitude(1.295970);
+    tempStop3.setLongitude(103.775000);
+    busStopListComplete.append(tempStop3);
+    drawStop(2);
 
     Bus tempBus;
     tempBus.setId("ASDF");
@@ -45,8 +63,27 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     tempBus.setOccupancy(35);
     tempBus.setLatitude(1.297970);
     tempBus.setLongitude(103.772000);
+    tempBus.setDestination(tempStop);
     busListComplete.append(tempBus);
     drawBus(0);
+
+
+    tempService.setCode("A1");
+    std::vector<Waypoint> route;
+    Waypoint waypoint1;
+    waypoint1.setLatitude(1.296970);
+    waypoint1.setLongitude(103.772000);
+    Waypoint waypoint2;
+    waypoint2.setLatitude(1.296970);
+    waypoint2.setLongitude(103.777000);
+    Waypoint waypoint3;
+    waypoint3.setLatitude(1.295970);
+    waypoint3.setLongitude(103.775000);
+    route.push_back(waypoint1);
+    route.push_back(waypoint2);
+    route.push_back(waypoint3);
+    tempService.setRoute(route);
+    busServiceListComplete.append(tempService);
 
 /*
     drawBus("D1",1.297970,103.770000,50);
@@ -76,6 +113,10 @@ void BusTrackWindow::btsGetBusStopsComplete(std::vector<BusStop> bus_stops)
         qDebug("%s: Found bus stop: %s", TAG.c_str(),bus_stop.getName().c_str());
         busStopListComplete.append(bus_stop);
         busStopList->addItem(bus_stop.getName().c_str());
+    }
+
+    if (!initializedBusStopServices) {
+        initializeBusStopServices();
     }
     for(int i=0; i<busStopListComplete.length(); i++)
     {
@@ -391,6 +432,8 @@ void BusTrackWindow::initializeValues()
     stopInfoBtnClicked = false;
     dispatchWidgetVisible = false;
     searchActive = false;
+    initializedBusStopServices = false;
+    searchOverlay = new QGraphicsPathItem(0);
 }
 
 void BusTrackWindow::initializeConnections()
@@ -431,6 +474,26 @@ void BusTrackWindow::initializeConnections()
     connect(ui->cancelButton, SIGNAL(clicked()), this, SLOT(cancelDispatch()));
 }
 
+void BusTrackWindow::initializeBusStopServices()
+{
+    initializedBusStopServices = true;
+    int i = 0;
+    for (BusStop bus_stop : busStopListComplete) {
+        QList<BusService> tempList;
+        for (BusService bus_service : busServiceListComplete) {
+            std::vector<Waypoint> route = bus_service.getRoute();
+            for (Waypoint waypoint : route) {
+                if (waypoint.getLatitude() == bus_stop.getLatitude() &&
+                        waypoint.getLongitude() == bus_stop.getLongitude()) {
+                    tempList.append(bus_service);
+                }                
+            }
+        }
+        busStopServices.insert(i, tempList);
+        i++;
+    }
+}
+
 void BusTrackWindow::drawStop(int index)
 {
     BusStop temp = busStopListComplete.at(index);
@@ -438,6 +501,7 @@ void BusTrackWindow::drawStop(int index)
     float longitude = temp.getLongitude();
     QString name= QString::fromStdString(temp.getName());
     int numPeople = temp.getOccupancy();
+    QList<BusService> busServiceList = busStopServices.value(index);
     
     // 1.298037, 103.769591 (Top-left)
     // 1.292223, 103.780003 (Bottom-right)
@@ -493,7 +557,8 @@ void BusTrackWindow::drawStop(int index)
     busstopHash.insert(name, busstopGraphics);
 
     //Generation of child graphics (toggle-able additional info)
-    QGraphicsRectItem* busstopinfoGraphics = new QGraphicsRectItem(offsetx+40, offsety-25, 150, 180);
+    int rectHeight = 60 + 15*busServiceList.size();
+    QGraphicsRectItem* busstopinfoGraphics = new QGraphicsRectItem(offsetx+40, offsety-25, 150, rectHeight);
     QColor windowBorderColor;
     windowBorderColor.setRgb(43,61,83);
     QPen windowPen;
@@ -515,6 +580,52 @@ void BusTrackWindow::drawStop(int index)
     busstopHeader->setPos(offsetx+50,offsety+5);
     busstopHeader->setParentItem(busstopGraphics);
     busstopHeader->hide();
+    for (int i = 0; i < busServiceList.size(); i++) {
+        BusService service = busServiceList.at(i);
+        int first = 999, second = 999;
+        for (Bus bus : busListComplete) {
+            if (bus.getService().getCode() == service.getCode()) {
+                int destinationIndex = 999;
+                int busStopIndex = 999999;
+                for (int j = 0; j < service.getRoute().size() && destinationIndex == 999; j++) {
+                    if (bus.getDestination().getLatitude() == service.getRoute().at(j).getLatitude() &&
+                            bus.getDestination().getLongitude() == service.getRoute().at(j).getLongitude()) {
+                        destinationIndex = j;
+                    }
+                }
+                for (int j = destinationIndex; j < service.getRoute().size() && busStopIndex == 999999; j++) {
+                    if (latitude == service.getRoute().at(j).getLatitude() &&
+                            longitude == service.getRoute().at(j).getLongitude()) {
+                        busStopIndex = j;
+                    }
+                }
+                int distance = 2 * (busStopIndex - destinationIndex + 1);
+                if (distance < first) {
+                    second = first;
+                    first = distance;
+                } else if (distance < second) {
+                    second = distance;
+                }
+            }
+        }
+        QString stringFirst;
+        QString stringSecond;
+        if (first == 999)
+            stringFirst = "NA";
+        else
+            stringFirst = QString::number(first);
+        if (second == 999)
+            stringSecond = "NA";
+        else
+            stringSecond = QString::number(second);
+        QString serviceArrival = QString::fromStdString(service.getCode())+"           "+stringFirst+"            "+stringSecond;
+        QGraphicsSimpleTextItem* busServiceArrivals = new QGraphicsSimpleTextItem(serviceArrival);
+//        busServiceArrivals->setFont(boldFont);
+        busServiceArrivals->setPos(offsetx+50,offsety+5+(15*(i+1)));
+        busServiceArrivals->setParentItem(busstopGraphics);
+        busServiceArrivals->hide();
+
+    }
 
     //Generation of busstopoccupany portion
     //Locating pixels to be painted and replacing them with new color (busstop occupancy)
