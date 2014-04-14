@@ -43,7 +43,6 @@ protected:
     void wheelEvent(QWheelEvent *event);
     void resizeEvent(QResizeEvent *event);
     void mousePressEvent(QMouseEvent* event);
-    void mouseMoveEvent(QMouseEvent* event);
 
 signals:
 
@@ -61,6 +60,8 @@ private slots:
     void btsConnected();
     void btsGetBusStopsComplete(std::vector<BusStop> bus_stops);
     void btsGetBusesComplete(std::vector<Bus> buses);
+    void setSearchTextFromBuses(QListWidgetItem* item);
+    void setSearchTextFromBusStops(QListWidgetItem* item);
 
 private:
     static const std::string TAG;

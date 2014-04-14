@@ -26,8 +26,6 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     initializeValues();
     initializeConnections();
 
-    setMouseTracking(true);
-    
     BusStop tempStop;
     tempStop.setId("Qweq");
     tempStop.setName("bobabobo");
@@ -200,25 +198,11 @@ void BusTrackWindow::mousePressEvent( QMouseEvent* event )
     }
 }
 
-void BusTrackWindow::mouseMoveEvent(QMouseEvent* event)
-{
-	if (QGraphicsItem *item = ui->mapView->itemAt(event->pos())) {
-        qDebug() << "You hovered" << item;
-        QList<QGraphicsItem *> childList = item->childItems();
-        qDebug() << childList;
-        for (int i = 0; i < childList.size(); i++){
-            if (childList[i]->contains(event->pos())){
-                qDebug() << "hover";
-            } else {
-                qDebug() << "nope";
-            }
-        }
-    }
-}
-
 void BusTrackWindow::resizeEvent(QResizeEvent *event)
 {
-
+    QSize currentSize = size();
+    ui->zoomSliderWidget->move(currentSize.width()*0.93, currentSize.height()*0.6);
+    ui->dispatchWidget->move(currentSize.width()*0.12, currentSize.height()*0.55);
 }
 
 void BusTrackWindow::setMap()
@@ -260,6 +244,23 @@ void BusTrackWindow::toggleSearchResultsWidget(QString query)
     {
         searchResultsWidget->setVisible(false);
         resetSearch();
+    }
+}
+
+void BusTrackWindow::setSearchTextFromBuses(QListWidgetItem* item){
+    for (int i = 0; i < busList->count() ; i++){
+        if (busList->item(i) == item){
+            ui->searchLineEdit->setPlaceholderText(item->text());
+        }
+    }
+}
+
+void BusTrackWindow::setSearchTextFromBusStops(QListWidgetItem* item){
+     for (int i = 0; i < busStopList->count() ; i++){
+        if (busStopList->item(i) == item){
+            ui->searchLineEdit->setPlaceholderText(item->text());
+             
+        }
     }
 }
 
@@ -450,6 +451,11 @@ void BusTrackWindow::initializeConnections()
     connect(ui->stopInfoBtn, SIGNAL(clicked()), this, SLOT(onStopInfoBtnClicked()));
     connect(hideAction, SIGNAL(triggered()), this, SLOT(toggleElementsVisibility()));
     connect(dispatchAction, SIGNAL(triggered()), this, SLOT(toggleDispatchWidget()));
+    
+    connect(busList, SIGNAL(itemClicked(QListWidgetItem*)), 
+        this, SLOT(setSearchTextFromBuses(QListWidgetItem*))); 
+    connect(busStopList, SIGNAL(itemClicked(QListWidgetItem*)), 
+        this, SLOT(setSearchTextFromBusStops(QListWidgetItem*)));   
 
     // Receive events from BusTrackService.
     connect(busTrackService, SIGNAL(connected()), this, SLOT(btsConnected()));
