@@ -88,14 +88,6 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     busStopList->addItem(tempStop3.getName().c_str());
 
     busList->addItem(tempBus.getService().getCode().c_str());
-/*
-    drawBus("D1",1.297970,103.770000,50);
-    drawBus("A1",1.297974,103.772000,30);
-    drawBus("A1",1.297974,103.773000,20);
-    drawBus("D2",1.297973,103.775000,10);
-    drawBus("D2",1.297973,103.774000,0);
-*/
-
 }
 
 BusTrackWindow::~BusTrackWindow()
@@ -133,6 +125,22 @@ void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
         qDebug("%s: Found bus: %s", TAG.c_str(), bus.getId().c_str());
         busListComplete.append(bus);
         busList->addItem(bus.getId().c_str());
+    }
+    for(int i=0; i<busListComplete.length(); i++)
+    {
+        drawBus(i);
+    }
+}
+
+void BusTrackWindow::updateMap()
+{
+    for (QGraphicsItem* item : paintedObjects) {
+        mapScene.removeItem(item);
+    }
+    paintedObjects.clear();
+    for(int i=0; i<busStopListComplete.length(); i++)
+    {
+        drawStop(i);
     }
     for(int i=0; i<busListComplete.length(); i++)
     {
@@ -250,7 +258,7 @@ void BusTrackWindow::toggleSearchResultsWidget(QString query)
 void BusTrackWindow::setSearchTextFromBuses(QListWidgetItem* item){
     for (int i = 0; i < busList->count() ; i++){
         if (busList->item(i) == item){
-            ui->searchLineEdit->setPlaceholderText(item->text());
+            ui->searchLineEdit->setText(item->text());
         }
     }
 }
@@ -258,7 +266,7 @@ void BusTrackWindow::setSearchTextFromBuses(QListWidgetItem* item){
 void BusTrackWindow::setSearchTextFromBusStops(QListWidgetItem* item){
      for (int i = 0; i < busStopList->count() ; i++){
         if (busStopList->item(i) == item){
-            ui->searchLineEdit->setPlaceholderText(item->text());
+            ui->searchLineEdit->setText(item->text());
              
         }
     }
@@ -357,7 +365,10 @@ void BusTrackWindow::toggleDispatchButtons(int index)
 }
 
 void BusTrackWindow::dispatchBus()
-{
+{   
+    //testing updateMap() function
+    updateMap();
+
     QString buses = "Bus(es) ";
     for(int i=0; i<BUS_NUM; i++)
     {
@@ -514,14 +525,14 @@ void BusTrackWindow::drawStop(int index)
     int numPeople = temp.getOccupancy();
     QList<BusService> busServiceList = busStopServices.value(index);
     
-    // 1.298037, 103.769591 (Top-left)
-    // 1.292223, 103.780003 (Bottom-right)
-    if (latitude > 1.298037 || longitude < 103.769591 ||
-        latitude < 1.292223 || longitude > 103.780003)
+    // 1.304444, 103.769694 (Top-left)
+    // 1.290457, 103.786843 (Bottom-right)
+    if (latitude > 1.304444 || longitude < 103.769694 ||
+        latitude < 1.290457 || longitude > 103.786843)
         return;
 
-    int offsety = 1080 * (1.298037-latitude)/(1.298037-1.292223);
-    int offsetx = 1920 * (longitude-103.769591)/(103.780003-103.769591);
+    int offsety = 2617 * (1.304444-latitude)/(1.304444-1.290457);
+    int offsetx = 3205 * (longitude-103.769694)/(103.786843-103.769694);
 
     //Color transitioning from red to yellow to green
     QColor repaintColor;
@@ -565,7 +576,7 @@ void BusTrackWindow::drawStop(int index)
     busstopGraphics->setTransformationMode(Qt::SmoothTransformation);
     busstopGraphics->setOffset(offsetx, offsety);
     mapScene.addItem(busstopGraphics);
-    busstopHash.insert(name, busstopGraphics);
+    paintedObjects.append(busstopGraphics);
 
     //Generation of child graphics (toggle-able additional info)
     int rectHeight = 60 + 15*busServiceList.size();
@@ -716,7 +727,7 @@ void BusTrackWindow::runSearch(QString query)
     overlayColor.setRgb(1,1,1,100);
     searchOverlay = new QGraphicsPathItem(0);
     QPainterPath path1;
-    path1.addRect(0,0,1920,1080);
+    path1.addRect(0,0,3205,2617);
     path1.setFillRule(Qt::OddEvenFill);
     searchOverlay->setBrush(overlayColor);
     searchOverlay->setOpacity(1);
@@ -726,13 +737,14 @@ void BusTrackWindow::runSearch(QString query)
         BusStop temp = busStopListComplete.at(stopResultIndex.at(i));
         float latitude = temp.getLatitude();
         float longitude = temp.getLongitude();
-        // 1.298037, 103.769591 (Top-left)
-        // 1.292223, 103.780003 (Bottom-right)
-        if (latitude > 1.298037 || longitude < 103.769591 ||
-            latitude < 1.292223 || longitude > 103.780003)
-            continue;
-        int offsety = 1080 * (1.298037-latitude)/(1.298037-1.292223);
-        int offsetx = 1920 * (longitude-103.769591)/(103.780003-103.769591);
+    // 1.304444, 103.769694 (Top-left)
+    // 1.290457, 103.786843 (Bottom-right)
+    if (latitude > 1.304444 || longitude < 103.769694 ||
+        latitude < 1.290457 || longitude > 103.786843)
+        continue;
+
+    int offsety = 2617 * (1.304444-latitude)/(1.304444-1.290457);
+    int offsetx = 3205 * (longitude-103.769694)/(103.786843-103.769694);
         path1.addEllipse(offsetx-radius+15, offsety-radius+17, 2*radius, 2*radius);
     }
 
@@ -740,13 +752,14 @@ void BusTrackWindow::runSearch(QString query)
         Bus temp = busListComplete.at(busResultIndex.at(i));
         float latitude = temp.getLatitude();
         float longitude = temp.getLongitude();
-        // 1.298037, 103.769591 (Top-left)
-        // 1.292223, 103.780003 (Bottom-right)
-        if (latitude > 1.298037 || longitude < 103.769591 ||
-            latitude < 1.292223 || longitude > 103.780003)
-            continue;
-        int offsety = 1080 * (1.298037-latitude)/(1.298037-1.292223);
-        int offsetx = 1920 * (longitude-103.769591)/(103.780003-103.769591);
+    // 1.304444, 103.769694 (Top-left)
+    // 1.290457, 103.786843 (Bottom-right)
+    if (latitude > 1.304444 || longitude < 103.769694 ||
+        latitude < 1.290457 || longitude > 103.786843)
+        continue;
+
+    int offsety = 2617 * (1.304444-latitude)/(1.304444-1.290457);
+    int offsetx = 3205 * (longitude-103.769694)/(103.786843-103.769694);
         path1.addEllipse(offsetx-radius+33, offsety-radius+25, 2*radius, 2*radius);
     }
     searchOverlay->setPath(path1);
@@ -760,16 +773,16 @@ void BusTrackWindow::drawBus(int index)
     int numPeople = temp.getOccupancy();
     QString busService = QString::fromStdString(temp.getService().getCode());
 
-    // 1.298037, 103.769591 (Top-left)
-    // 1.292223, 103.780003 (Bottom-right)
-    if (latitude > 1.298037 || longitude < 103.769591 ||
-        latitude < 1.292223 || longitude > 103.780003)
+    // 1.304444, 103.769694 (Top-left)
+    // 1.290457, 103.786843 (Bottom-right)
+    if (latitude > 1.304444 || longitude < 103.769694 ||
+        latitude < 1.290457 || longitude > 103.786843)
         return;
 
-    int offsety = 1080 * (1.298037-latitude)/(1.298037-1.292223);
-    int offsetx = 1920 * (longitude-103.769591)/(103.780003-103.769591);
-
+    int offsety = 2617 * (1.304444-latitude)/(1.304444-1.290457);
+    int offsetx = 3205 * (longitude-103.769694)/(103.786843-103.769694);
 	float percentageNumPeople = (numPeople * 1.0)/MAX_NUM_PEOPLE_BUS;
+
     //Color transitioning from red to yellow to green
     QColor repaintBusColor;
     repaintBusColor.setRgb(255,0,36);
@@ -811,6 +824,7 @@ void BusTrackWindow::drawBus(int index)
     busGraphics->setTransformationMode(Qt::SmoothTransformation);
 	busGraphics->setOffset(offsetx, offsety);
    	mapScene.addItem(busGraphics);
+    paintedObjects.append(busGraphics);
 
 
     QImage busoccupancy;
