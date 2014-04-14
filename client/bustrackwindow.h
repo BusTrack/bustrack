@@ -54,10 +54,6 @@ private slots:
     void onStopInfoBtnClicked();
     void toggleElementsVisibility();
     void toggleDispatchWidget();
-    void createCalendarWidget();
-    void createTimeWidget();
-    void calendarSelectionChanged(int i);
-    void timeSelectionChanged(int i);
 
     void btsConnected();
     void btsGetBusStopsComplete(std::vector<BusStop> bus_stops);
@@ -84,10 +80,6 @@ private:
     QHash<QString,QGraphicsItem*> busstopHash;
     bool searchActive;
     QGraphicsPathItem* searchOverlay;
-    QList<QPushButton*> calButtonList;
-    QList<QPushButton*> clockButtonList;
-    QList<QLabel*> calTickList;
-    QList<QLabel*> clockTickList;
     QSignalMapper *signalMapper;
     QWidget *searchResultsWidget;
     QListWidget *searchResultsList;
@@ -101,7 +93,6 @@ private:
     QList<Bus> busListComplete;
 
     // supporting methods
-    void initializeLists();
     void initializeWidgets();
     void initializeConnections();
     void initializeValues();

@@ -329,7 +329,8 @@ QSlider::handle:horizontal {
        <string notr="true">background-color: rgb(255, 255, 255);
 border-color:  rgb(43, 62, 81);
 border-width: 3px;
-border-style: solid;</string>
+border-style: solid;
+font-size: 14pt;</string>
       </property>
       <property name="text">
        <string>Dispatch</string>
@@ -352,7 +353,9 @@ border-style: solid;</string>
 border-color:  rgb(43, 62, 81);
 border-width: 3px;
 border-style: solid;
-text-align: center;</string>
+text-align: center;
+font-size: 14pt;
+</string>
       </property>
       <property name="text">
        <string>Cancel</string>
@@ -361,715 +364,145 @@ text-align: center;</string>
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="A1CalButton">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>70</y>
-        <width>50</width>
-        <height>50</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="bustrack.qrc">
-        <normaloff>:/resources/calBlue.png</normaloff>:/resources/calBlue.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>50</width>
-        <height>50</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="A1ClockButton">
-      <property name="geometry">
-       <rect>
-        <x>80</x>
-        <y>70</y>
-        <width>50</width>
-        <height>50</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="bustrack.qrc">
-        <normaloff>:/resources/clockBlue.png</normaloff>:/resources/clockBlue.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>50</width>
-        <height>50</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="A2CalButton">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>70</y>
-        <width>50</width>
-        <height>50</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="bustrack.qrc">
-        <normaloff>:/resources/calBlue.png</normaloff>:/resources/calBlue.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>50</width>
-        <height>50</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="A2ClockButton">
-      <property name="geometry">
-       <rect>
-        <x>220</x>
-        <y>70</y>
-        <width>50</width>
-        <height>50</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="bustrack.qrc">
-        <normaloff>:/resources/clockBlue.png</normaloff>:/resources/clockBlue.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>50</width>
-        <height>50</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="BCalButton">
-      <property name="geometry">
-       <rect>
-        <x>300</x>
-        <y>70</y>
-        <width>50</width>
-        <height>50</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="bustrack.qrc">
-        <normaloff>:/resources/calBlue.png</normaloff>:/resources/calBlue.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>50</width>
-        <height>50</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="BClockButton">
-      <property name="geometry">
-       <rect>
-        <x>360</x>
-        <y>70</y>
-        <width>50</width>
-        <height>50</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="bustrack.qrc">
-        <normaloff>:/resources/clockBlue.png</normaloff>:/resources/clockBlue.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>50</width>
-        <height>50</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="CCalButton">
-      <property name="geometry">
-       <rect>
-        <x>440</x>
-        <y>70</y>
-        <width>50</width>
-        <height>50</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="bustrack.qrc">
-        <normaloff>:/resources/calBlue.png</normaloff>:/resources/calBlue.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>50</width>
-        <height>50</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="CClockButton">
-      <property name="geometry">
-       <rect>
-        <x>500</x>
-        <y>70</y>
-        <width>50</width>
-        <height>50</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="bustrack.qrc">
-        <normaloff>:/resources/clockBlue.png</normaloff>:/resources/clockBlue.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>50</width>
-        <height>50</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="D1CalButton">
-      <property name="geometry">
-       <rect>
-        <x>580</x>
-        <y>70</y>
-        <width>50</width>
-        <height>50</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="bustrack.qrc">
-        <normaloff>:/resources/calBlue.png</normaloff>:/resources/calBlue.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>50</width>
-        <height>50</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="D1ClockButton">
-      <property name="geometry">
-       <rect>
-        <x>640</x>
-        <y>70</y>
-        <width>50</width>
-        <height>50</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="bustrack.qrc">
-        <normaloff>:/resources/clockBlue.png</normaloff>:/resources/clockBlue.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>50</width>
-        <height>50</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="D2CalButton">
-      <property name="geometry">
-       <rect>
-        <x>720</x>
-        <y>70</y>
-        <width>50</width>
-        <height>50</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="bustrack.qrc">
-        <normaloff>:/resources/calBlue.png</normaloff>:/resources/calBlue.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>50</width>
-        <height>50</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="D2ClockButton">
-      <property name="geometry">
-       <rect>
-        <x>780</x>
-        <y>70</y>
-        <width>50</width>
-        <height>50</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="bustrack.qrc">
-        <normaloff>:/resources/clockBlue.png</normaloff>:/resources/clockBlue.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>50</width>
-        <height>50</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QLabel" name="A1Label">
+     <widget class="QPushButton" name="dispatchA1Btn">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>130</width>
-        <height>170</height>
+        <width>131</width>
+        <height>171</height>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);
+       <string notr="true">color: rgb(43, 62, 81);
+font-size: 45pt;
+background-color: rgb(255, 255, 255);
 border-color:  rgb(43, 62, 81);
 border-width: 3px;
 border-style: solid;
-qproperty-alignment: AlignTop;
-padding-left: 23px;
-font-size: 35pt;</string>
+</string>
       </property>
       <property name="text">
        <string>A1</string>
       </property>
      </widget>
-     <widget class="QLabel" name="A2Label">
+     <widget class="QPushButton" name="dispatchA2Btn">
       <property name="geometry">
        <rect>
         <x>150</x>
         <y>10</y>
-        <width>130</width>
-        <height>170</height>
+        <width>131</width>
+        <height>171</height>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);
+       <string notr="true">color: rgb(43, 62, 81);
+font-size: 45pt;
+background-color: rgb(255, 255, 255);
 border-color:  rgb(43, 62, 81);
 border-width: 3px;
 border-style: solid;
-qproperty-alignment: AlignTop;
-padding-left: 23px;
-font-size: 35pt;</string>
+</string>
       </property>
       <property name="text">
        <string>A2</string>
       </property>
      </widget>
-     <widget class="QLabel" name="Blabel">
+     <widget class="QPushButton" name="dispatchBBtn">
       <property name="geometry">
        <rect>
         <x>290</x>
         <y>10</y>
-        <width>130</width>
-        <height>170</height>
+        <width>131</width>
+        <height>171</height>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);
+       <string notr="true">color: rgb(43, 62, 81);
+font-size: 45pt;
+background-color: rgb(255, 255, 255);
 border-color:  rgb(43, 62, 81);
 border-width: 3px;
 border-style: solid;
-qproperty-alignment: AlignTop;
-padding-left: 23px;
-font-size: 35pt;</string>
+</string>
       </property>
       <property name="text">
-       <string> B</string>
+       <string>B</string>
       </property>
      </widget>
-     <widget class="QLabel" name="CLabel">
+     <widget class="QPushButton" name="dispatchCBtn">
       <property name="geometry">
        <rect>
         <x>430</x>
         <y>10</y>
-        <width>130</width>
-        <height>170</height>
+        <width>131</width>
+        <height>171</height>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);
+       <string notr="true">color: rgb(43, 62, 81);
+font-size: 45pt;
+background-color: rgb(255, 255, 255);
 border-color:  rgb(43, 62, 81);
 border-width: 3px;
 border-style: solid;
-qproperty-alignment: AlignTop;
-padding-left: 23px;
-font-size: 35pt;</string>
+</string>
       </property>
       <property name="text">
-       <string> C</string>
+       <string>C</string>
       </property>
      </widget>
-     <widget class="QLabel" name="D1Label">
+     <widget class="QPushButton" name="dispatchD1Btn">
       <property name="geometry">
        <rect>
         <x>570</x>
         <y>10</y>
-        <width>130</width>
-        <height>170</height>
+        <width>131</width>
+        <height>171</height>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);
+       <string notr="true">color: rgb(43, 62, 81);
+font-size: 45pt;
+background-color: rgb(255, 255, 255);
 border-color:  rgb(43, 62, 81);
 border-width: 3px;
 border-style: solid;
-qproperty-alignment: AlignTop;
-padding-left: 23px;
-font-size: 35pt;</string>
+</string>
       </property>
       <property name="text">
        <string>D1</string>
       </property>
      </widget>
-     <widget class="QLabel" name="D2Label">
+     <widget class="QPushButton" name="dispatchD2Btn">
       <property name="geometry">
        <rect>
         <x>710</x>
         <y>10</y>
-        <width>130</width>
-        <height>170</height>
+        <width>131</width>
+        <height>171</height>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);
+       <string notr="true">color: rgb(43, 62, 81);
+font-size: 45pt;
+background-color: rgb(255, 255, 255);
 border-color:  rgb(43, 62, 81);
 border-width: 3px;
 border-style: solid;
-qproperty-alignment: AlignTop;
-padding-left: 23px;
-font-size: 35pt;</string>
+</string>
       </property>
       <property name="text">
        <string>D2</string>
       </property>
      </widget>
-     <widget class="QLabel" name="A1Tick">
-      <property name="geometry">
-       <rect>
-        <x>32</x>
-        <y>123</y>
-        <width>25</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="pixmap">
-       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
-      </property>
-      <property name="scaledContents">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="A1Tick2">
-      <property name="geometry">
-       <rect>
-        <x>93</x>
-        <y>123</y>
-        <width>25</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="pixmap">
-       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
-      </property>
-      <property name="scaledContents">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="A2Tick2">
-      <property name="geometry">
-       <rect>
-        <x>233</x>
-        <y>123</y>
-        <width>25</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="pixmap">
-       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
-      </property>
-      <property name="scaledContents">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="A2Tick">
-      <property name="geometry">
-       <rect>
-        <x>172</x>
-        <y>123</y>
-        <width>25</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="pixmap">
-       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
-      </property>
-      <property name="scaledContents">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="BTick">
-      <property name="geometry">
-       <rect>
-        <x>313</x>
-        <y>123</y>
-        <width>25</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="pixmap">
-       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
-      </property>
-      <property name="scaledContents">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="BTick2">
-      <property name="geometry">
-       <rect>
-        <x>374</x>
-        <y>123</y>
-        <width>25</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="pixmap">
-       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
-      </property>
-      <property name="scaledContents">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="CTick">
-      <property name="geometry">
-       <rect>
-        <x>452</x>
-        <y>123</y>
-        <width>25</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="pixmap">
-       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
-      </property>
-      <property name="scaledContents">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="CTick2">
-      <property name="geometry">
-       <rect>
-        <x>513</x>
-        <y>123</y>
-        <width>25</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="pixmap">
-       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
-      </property>
-      <property name="scaledContents">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="D1Tick">
-      <property name="geometry">
-       <rect>
-        <x>593</x>
-        <y>123</y>
-        <width>25</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="pixmap">
-       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
-      </property>
-      <property name="scaledContents">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="D1Tick2">
-      <property name="geometry">
-       <rect>
-        <x>653</x>
-        <y>123</y>
-        <width>25</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="pixmap">
-       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
-      </property>
-      <property name="scaledContents">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="D2Tick2">
-      <property name="geometry">
-       <rect>
-        <x>793</x>
-        <y>123</y>
-        <width>25</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="pixmap">
-       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
-      </property>
-      <property name="scaledContents">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="D2Tick">
-      <property name="geometry">
-       <rect>
-        <x>733</x>
-        <y>123</y>
-        <width>25</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="pixmap">
-       <pixmap resource="bustrack.qrc">:/resources/tick.png</pixmap>
-      </property>
-      <property name="scaledContents">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <zorder>D2Label</zorder>
-     <zorder>D1Label</zorder>
-     <zorder>CLabel</zorder>
-     <zorder>Blabel</zorder>
-     <zorder>A2Label</zorder>
-     <zorder>A1Label</zorder>
-     <zorder>dispatchButton</zorder>
-     <zorder>cancelButton</zorder>
-     <zorder>A1CalButton</zorder>
-     <zorder>A1ClockButton</zorder>
-     <zorder>A2CalButton</zorder>
-     <zorder>A2ClockButton</zorder>
-     <zorder>BCalButton</zorder>
-     <zorder>BClockButton</zorder>
-     <zorder>CCalButton</zorder>
-     <zorder>CClockButton</zorder>
-     <zorder>D1CalButton</zorder>
-     <zorder>D1ClockButton</zorder>
-     <zorder>D2CalButton</zorder>
-     <zorder>D2ClockButton</zorder>
-     <zorder>A1Tick</zorder>
-     <zorder>A1Tick2</zorder>
-     <zorder>A2Tick2</zorder>
-     <zorder>A2Tick</zorder>
-     <zorder>BTick</zorder>
-     <zorder>BTick2</zorder>
-     <zorder>CTick</zorder>
-     <zorder>CTick2</zorder>
-     <zorder>D1Tick</zorder>
-     <zorder>D1Tick2</zorder>
-     <zorder>D2Tick2</zorder>
-     <zorder>D2Tick</zorder>
     </widget>
-   </widget>
-   <widget class="QCalendarWidget" name="calendarWidget">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>319</y>
-      <width>261</width>
-      <height>131</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(43, 62, 81);</string>
-    </property>
-    <property name="firstDayOfWeek">
-     <enum>Qt::Monday</enum>
-    </property>
-    <property name="gridVisible">
-     <bool>false</bool>
-    </property>
-   </widget>
-   <widget class="QTimeEdit" name="timeEdit">
-    <property name="geometry">
-     <rect>
-      <x>480</x>
-      <y>430</y>
-      <width>121</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="calendarPopup">
-     <bool>false</bool>
-    </property>
    </widget>
    <zorder>mapView</zorder>
    <zorder>searchBarWidget</zorder>
    <zorder>sideBarWidget</zorder>
    <zorder>zoomSliderWidget</zorder>
    <zorder>dispatchWidget</zorder>
-   <zorder>calendarWidget</zorder>
-   <zorder>timeEdit</zorder>
    <zorder>busInfoList</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
