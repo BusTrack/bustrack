@@ -14,7 +14,10 @@ const std::string BusTrackWindow::TAG ("BusTrackWindow");
 
 BusTrackWindow::BusTrackWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::BusTrackWindow)
+    ui(new Ui::BusTrackWindow),
+    initializedBusStops(false),
+    initializedBusServices(false),
+    initializedBusStopServices(false)
 {
     // Initialize the BusTrack service.
     busTrackService = new bustrack::BusTrackService();
@@ -25,69 +28,6 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     initializeWidgets();
     initializeValues();
     initializeConnections();
-
-    BusStop tempStop;
-    tempStop.setId("Qweq");
-    tempStop.setName("bobabobo");
-    tempStop.setOccupancy(10);
-    tempStop.setLatitude(1.296970);
-    tempStop.setLongitude(103.772000);
-    busStopListComplete.append(tempStop);
-    drawStop(0);
-
-    BusStop tempStop2;
-    tempStop2.setId("Qweq");
-    tempStop2.setName("aeiou");
-    tempStop2.setOccupancy(20);
-    tempStop2.setLatitude(1.296970);
-    tempStop2.setLongitude(103.777000);
-    busStopListComplete.append(tempStop2);
-    drawStop(1);
-
-    BusStop tempStop3;
-    tempStop3.setId("Qweq");
-    tempStop3.setName("qwezxcqwec");
-    tempStop3.setOccupancy(30);
-    tempStop3.setLatitude(1.295970);
-    tempStop3.setLongitude(103.775000);
-    busStopListComplete.append(tempStop3);
-    drawStop(2);
-
-    Bus tempBus;
-    tempBus.setId("ASDF");
-    BusService tempService;
-    tempService.setCode("A1");
-    tempBus.setService(tempService);
-    tempBus.setOccupancy(35);
-    tempBus.setLatitude(1.297970);
-    tempBus.setLongitude(103.772000);
-    tempBus.setDestination(tempStop2);
-    busListComplete.append(tempBus);
-    drawBus(0);
-
-
-    tempService.setCode("A1");
-    std::vector<std::shared_ptr<Waypoint>> route;
-    std::shared_ptr<Waypoint> waypoint1 = std::make_shared<Waypoint>();
-    waypoint1->setLatitude(1.296970);
-    waypoint1->setLongitude(103.772000);
-    std::shared_ptr<Waypoint> waypoint2 = std::make_shared<Waypoint>();
-    waypoint2->setLatitude(1.296970);
-    waypoint2->setLongitude(103.777000);
-    std::shared_ptr<Waypoint> waypoint3 = std::make_shared<Waypoint>();
-    waypoint3->setLatitude(1.295970);
-    waypoint3->setLongitude(103.775000);
-    route.push_back(waypoint1);
-    route.push_back(waypoint2);
-    route.push_back(waypoint3);
-    tempService.setRoute(route);
-    busServiceListComplete.append(tempService);
-
-    busStopList->addItem(tempStop.getName().c_str());
-    busStopList->addItem(tempStop2.getName().c_str());
-    busStopList->addItem(tempStop3.getName().c_str());
-
-    busList->addItem(tempBus.getService().getCode().c_str());
 }
 
 BusTrackWindow::~BusTrackWindow()
@@ -98,8 +38,6 @@ BusTrackWindow::~BusTrackWindow()
 // event handlers
 void BusTrackWindow::btsConnected()
 {
-    busTrackService->getBusServices();
-    busTrackService->getBusStops();
     busTrackService->getBuses();
 }
 
@@ -111,6 +49,11 @@ void BusTrackWindow::btsGetBusServicesComplete(
                 bus_service.getCode().c_str());
         busServiceListComplete.append(bus_service);
     }
+
+    initializedBusServices = true;
+    initializeBusStopServices();
+    
+    busTrackService->getBusStops();
 }
 
 void BusTrackWindow::btsGetBusStopsComplete(std::vector<BusStop> bus_stops)
@@ -121,13 +64,11 @@ void BusTrackWindow::btsGetBusStopsComplete(std::vector<BusStop> bus_stops)
         busStopList->addItem(bus_stop.getName().c_str());
     }
 
-    if (!initializedBusStopServices) {
-        initializeBusStopServices();
-    }
-    for(int i=0; i<busStopListComplete.length(); i++)
-    {
-        drawStop(i);
-    }
+    initializedBusStops = true;
+    initializeBusStopServices();
+
+    updateMap();
+    
 }
 
 void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
@@ -141,6 +82,8 @@ void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
     {
         drawBus(i);
     }
+    
+    busTrackService->getBusServices();
 }
 
 void BusTrackWindow::updateMap()
@@ -483,6 +426,12 @@ void BusTrackWindow::initializeConnections()
     connect(busTrackService, SIGNAL(connected()), this, SLOT(btsConnected()));
     connect(
         busTrackService,
+        SIGNAL(getBusServicesComplete(std::vector<BusService>)),
+        this,
+        SLOT(btsGetBusServicesComplete(std::vector<BusService>))
+    );
+    connect(
+        busTrackService,
         SIGNAL(getBusStopsComplete(std::vector<BusStop>)),
         this,
         SLOT(btsGetBusStopsComplete(std::vector<BusStop>))
@@ -509,6 +458,11 @@ void BusTrackWindow::initializeConnections()
 
 void BusTrackWindow::initializeBusStopServices()
 {
+    if (!initializedBusServices || !initializedBusStops ||
+         initializedBusStopServices) {
+        return;
+    }
+
     initializedBusStopServices = true;
     int i = 0;
     for (BusStop bus_stop : busStopListComplete) {

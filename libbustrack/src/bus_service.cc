@@ -64,6 +64,10 @@ namespace bustrack {
     std::vector<std::shared_ptr<Waypoint>> route;
     for (int i = 1; i < tokens.size(); i++) {
       QString waypoint_str (tokens[i]);
+      if (waypoint_str.trimmed().isEmpty()) {
+        continue;
+      }
+
       QStringList waypoint_tokens = waypoint_str.split(",");
 
       if (waypoint_tokens.size() < 1) {

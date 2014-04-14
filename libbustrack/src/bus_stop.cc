@@ -83,7 +83,7 @@ namespace bustrack {
 
     bus_stop.setLongitude(tokens[3].toFloat(&parsing_ok));
     if (!parsing_ok) {
-      qWarning("%s Unable to parse longitude for bus stop with ID %s",
+      qWarning("%s: Unable to parse longitude for bus stop with ID %s",
           TAG.c_str(), bus_stop.getId().c_str());
     }
 

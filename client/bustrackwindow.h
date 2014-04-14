@@ -90,6 +90,8 @@ private:
     QGraphicsPathItem* searchServiceOverlay; 
     
     QSignalMapper *signalMapper;
+    bool initializedBusStops;
+    bool initializedBusServices;
     bool initializedBusStopServices;
     QWidget *searchResultsWidget;
     QListWidget *searchResultsList;

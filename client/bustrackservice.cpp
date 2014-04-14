@@ -101,6 +101,7 @@ void BusTrackService::handleReadyRead() {
             }
 
             emit getBusServicesComplete(bus_services);
+            break;
         }
 
         case BUS_STOPS_REQUEST: {
@@ -122,6 +123,7 @@ void BusTrackService::handleReadyRead() {
             }
 
             emit getBusesComplete(buses);
+            break;
         }
         default:
             break;
