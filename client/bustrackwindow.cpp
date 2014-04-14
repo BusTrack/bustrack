@@ -50,6 +50,11 @@ void BusTrackWindow::btsGetBusStopsComplete(std::vector<BusStop> bus_stops)
             bus_stop.getName().c_str());
         busStopListComplete.append(bus_stop.getName().c_str());
     }
+
+    for(int i=0; i<busStopListComplete.length(); i++)
+    {
+        ui->busStopList->addItem(busStopListComplete[i]);
+    }
 }
 
 void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
@@ -57,6 +62,11 @@ void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
     for (Bus bus : buses) {
         qDebug("%s: Found bus: %s", TAG.c_str(), bus.getId().c_str());
         busListComplete.append(bus.getId().c_str());
+    }
+
+    for(int i=0; i<busListComplete.length(); i++)
+    {
+        ui->busInfoList->addItem(busListComplete[i]);
     }
 }
 
@@ -327,15 +337,6 @@ void BusTrackWindow::initializeWidgets()
 
     ui->busInfoListWidget->move(79, 80);
     ui->busStopInfoListWidget->move(79, 140);
-
-    for(int i=0; i<busListComplete.length(); i++)
-    {
-        ui->busInfoList->addItem(busListComplete[i]);
-    }
-    for(int i=0; i<busStopListComplete.length(); i++)
-    {
-        ui->busStopList->addItem(busStopListComplete[i]);
-    }
 }
 
 void BusTrackWindow::initializeValues()
