@@ -29,8 +29,9 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     setMouseTracking(true);
 
     drawBus("D1",1.297970,103.770000,50);
+    drawBus("A1",1.297974,103.772000,30);
     drawBus("A1",1.297974,103.773000,20);
-    drawBus("A2",1.297977,103.775000,30);
+    drawBus("D2",1.297973,103.775000,10);
     drawBus("D2",1.297973,103.774000,0);
 }
 
@@ -406,22 +407,14 @@ void BusTrackWindow::drawStop(QString name, float latitude, float longitude, int
 
     int offsetx = 1080 * (latitude-1.292223)/(1.298037-1.292223);
     int offsety = 1920 * (longitude-103.769591)/(103.780003-103.769591);
-    /*
-    if (latitude > 1.297982 || longitude < 103.769741 ||
-        latitude < 1.292964 || longitude >  103.778872)
-         return;
-
-    int offsetx = 1080 * (latitude-1.292964)/(1.297982-1.292964);
-    int offsety = 1920 * (longitude-103.769741)/(103.778872-103.769741);
-    */
 
     //Color transitioning from red to yellow to green
     QColor repaintColor;
     repaintColor.setRgb(255,0,36);
     if (numPeople < 30 && numPeople > 15) {
-        repaintColor.setRgb(240.0/(numPeople-15), 240.0/(numPeople-15), 36);
-    } else if (numPeople > 0) {
-        repaintColor.setRgb(240 - (240.0/numPeople), (210.0/numPeople), 36);
+        repaintColor.setRgb(255 + (240-255)/15*(numPeople-15), 0 + 240/15*(numPeople-15), 36);
+    } else if (numPeople > 0 && numPeople <= 15) {
+        repaintColor.setRgb(0 +  240.0/15*numPeople, 210.0 + 30/15*numPeople, 36);
     } else if (numPeople == 0) {
         repaintColor.setRgb(0,210,36);
     }
@@ -487,7 +480,7 @@ void BusTrackWindow::drawStop(QString name, float latitude, float longitude, int
     //Locating pixels to be painted and replacing them with new color (busstop occupancy)
     QImage busstopoccupancy;
     busstopoccupancy.load(":/resources/occupancy.png");
-    QImage world2(2359, 1738, QImage::Format_RGB32);
+    QImage world2(400, 400, QImage::Format_RGB32);
     world2.fill(1);	 
     QPainter painter2(&world2);
     sizeImage = busstopoccupancy.size();
@@ -562,27 +555,29 @@ void BusTrackWindow::searchBus(QString name)
 
 void BusTrackWindow::drawBus(QString busService, float latitude, float longitude, int numPeople)
 {
-    if (latitude > 1.297982 || longitude < 103.769741 || latitude < 1.292964 || longitude >  103.778872)
-         return;
-    int offsetx = 1080 * (latitude-1.292964)/(1.297982-1.292964);
-    int offsety = 1920 * (longitude-103.769741)/(103.778872-103.769741);
+    // 1.298037, 103.769591 (Top-left)
+    // 1.292223, 103.780003 (Bottom-right)
+    if (latitude > 1.298037 || longitude < 103.769591 ||
+        latitude < 1.292223 || longitude > 103.780003)
+        return;
+
+    int offsetx = 1080 * (latitude-1.292223)/(1.298037-1.292223);
+    int offsety = 1920 * (longitude-103.769591)/(103.780003-103.769591);
 
 	float percentageNumPeople = (numPeople * 1.0)/MAX_NUM_PEOPLE_BUS;
-	//Color transitioning from red to yellow to green	
-	QColor repaintBusColor;
-	repaintBusColor.setRgb(255,0,36);	
-	if (numPeople < 30 && numPeople > 15) {
-		repaintBusColor.setRgb(240.0/(numPeople-15), 
-			240.0/(numPeople-15), 36);
-	} else if (numPeople > 0) {
-		repaintBusColor.setRgb(240 - (240.0/numPeople), 
-			(210.0/numPeople), 36);
-	} else if (numPeople <= 0) {
-		repaintBusColor.setRgb(0,210,36);
-	}	
+    //Color transitioning from red to yellow to green
+    QColor repaintBusColor;
+    repaintBusColor.setRgb(255,0,36);
+    if (numPeople < 50 && numPeople > 25) {
+        repaintBusColor.setRgb(255 + (240-255)/25*(numPeople-25), 0 + 240/25*(numPeople-25),36);
+    } else if (numPeople > 0 && numPeople <= 25) {
+        repaintBusColor.setRgb(0 +  240.0/25*numPeople, 210.0 + 30/25*numPeople, 36);
+    } else if (numPeople == 0) {
+        repaintBusColor.setRgb(0,210,36);
+    }
 
 	//Locating pixels to be painted and replacing them with new color
-	QImage world(2359, 1738, QImage::Format_RGB32);
+	QImage world(400, 400, QImage::Format_RGB32);
 	QSize sizeImage;
 	int r,g,b,alpha;
 	QRgb color;
@@ -615,7 +610,7 @@ void BusTrackWindow::drawBus(QString busService, float latitude, float longitude
 
     QImage busoccupancy;
     busoccupancy.load(":/resources/occupancy.png");
-    QImage world2(2359, 1738, QImage::Format_RGB32);
+    QImage world2(400, 400, QImage::Format_RGB32);
     world2.fill(1);	 
     QPainter painter2(&world2);
     sizeImage = busoccupancy.size();
