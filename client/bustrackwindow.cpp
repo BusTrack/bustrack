@@ -56,7 +56,7 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     Bus tempBus;
     tempBus.setId("ASDF");
     BusService tempService;
-    tempService.setCode("A2");
+    tempService.setCode("A1");
     tempBus.setService(tempService);
     tempBus.setOccupancy(35);
     tempBus.setLatitude(1.297970);
@@ -699,7 +699,6 @@ void BusTrackWindow::runSearch(QString query)
     QList<int> stopResultIndex;
     for (int i = 0 ; i < busStopListComplete.size(); i++) {
         BusStop curStop = busStopListComplete.at(i);
-        qDebug() << QString::fromStdString(curStop.getName());
         if (QString::fromStdString(curStop.getName()).contains(query,Qt::CaseInsensitive)){
             resultsFound = true;
             stopResultIndex.append(i);
@@ -709,7 +708,6 @@ void BusTrackWindow::runSearch(QString query)
     QList<int> busResultIndex;
     for (int i = 0 ; i < busListComplete.size(); i++) {
         Bus curBus = busListComplete.at(i);
-        qDebug() << QString::fromStdString(curBus.getService().getCode());
         if (QString::fromStdString(curBus.getService().getCode()).contains(query,Qt::CaseInsensitive)){
             resultsFound = true;
             busResultIndex.append(i);
@@ -761,6 +759,30 @@ void BusTrackWindow::runSearch(QString query)
         path1.addEllipse(offsetx-radius+33, offsety-radius+25, 2*radius, 2*radius);
     }
     searchOverlay->setPath(path1);
+    
+    for (int i = 0; i < busServiceListComplete.size(); i++) {
+        BusService curService= busServiceListComplete.at(i);
+        if (QString::fromStdString(curService.getCode()) == query) {
+            searchServiceOverlay = new QGraphicsPathItem(0);
+            QPen windowPen;
+            windowPen.setColor(Qt::cyan);
+            windowPen.setWidth(4);
+            searchServiceOverlay->setPen(windowPen);
+            QPointF startPoint;
+            startPoint.setX(3205 * (curService.getRoute().at(0)->getLongitude()-103.769694)/(103.786843-103.769694)+15);
+            startPoint.setY(2617 * (1.304444-curService.getRoute().at(0)->getLatitude())/(1.304444-1.290457)+15);
+            QPainterPath path(startPoint);
+            std::vector<std::shared_ptr<Waypoint>> route = curService.getRoute();
+            for (std::shared_ptr<Waypoint> waypoint : route) {
+                QPointF nextPoint;
+                nextPoint.setX(3205 * (waypoint->getLongitude()-103.769694)/(103.786843-103.769694) + 15);
+                nextPoint.setY(2617 * (1.304444-waypoint->getLatitude())/(1.304444-1.290457) +15);
+                path.lineTo(nextPoint);
+            }
+            searchServiceOverlay->setPath(path);
+            mapScene.addItem(searchServiceOverlay);
+        }
+    }   
 }
 
 void BusTrackWindow::drawBus(int index)

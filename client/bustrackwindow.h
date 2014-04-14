@@ -86,6 +86,8 @@ private:
     QList<QGraphicsItem*> paintedObjects;
     bool searchActive;
     QGraphicsPathItem* searchOverlay;
+    QGraphicsPathItem* searchServiceOverlay; 
+    
     QSignalMapper *signalMapper;
     bool initializedBusStopServices;
     QWidget *searchResultsWidget;
