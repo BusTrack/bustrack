@@ -119,12 +119,11 @@ namespace bustrack {
   std::string Bus::toString() {
     std::stringstream serialized_ss;
     serialized_ss << getId();
-
     return serialized_ss.str();
   }
   
   std::string Bus::toStringAll() {
-    std::stringstream serialized_all_ss (toString());
+    std::stringstream serialized_all_ss (toString(), std::stringstream::ate);
     serialized_all_ss << "|" << getOccupancy() << "|" << getLatitude() <<
       getLongitude();
     

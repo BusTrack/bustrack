@@ -35,7 +35,8 @@ namespace bustrack {
     // Create the response payload.
     std::string payload;
     for (BusStop bus_stop : bus_stops) {
-      payload.append(bus_stop.toString());
+      qDebug() << bus_stop.toStringAll().c_str();
+      payload.append(bus_stop.toStringAll());
       payload.append("\n");
     }
 

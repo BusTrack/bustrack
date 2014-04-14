@@ -28,7 +28,13 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
 
     setMouseTracking(true);
 
-    drawBus("D1",1.297970,103.770000,0);
+    drawBus("D1",1.297970,103.770000,50);
+    drawBus("A1",1.297974,103.773000,20);
+    drawBus("A2",1.297977,103.775000,30);
+    drawBus("D2",1.297973,103.774000,0);
+    
+    drawStop("NUS Central Library", 1.296632, 103.772508, 0);
+    drawStop("University Health Center", 1.298961, 103.776024, 0);
 }
 
 BusTrackWindow::~BusTrackWindow()

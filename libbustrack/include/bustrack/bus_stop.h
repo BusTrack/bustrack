@@ -31,16 +31,23 @@ namespace bustrack {
 
     std::string getName();
     void setName(const std::string& name);
+    
+    unsigned int getOccupancy();
+    void setOccupancy(unsigned int occupancy);
 
     static BusStop fromString(const std::string& serialized);
+    static BusStop fromStringAll(const std::string& serialized);
     std::string toString();
+    std::string toStringAll();
 
   private:
     static const std::string TAG;
     static const int NUM_SERIALIZED_FIELDS = 4;
+    static const int NUM_ALL_FIELDS = 5;
 
     std::string id_;
     std::string name_;
+    unsigned int occupancy_;
   };
 
 }

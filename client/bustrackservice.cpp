@@ -88,7 +88,7 @@ void BusTrackService::handleReadyRead() {
             QStringList bus_stops_line = decoded_payload.split("\n");
             std::vector<BusStop> bus_stops;
             for (QString bus_stop : bus_stops_line) {
-                bus_stops.push_back(BusStop::fromString(bus_stop.toStdString()));
+                bus_stops.push_back(BusStop::fromStringAll(bus_stop.toStdString()));
             }
 
             emit getBusStopsComplete(bus_stops);

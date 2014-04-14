@@ -44,12 +44,20 @@ namespace bustrack {
   void BusStop::setName(const std::string& name) {
     name_ = name;
   }
+  
+  unsigned int BusStop::getOccupancy() {
+    return occupancy_;
+  }
+  
+  void BusStop::setOccupancy(unsigned int occupancy) {
+    occupancy_ = occupancy;
+  }
 
   BusStop BusStop::fromString(const std::string& serialized) {
     QString q_serialized (serialized.c_str());
     QStringList tokens = q_serialized.split("|");
 
-    if (tokens.size() != NUM_SERIALIZED_FIELDS) {
+    if (tokens.size() < NUM_SERIALIZED_FIELDS) {
       qWarning("%s: Insufficient number of fields! (%s)", TAG.c_str(),
          serialized.c_str());
       return BusStop();
@@ -76,13 +84,33 @@ namespace bustrack {
 
     return bus_stop;
   }
+  
+  BusStop BusStop::fromStringAll(const std::string& serialized) {
+    QString q_serialized (serialized.c_str());
+    QStringList tokens = q_serialized.split("|");
+    BusStop bus_stop = fromString(serialized);
+    
+    if (tokens.size() < NUM_ALL_FIELDS) {
+      qWarning("%s: Insufficient number of all fields! (%s)", TAG.c_str(),
+          serialized.c_str());
+      return bus_stop;
+    }
+    
+    bus_stop.setOccupancy(tokens[4].toUInt());
+    return bus_stop;
+  }
  
   std::string BusStop::toString() {
     std::stringstream serialized_ss;
     serialized_ss << getId() << "|" << getName() << "|" <<
           getLatitude() << "|" << getLongitude();
-
     return serialized_ss.str();
+  }
+  
+  std::string BusStop::toStringAll() {
+    std::stringstream serialized_all_ss (toString(), std::stringstream::ate);
+    serialized_all_ss << "|" << getOccupancy();
+    return serialized_all_ss.str();
   }
 
 }
