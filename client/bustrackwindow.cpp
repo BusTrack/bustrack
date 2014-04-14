@@ -32,9 +32,6 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
     drawBus("A1",1.297974,103.773000,20);
     drawBus("A2",1.297977,103.775000,30);
     drawBus("D2",1.297973,103.774000,0);
-    
-    drawStop("NUS Central Library", 1.296632, 103.772508, 0);
-    drawStop("University Health Center", 1.298961, 103.776024, 0);
 }
 
 BusTrackWindow::~BusTrackWindow()
@@ -55,6 +52,9 @@ void BusTrackWindow::btsGetBusStopsComplete(std::vector<BusStop> bus_stops)
         qDebug("%s: Found bus stop: %s", TAG.c_str(),
             bus_stop.getName().c_str());
         busStopListComplete.append(bus_stop.getName().c_str());
+
+        drawStop(QString(bus_stop.getName().c_str()), bus_stop.getLatitude(),
+                bus_stop.getLongitude(), bus_stop.getOccupancy());
     }
 
     for(int i=0; i<busStopListComplete.length(); i++)
@@ -398,10 +398,22 @@ void BusTrackWindow::initializeConnections()
 
 void BusTrackWindow::drawStop(QString name, float latitude, float longitude, int numPeople)
 {
-    if (latitude > 1.297982 || longitude < 103.769741 || latitude < 1.292964 || longitude >  103.778872)
+    // 1.298037, 103.769591 (Top-left)
+    // 1.292223, 103.780003 (Bottom-right)
+    if (latitude > 1.298037 || longitude < 103.769591 ||
+        latitude < 1.292223 || longitude > 103.780003)
+        return;
+
+    int offsetx = 1080 * (latitude-1.292223)/(1.298037-1.292223);
+    int offsety = 1920 * (longitude-103.769591)/(103.780003-103.769591);
+    /*
+    if (latitude > 1.297982 || longitude < 103.769741 ||
+        latitude < 1.292964 || longitude >  103.778872)
          return;
+
     int offsetx = 1080 * (latitude-1.292964)/(1.297982-1.292964);
     int offsety = 1920 * (longitude-103.769741)/(103.778872-103.769741);
+    */
 
     //Color transitioning from red to yellow to green
     QColor repaintColor;
