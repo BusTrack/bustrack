@@ -21,6 +21,7 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
 
     ui->setupUi(this);
 
+    initializeLists();
     initializeWidgets();
     initializeValues();
     initializeConnections();
@@ -93,6 +94,28 @@ void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
     {
         drawBus(i);
     }
+}
+
+void BusTrackWindow::initializeLists()
+{
+    for(int i=0; i<BUS_NUM; i++)
+    {
+        busSelectedList.append(false);
+    }
+
+    dispatchList.append(ui->dispatchA1Btn);
+    dispatchList.append(ui->dispatchA2Btn);
+    dispatchList.append(ui->dispatchBBtn);
+    dispatchList.append(ui->dispatchCBtn);
+    dispatchList.append(ui->dispatchD1Btn);
+    dispatchList.append(ui->dispatchD2Btn);
+
+    busServiceList.append("A1");
+    busServiceList.append("A2");
+    busServiceList.append("B");
+    busServiceList.append("C");
+    busServiceList.append("D1");
+    busServiceList.append("D2");
 }
 
 // override default mouse behaviour to implement zoom
@@ -274,8 +297,48 @@ void BusTrackWindow::toggleDispatchWidget()
     }
 }
 
+void BusTrackWindow::toggleDispatchButtons(int index)
+{
+    if(!busSelectedList[index])
+    {
+        busSelectedList[index] = true;
+    }
+    else
+    {
+        busSelectedList[index] = false;
+    }
+}
+
+void BusTrackWindow::dispatchBus()
+{
+    QString buses = "Bus(es) ";
+    for(int i=0; i<BUS_NUM; i++)
+    {
+        if(busSelectedList[i] == true)
+        {
+            // TODO dispatch bus
+            qDebug() << busServiceList[i];
+            buses.append(busServiceList[i] + ", ");
+        }
+    }
+    statusBar()->showMessage(buses + "has/have been dispatched");
+    ui->dispatchWidget->setVisible(false);
+    cancelDispatch();
+}
+
+void BusTrackWindow::cancelDispatch()
+{
+    for(int i=0; i<BUS_NUM; i++)
+    {
+        busSelectedList[i] = false;
+    }
+    statusBar()->showMessage("No buses have been dispatched");
+    ui->dispatchWidget->setVisible(false);
+}
+
 void BusTrackWindow::initializeWidgets()
 {
+    //qDebug() << "in intializeWidgets";
     searchResultsWidget = new QWidget(this);
     searchResultsWidget->setGeometry(79, 69, 350, 241);
     searchResultsList = new QListWidget(searchResultsWidget);
@@ -321,6 +384,7 @@ void BusTrackWindow::initializeWidgets()
 
 void BusTrackWindow::initializeValues()
 {
+    //qDebug() << "in initializeValues()";
     currentZoom = 1.0;
     slideValue = 1.0;
     busInfoBtnClicked = false;
@@ -331,6 +395,7 @@ void BusTrackWindow::initializeValues()
 
 void BusTrackWindow::initializeConnections()
 {
+    //qDebug() << "in initializeConnections";
     connect(ui->zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(zoomSlide(int)));
     connect(ui->searchLineEdit, SIGNAL(textChanged(QString)), this, SLOT(toggleSearchResultsWidget(QString)));
     connect(ui->busInfoBtn, SIGNAL(clicked()), this, SLOT(onBusInfoBtnClicked()));
@@ -352,6 +417,18 @@ void BusTrackWindow::initializeConnections()
         this,
         SLOT(btsGetBusesComplete(std::vector<Bus>))
     );
+
+    // connections for bus dispatch
+    signalMapper = new QSignalMapper(this);
+    for(int i=0; i<BUS_NUM; i++)
+    {
+        signalMapper->setMapping(dispatchList[i], i);
+        connect(dispatchList[i], SIGNAL(clicked()), signalMapper, SLOT(map()));
+    }
+    connect(signalMapper, SIGNAL(mapped(int)), this, SLOT(toggleDispatchButtons(int)));
+
+    connect(ui->dispatchButton, SIGNAL(clicked()), this, SLOT(dispatchBus()));
+    connect(ui->cancelButton, SIGNAL(clicked()), this, SLOT(cancelDispatch()));
 }
 
 void BusTrackWindow::drawStop(int index)
