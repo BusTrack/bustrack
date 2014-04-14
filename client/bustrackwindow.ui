@@ -380,10 +380,19 @@ background-color: rgb(255, 255, 255);
 border-color:  rgb(43, 62, 81);
 border-width: 3px;
 border-style: solid;
+
+
+
 </string>
       </property>
       <property name="text">
        <string>A1</string>
+      </property>
+      <property name="checkable">
+       <bool>false</bool>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
       </property>
      </widget>
      <widget class="QPushButton" name="dispatchA2Btn">
@@ -498,12 +507,6 @@ border-style: solid;
      </widget>
     </widget>
    </widget>
-   <zorder>mapView</zorder>
-   <zorder>searchBarWidget</zorder>
-   <zorder>sideBarWidget</zorder>
-   <zorder>zoomSliderWidget</zorder>
-   <zorder>dispatchWidget</zorder>
-   <zorder>busInfoList</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -515,7 +518,11 @@ border-style: solid;
     </rect>
    </property>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

@@ -53,6 +53,9 @@ private slots:
     void onStopInfoBtnClicked();
     void toggleElementsVisibility();
     void toggleDispatchWidget();
+    void toggleDispatchButtons(int index);
+    void dispatchBus();
+    void cancelDispatch();
 
     void btsConnected();
     void btsGetBusStopsComplete(std::vector<BusStop> bus_stops);
@@ -78,6 +81,7 @@ private:
     bool stopInfoBtnClicked;
     bool hidden;
     bool dispatchWidgetVisible;
+
     QHash<QString,QGraphicsItem*> busstopHash;
     bool searchActive;
     QGraphicsPathItem* searchOverlay;
@@ -90,6 +94,11 @@ private:
     QWidget *busStopListWidget;
     QListWidget *busStopList;
 
+    // for bus dispatch
+    QList<QPushButton*> dispatchList;
+    QList<bool> busSelectedList;
+    QList<QString> busServiceList;
+
     // models equivalent
     QList<BusStop> busStopListComplete;
     QList<Bus> busListComplete;
@@ -97,6 +106,7 @@ private:
     QList<BusService> busServiceListComplete;
 
     // supporting methods
+    void initializeLists();
     void initializeWidgets();
     void initializeConnections();
     void initializeValues();

@@ -48,3 +48,15 @@ QSlider::add-page:vertical
 {
 	background-color: rgb(43, 62, 81);
 }
+
+QPushButton:pressed
+{
+	background-color: rgb(43, 62, 81);
+	color: rgb(255, 255, 255);
+}
+
+
+QStatusBar
+{
+	background-color: rgb(255,255,255);
+}
