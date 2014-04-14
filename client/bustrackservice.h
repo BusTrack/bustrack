@@ -26,6 +26,7 @@
 #include "bustrack/message.h"
 #include "bustrack/bus.h"
 #include "bustrack/bus_stop.h"
+#include "bustrack/bus_service.h"
 
 namespace bustrack {
 
@@ -35,7 +36,8 @@ class BusTrackService : public QObject
 
 public:
     BusTrackService(QObject* parent = 0);
-    
+   
+    void getBusServices();
     void getBusStops();
     void getBuses();
 
@@ -43,6 +45,7 @@ signals:
     void connected();
     void error();
 
+    void getBusServicesComplete(std::vector<BusService> busServices);
     void getBusStopsComplete(std::vector<BusStop> busStops);
     void getBusesComplete(std::vector<Bus> buses);
 
@@ -53,6 +56,7 @@ private slots:
 
 private:
     enum RequestType {
+        BUS_SERVICES_REQUEST,
         BUS_STOPS_REQUEST,
         BUSES_REQUEST
     };

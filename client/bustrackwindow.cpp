@@ -98,8 +98,19 @@ BusTrackWindow::~BusTrackWindow()
 // event handlers
 void BusTrackWindow::btsConnected()
 {
+    busTrackService->getBusServices();
     busTrackService->getBusStops();
     busTrackService->getBuses();
+}
+
+void BusTrackWindow::btsGetBusServicesComplete(
+        std::vector<BusService> bus_services)
+{
+    for (BusService bus_service : bus_services) {
+        qDebug("%s: Found bus service: %s", TAG.c_str(),
+                bus_service.getCode().c_str());
+        busServiceListComplete.append(bus_service);
+    }
 }
 
 void BusTrackWindow::btsGetBusStopsComplete(std::vector<BusStop> bus_stops)

@@ -59,6 +59,7 @@ private slots:
     void cancelDispatch();
 
     void btsConnected();
+    void btsGetBusServicesComplete(std::vector<BusService> bus_services);
     void btsGetBusStopsComplete(std::vector<BusStop> bus_stops);
     void btsGetBusesComplete(std::vector<Bus> buses);
     void setSearchTextFromBuses(QListWidgetItem* item);

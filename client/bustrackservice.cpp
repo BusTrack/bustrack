@@ -33,6 +33,14 @@ BusTrackService::BusTrackService(QObject*) : nextRequestId_(0)
     socket_->connectToHost("127.0.0.1", 8080);
 }
 
+void BusTrackService::getBusServices() {
+    qDebug("%s: Invoked getBusServices()", TAG.c_str());
+    Message request;
+    request.setId(nextRequestId_);
+    request.setTag("BUS_SERVICES");
+    sendRequest_(request, BUS_SERVICES_REQUEST);
+}
+
 void BusTrackService::getBusStops() {
     qDebug("%s: Invoked getBusStops()", TAG.c_str());
     Message request;
@@ -84,6 +92,16 @@ void BusTrackService::handleReadyRead() {
     decoded_payload = decoded_payload.trimmed();
     RequestType message_type = requestQueue_.at(message_id);
     switch (message_type) {
+        case BUS_SERVICES_REQUEST: {
+            QStringList bus_services_line = decoded_payload.split("\n");
+            std::vector<BusService> bus_services;
+            for (QString bus_service : bus_services_line) {
+                bus_services.push_back(BusService::fromString(
+                            bus_service.toStdString()));
+            }
+
+            emit getBusServicesComplete(bus_services);
+        },
         case BUS_STOPS_REQUEST: {
             QStringList bus_stops_line = decoded_payload.split("\n");
             std::vector<BusStop> bus_stops;
@@ -102,7 +120,7 @@ void BusTrackService::handleReadyRead() {
             }
 
             emit getBusesComplete(buses);
-        }
+        },
         default:
             break;
     }
