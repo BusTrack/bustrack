@@ -690,6 +690,7 @@ void BusTrackWindow::resetSearch()
 {
     searchActive = false;
     searchOverlay->hide();
+    searchServiceOverlay->hide();
 }
 
 void BusTrackWindow::runSearch(QString query)
