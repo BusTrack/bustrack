@@ -74,29 +74,24 @@ void BusTrackWindow::btsGetBusStopsComplete(std::vector<BusStop> bus_stops)
 {
     for (BusStop bus_stop : bus_stops) {
         qDebug("%s: Found bus stop: %s", TAG.c_str(),bus_stop.getName().c_str());
- //       busStopListComplete.append(bus_stop);
+        busStopListComplete.append(bus_stop);
     }
-
-/*
     for(int i=0; i<busStopListComplete.length(); i++)
     {
-        ui->busStopList->addItem(busStopListComplete[i]);
+        drawStop(i);
     }
-*/
 }
 
 void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
 {
     for (Bus bus : buses) {
         qDebug("%s: Found bus: %s", TAG.c_str(), bus.getId().c_str());
-//        busListComplete.append(bus);
+        busListComplete.append(bus);
     }
-/*
     for(int i=0; i<busListComplete.length(); i++)
     {
-        ui->busInfoList->addItem(busListComplete[i]);
+        drawBus(i);
     }
-*/
 }
 
 // override default mouse behaviour to implement zoom
@@ -422,6 +417,7 @@ void BusTrackWindow::drawStop(int index)
     BusStop temp = busStopListComplete.at(index);
     float latitude = temp.getLatitude();
     float longitude = temp.getLongitude();
+    qDebug() << latitude;
     QString name= QString::fromStdString(temp.getName());
     int numPeople = temp.getOccupancy();
     
@@ -431,8 +427,8 @@ void BusTrackWindow::drawStop(int index)
         latitude < 1.292223 || longitude > 103.780003)
         return;
 
-    int offsetx = 1080 * (latitude-1.292223)/(1.298037-1.292223);
-    int offsety = 1920 * (longitude-103.769591)/(103.780003-103.769591);
+    int offsety = 1080 * (1.298037-latitude)/(1.298037-1.292223);
+    int offsetx = 1920 * (longitude-103.769591)/(103.780003-103.769591);
 
     //Color transitioning from red to yellow to green
     QColor repaintColor;
@@ -569,7 +565,7 @@ void BusTrackWindow::runSearch(QString query)
             busResultIndex.append(i);
         }
     }
-   
+    qDebug() << resultsFound;
     if (!resultsFound)
         return;
 
@@ -594,9 +590,9 @@ void BusTrackWindow::runSearch(QString query)
         // 1.292223, 103.780003 (Bottom-right)
         if (latitude > 1.298037 || longitude < 103.769591 ||
             latitude < 1.292223 || longitude > 103.780003)
-            return;
-        int offsetx = 1080 * (latitude-1.292223)/(1.298037-1.292223);
-        int offsety = 1920 * (longitude-103.769591)/(103.780003-103.769591);
+            continue;
+        int offsety = 1080 * (1.298037-latitude)/(1.298037-1.292223);
+        int offsetx = 1920 * (longitude-103.769591)/(103.780003-103.769591);
         path1.addEllipse(offsetx-radius+15, offsety-radius+17, 2*radius, 2*radius);
     }
 
@@ -608,9 +604,9 @@ void BusTrackWindow::runSearch(QString query)
         // 1.292223, 103.780003 (Bottom-right)
         if (latitude > 1.298037 || longitude < 103.769591 ||
             latitude < 1.292223 || longitude > 103.780003)
-            return;
-        int offsetx = 1080 * (latitude-1.292223)/(1.298037-1.292223);
-        int offsety = 1920 * (longitude-103.769591)/(103.780003-103.769591);
+            continue;
+        int offsety = 1080 * (1.298037-latitude)/(1.298037-1.292223);
+        int offsetx = 1920 * (longitude-103.769591)/(103.780003-103.769591);
         path1.addEllipse(offsetx-radius+33, offsety-radius+25, 2*radius, 2*radius);
     }
     searchOverlay->setPath(path1);
@@ -630,8 +626,8 @@ void BusTrackWindow::drawBus(int index)
         latitude < 1.292223 || longitude > 103.780003)
         return;
 
-    int offsetx = 1080 * (latitude-1.292223)/(1.298037-1.292223);
-    int offsety = 1920 * (longitude-103.769591)/(103.780003-103.769591);
+    int offsety = 1080 * (1.298037-latitude)/(1.298037-1.292223);
+    int offsetx = 1920 * (longitude-103.769591)/(103.780003-103.769591);
 
 	float percentageNumPeople = (numPeople * 1.0)/MAX_NUM_PEOPLE_BUS;
     //Color transitioning from red to yellow to green
