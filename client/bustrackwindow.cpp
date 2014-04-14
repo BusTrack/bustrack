@@ -183,12 +183,12 @@ void BusTrackWindow::toggleSearchResultsWidget(QString query)
 {
     if(query.length() > 0)
     {
-        ui->searchResultsWidget->setVisible(true);
+        searchResultsWidget->setVisible(true);
         runSearch(query);
     }
     else
     {
-        ui->searchResultsWidget->setVisible(false);
+        searchResultsWidget->setVisible(false);
         resetSearch();
     }
 }
@@ -200,15 +200,16 @@ void BusTrackWindow::onBusInfoBtnClicked()
     {
         ui->busInfoBtn->setIcon(QIcon(":/resources/searchBusSel.png"));
         ui->stopInfoBtn->setIcon(QIcon(":/resources/searchStop.png"));
-        //ui->infoListWidget->move(79, 80);
-        ui->busInfoListWidget->setVisible(true);
+        busListWidget->setVisible(true);
+        busStopListWidget->setVisible(false);
         busInfoBtnClicked = true;
+        stopInfoBtnClicked = false;
     }
     else
     {
         ui->busInfoBtn->setIcon(QIcon(":/resources/searchBus.png"));
         busInfoBtnClicked = false;
-        ui->busInfoListWidget->setVisible(false);
+        busListWidget->setVisible(false);
     }
 
 }
@@ -219,14 +220,15 @@ void BusTrackWindow::onStopInfoBtnClicked()
     {
         ui->stopInfoBtn->setIcon(QIcon(":/resources/searchStopSel.png"));
         ui->busInfoBtn->setIcon(QIcon(":/resources/searchBus.png"));
-        //ui->infoListWidget->move(79, 140);
-        ui->busStopInfoListWidget->setVisible(true);
+        busStopListWidget->setVisible(true);
+        busListWidget->setVisible(false);
         stopInfoBtnClicked = true;
+        busInfoBtnClicked = false;
     }
     else
     {
         ui->stopInfoBtn->setIcon(QIcon(":/resources/searchStop.png"));
-        ui->busStopInfoListWidget->setVisible(false);
+        busStopListWidget->setVisible(false);
         stopInfoBtnClicked = false;
     }
 }
@@ -235,10 +237,10 @@ void BusTrackWindow::toggleElementsVisibility()
 {
     if(!hidden)
     {
-        ui->busInfoListWidget->setVisible(false);
-        ui->busStopInfoListWidget->setVisible(false);
+        busListWidget->setVisible(false);
+        busStopListWidget->setVisible(false);
         ui->zoomSliderWidget->setVisible(false);
-        ui->searchResultsWidget->setVisible(false);
+        searchResultsWidget->setVisible(false);
         ui->searchBarWidget->setVisible(false);
         ui->sideBarWidget->setVisible(false);
         ui->dispatchWidget->setVisible(false);
@@ -248,10 +250,10 @@ void BusTrackWindow::toggleElementsVisibility()
     }
     else
     {
-        ui->busInfoListWidget->setVisible(true);
-        ui->busStopInfoListWidget->setVisible(true);
+        busListWidget->setVisible(true);
+        busStopListWidget->setVisible(true);
         ui->zoomSliderWidget->setVisible(true);
-        ui->searchResultsWidget->setVisible(true);
+        searchResultsWidget->setVisible(true);
         ui->searchBarWidget->setVisible(true);
         ui->sideBarWidget->setVisible(true);
         ui->dispatchWidget->setVisible(true);
@@ -329,13 +331,35 @@ void BusTrackWindow::initializeLists()
 
 void BusTrackWindow::initializeWidgets()
 {
-    ui->zoomSliderWidget->setVisible(true);
-    ui->searchBarWidget->setVisible(true);
-    ui->sideBarWidget->setVisible(true);
+    searchResultsWidget = new QWidget(this);
+    searchResultsWidget->setGeometry(79, 69, 350, 241);
+    searchResultsList = new QListWidget(searchResultsWidget);
+    searchResultsList->setGeometry(4, 4, 341, 232);
+    searchResultsList->setGeometry(4, 4, 341, 242);
+    searchResultsList->setViewMode(QListView::ListMode);
+    searchResultsList->setFlow(QListView::TopToBottom);
+    searchResultsList->setUniformItemSizes(true);
+    searchResultsWidget->setVisible(false);
 
-    ui->searchResultsWidget->setVisible(false);
-    ui->busInfoListWidget->setVisible(false);
-    ui->busStopInfoListWidget->setVisible(false);
+    busListWidget = new QWidget(this);
+    busListWidget->setGeometry(80, 80, 350, 251);
+    busList = new QListWidget(busListWidget);
+    busList->setGeometry(4, 4, 341, 242);
+    busList->setViewMode(QListView::ListMode);
+    busList->setFlow(QListView::TopToBottom);
+    busList->setUniformItemSizes(true);
+    busListWidget->setVisible(false);
+
+    busStopListWidget = new QWidget(this);
+    busStopListWidget->setGeometry(80, 130, 350, 251);
+    busStopList = new QListWidget(busStopListWidget);
+    busStopList->setGeometry(4, 4, 341, 232);
+    busStopList->setGeometry(4, 4, 341, 242);
+    busStopList->setViewMode(QListView::ListMode);
+    busStopList->setFlow(QListView::TopToBottom);
+    busStopList->setUniformItemSizes(true);
+    busStopListWidget->setVisible(false);
+
     ui->dispatchWidget->setVisible(false);
     ui->calendarWidget->setVisible(false);
     ui->timeEdit->setVisible(false);
@@ -356,9 +380,6 @@ void BusTrackWindow::initializeWidgets()
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(hideAction);
     fileMenu->addAction(dispatchAction);
-
-    ui->busInfoListWidget->move(79, 80);
-    ui->busStopInfoListWidget->move(79, 140);
 }
 
 void BusTrackWindow::initializeValues()

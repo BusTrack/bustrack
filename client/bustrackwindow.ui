@@ -271,77 +271,6 @@ QSlider::handle:horizontal {
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="searchResultsWidget" native="true">
-    <property name="geometry">
-     <rect>
-      <x>79</x>
-      <y>69</y>
-      <width>350</width>
-      <height>241</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(43, 62, 81);
-border-top-color: rgb(255, 255, 255);</string>
-    </property>
-    <widget class="QListWidget" name="searchResultsList">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>4</x>
-       <y>4</y>
-       <width>341</width>
-       <height>232</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="uniformItemSizes">
-      <bool>true</bool>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="busInfoListWidget" native="true">
-    <property name="geometry">
-     <rect>
-      <x>440</x>
-      <y>140</y>
-      <width>350</width>
-      <height>251</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(43, 62, 81);</string>
-    </property>
-    <widget class="QListWidget" name="busInfoList">
-     <property name="geometry">
-      <rect>
-       <x>4</x>
-       <y>4</y>
-       <width>341</width>
-       <height>242</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="selectionMode">
-      <enum>QAbstractItemView::SingleSelection</enum>
-     </property>
-     <property name="uniformItemSizes">
-      <bool>true</bool>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </widget>
    <widget class="QWidget" name="dispatchWidget" native="true">
     <property name="geometry">
      <rect>
@@ -1134,41 +1063,14 @@ font-size: 35pt;</string>
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QWidget" name="busStopInfoListWidget" native="true">
-    <property name="geometry">
-     <rect>
-      <x>490</x>
-      <y>-10</y>
-      <width>350</width>
-      <height>251</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(43, 62, 81);</string>
-    </property>
-    <widget class="QListWidget" name="busStopList">
-     <property name="geometry">
-      <rect>
-       <x>4</x>
-       <y>4</y>
-       <width>341</width>
-       <height>242</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="selectionMode">
-      <enum>QAbstractItemView::SingleSelection</enum>
-     </property>
-     <property name="uniformItemSizes">
-      <bool>true</bool>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </widget>
+   <zorder>mapView</zorder>
+   <zorder>searchBarWidget</zorder>
+   <zorder>sideBarWidget</zorder>
+   <zorder>zoomSliderWidget</zorder>
+   <zorder>dispatchWidget</zorder>
+   <zorder>calendarWidget</zorder>
+   <zorder>timeEdit</zorder>
+   <zorder>busInfoList</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
