@@ -37,11 +37,11 @@ namespace bustrack {
     code_ = code;
   }
 
-  std::vector<Waypoint> BusService::getRoute() {
+  std::vector<std::shared_ptr<Waypoint>> BusService::getRoute() {
     return route_;
   }
 
-  void BusService::setRoute(std::vector<Waypoint> route) {
+  void BusService::setRoute(std::vector<std::shared_ptr<Waypoint>> route) {
     route_ = route;
   }
   

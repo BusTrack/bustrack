@@ -24,15 +24,29 @@
 
 namespace bustrack {
 
+  /**
+   * A Waypoint represents a location. It has latitude and longitude
+   * components.
+   */
   class Waypoint {
   public:
+    static const std::string TYPE_NORMAL;
+    static const std::string TYPE_BUS_STOP;
+
+    Waypoint();
+    std::string getType();
+
     float getLatitude();
     void setLatitude(float latitude);
 
     float getLongitude();
     void setLongitude(float longitude);
 
+  protected:
+    void setType(const std::string& type);
+
   private:
+    std::string type_;
     float latitude_;
     float longitude_;
   };

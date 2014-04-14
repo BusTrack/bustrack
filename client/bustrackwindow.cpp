@@ -67,16 +67,16 @@ BusTrackWindow::BusTrackWindow(QWidget *parent) :
 
 
     tempService.setCode("A1");
-    std::vector<Waypoint> route;
-    Waypoint waypoint1;
-    waypoint1.setLatitude(1.296970);
-    waypoint1.setLongitude(103.772000);
-    Waypoint waypoint2;
-    waypoint2.setLatitude(1.296970);
-    waypoint2.setLongitude(103.777000);
-    Waypoint waypoint3;
-    waypoint3.setLatitude(1.295970);
-    waypoint3.setLongitude(103.775000);
+    std::vector<std::shared_ptr<Waypoint>> route;
+    std::shared_ptr<Waypoint> waypoint1 = std::make_shared<Waypoint>();
+    waypoint1->setLatitude(1.296970);
+    waypoint1->setLongitude(103.772000);
+    std::shared_ptr<Waypoint> waypoint2 = std::make_shared<Waypoint>();
+    waypoint2->setLatitude(1.296970);
+    waypoint2->setLongitude(103.777000);
+    std::shared_ptr<Waypoint> waypoint3 = std::make_shared<Waypoint>();
+    waypoint3->setLatitude(1.295970);
+    waypoint3->setLongitude(103.775000);
     route.push_back(waypoint1);
     route.push_back(waypoint2);
     route.push_back(waypoint3);
@@ -492,10 +492,10 @@ void BusTrackWindow::initializeBusStopServices()
     for (BusStop bus_stop : busStopListComplete) {
         QList<BusService> tempList;
         for (BusService bus_service : busServiceListComplete) {
-            std::vector<Waypoint> route = bus_service.getRoute();
-            for (Waypoint waypoint : route) {
-                if (waypoint.getLatitude() == bus_stop.getLatitude() &&
-                        waypoint.getLongitude() == bus_stop.getLongitude()) {
+            std::vector<std::shared_ptr<Waypoint>> route = bus_service.getRoute();
+            for (std::shared_ptr<Waypoint> waypoint : route) {
+                if (waypoint->getLatitude() == bus_stop.getLatitude() &&
+                        waypoint->getLongitude() == bus_stop.getLongitude()) {
                     tempList.append(bus_service);
                 }                
             }
@@ -599,14 +599,14 @@ void BusTrackWindow::drawStop(int index)
                 int destinationIndex = 999;
                 int busStopIndex = 999999;
                 for (int j = 0; j < service.getRoute().size() && destinationIndex == 999; j++) {
-                    if (bus.getDestination().getLatitude() == service.getRoute().at(j).getLatitude() &&
-                            bus.getDestination().getLongitude() == service.getRoute().at(j).getLongitude()) {
+                    if (bus.getDestination().getLatitude() == service.getRoute().at(j)->getLatitude() &&
+                            bus.getDestination().getLongitude() == service.getRoute().at(j)->getLongitude()) {
                         destinationIndex = j;
                     }
                 }
                 for (int j = destinationIndex; j < service.getRoute().size() && busStopIndex == 999999; j++) {
-                    if (latitude == service.getRoute().at(j).getLatitude() &&
-                            longitude == service.getRoute().at(j).getLongitude()) {
+                    if (latitude == service.getRoute().at(j)->getLatitude() &&
+                            longitude == service.getRoute().at(j)->getLongitude()) {
                         busStopIndex = j;
                     }
                 }

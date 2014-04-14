@@ -31,6 +31,7 @@ namespace bustrack {
 
   BusStop::BusStop() :
       id_("Unknown ID"), name_("Unknown Name"), occupancy_(0) {
+    setType(Waypoint::TYPE_BUS_STOP);
   }
 
   std::string BusStop::getId() {

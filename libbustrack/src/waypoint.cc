@@ -21,6 +21,20 @@
 
 namespace bustrack {
 
+  const std::string Waypoint::TYPE_NORMAL ("NORMAL");
+  const std::string Waypoint::TYPE_BUS_STOP ("BUS_STOP");
+
+  Waypoint::Waypoint() : type_(TYPE_NORMAL) {
+  }
+
+  std::string Waypoint::getType() {
+    return type_;
+  }
+
+  void Waypoint::setType(const std::string& type) {
+    type_ = type;
+  }
+
   float Waypoint::getLatitude() {
     return latitude_;
   }
