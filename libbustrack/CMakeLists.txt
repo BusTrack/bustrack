@@ -17,9 +17,6 @@
 #  limitations under the License.                                              #
 # ============================================================================ #
 
-# Include Qt5 dependencies.
-find_package (Qt5Core REQUIRED)
-
 # Create a library called "bustrack" which includes the source files below.
 # The extension of the library is already known by CMake. Any number of sources
 # could be listed here.
@@ -33,7 +30,8 @@ add_library (bustrack
   src/message.cc
 )
 
-# Add the appropriate include paths.
-qt5_use_modules (bustrack Core)
+# Add definitions for Qt4.
+include (${QT_USE_FILE})
+add_definitions (${QT_DEFINITIONS})
 
 # vim: set ts=2 sw=2 et:
