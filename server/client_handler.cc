@@ -54,8 +54,8 @@ namespace bustrack {
 
     QString line = QString(buf).trimmed();
     Message message = Message::decodeFromString(line.toStdString());
-    qDebug("%s [%d]: Message with tag %s received", TAG.c_str(), socket_id_,
-        message.getTag().c_str());
+    qDebug("%s [%d]: Message with tag %s id %d received", TAG.c_str(),
+        socket_id_, message.getTag().c_str(), message.getId());
 
     // Obtain the request router.
     std::shared_ptr<RequestRouter> router = context_->getRequestRouter();

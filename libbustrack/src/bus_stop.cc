@@ -80,7 +80,7 @@ namespace bustrack {
   std::string BusStop::toString() {
     std::stringstream serialized_ss;
     serialized_ss << getId() << "|" << getName() << "|" <<
-          getLatitude() << "|" << getLongitude() << std::endl;
+          getLatitude() << "|" << getLongitude();
 
     return serialized_ss.str();
   }

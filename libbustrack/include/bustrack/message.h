@@ -80,6 +80,17 @@ namespace bustrack {
     void setTag(const std::string& tag);
 
     /**
+     * Returns the ID of the message.
+     */
+    unsigned int getId() const;
+
+    /**
+     * Sets the ID of the message.
+     * @param id The ID of the message
+     */
+    void setId(unsigned int id);
+
+    /**
      * Returns the payload of the message.
      */
     QByteArray getPayload() const;
@@ -99,6 +110,7 @@ namespace bustrack {
 
   private:
     std::string tag_;
+    unsigned int id_;
     QByteArray payload_;
   };
 

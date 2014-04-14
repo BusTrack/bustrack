@@ -22,13 +22,13 @@
 
 namespace bustrack {
 
-  void InvalidRequest::process(Message message, QTcpSocket* socket) {
+  void InvalidRequest::process(Message request, Message response,
+      QTcpSocket* socket) {
     // Create the response payload.
-    std::string payload (message.getTag());
+    std::string payload (request.getTag());
     payload.append("_ERROR");
 
     // Create the response message.
-    Message response;
     response.setTag(payload);
     response.setPayload("Invalid request.");
 

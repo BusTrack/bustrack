@@ -33,12 +33,16 @@ namespace bustrack {
   }
 
   void RequestRouter::process(Message request, QTcpSocket* socket) {
-    qDebug("%s: routing request with tag %s", TAG.c_str(),
-        request.getTag().c_str());
+    qDebug("%s: routing request with tag %s and id %d", TAG.c_str(),
+        request.getTag().c_str(), request.getId());
+
+    // Prepare a response template.
+    Message response;
+    response.setId(request.getId());
 
     // Get the actual request.
     std::unique_ptr<Request> actual_request = getActualRequest(request);
-    actual_request->process(request, socket);
+    actual_request->process(request, response, socket);
   }
 
   std::unique_ptr<Request> RequestRouter::getActualRequest(Message request) {

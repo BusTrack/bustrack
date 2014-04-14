@@ -17,10 +17,118 @@
  * limitations under the License.
  * ========================================================================= */
 
+#include <QStringList>
 #include "bustrackservice.h"
 
-BusTrackService::BusTrackService(QObject*)
+namespace bustrack {
+
+const std::string BusTrackService::TAG ("BusTrackService");
+
+BusTrackService::BusTrackService(QObject*) : nextRequestId_(0)
 {
+    socket_ = new QTcpSocket();
+    connectSignals_();
+
+    // Connect to the socket.
+    socket_->connectToHost("127.0.0.1", 8080);
+}
+
+void BusTrackService::getBusStops() {
+    Message request;
+    request.setId(nextRequestId_);
+    request.setTag("BUS_STOPS");
+
+    sendRequest_(request, BUS_STOPS_REQUEST);
+}
+
+void BusTrackService::handleError(QAbstractSocket::SocketError) {
+    qWarning("%s: Error connecting to server: %s", TAG.c_str(),
+            socket_->errorString().toStdString().c_str());
+    emit error();
+}
+
+void BusTrackService::handleConnected() {
+    qDebug("%s: Received connect() signal from QTcpSocket", TAG.c_str());
+    emit connected();
+}
+
+void BusTrackService::handleReadyRead() {
+    // We have some response!
+    char buf[16384];
+    qint64 line_length = socket_->readLine(buf, sizeof(buf));
+    if (line_length != -1) {
+      qDebug("%s: %lld bytes received", TAG.c_str(), line_length);
+    }
+
+    QString line = QString(buf).trimmed();
+    Message message = Message::decodeFromString(line.toStdString());
+    qDebug("%s: Message with tag %s id %d received", TAG.c_str(), 
+        message.getTag().c_str(), message.getId());
+
+    // Throw it into the sorting house!
+    unsigned int message_id = message.getId();
+    if (requestQueue_.find(message_id) == requestQueue_.end()) {
+        qWarning("%s: Unsolicited message received, dropping!", TAG.c_str());
+        return;
+    }
+
+    QString decoded_payload (message.getPayload());
+    decoded_payload = decoded_payload.trimmed();
+    RequestType message_type = requestQueue_.at(message_id);
+    switch (message_type) {
+        case BUS_STOPS_REQUEST: {
+            QStringList bus_stops_line = decoded_payload.split("\n");
+            std::vector<BusStop> bus_stops;
+            for (QString bus_stop : bus_stops_line) {
+                bus_stops.push_back(BusStop::fromString(bus_stop.toStdString()));
+            }
+
+            emit getBusStopsComplete(bus_stops);
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+void BusTrackService::connectSignals_() {
+    // Connect the socket events to this class.
+    connect(
+        socket_,
+        SIGNAL(error(QAbstractSocket::SocketError)),
+        this,
+        SLOT(handleError(QAbstractSocket::SocketError))
+    );
+
+    connect(
+        socket_,
+        SIGNAL(connected()),
+        this,
+        SLOT(handleConnected())
+    );
+
+    connect(
+        socket_,
+        SIGNAL(readyRead()),
+        this,
+        SLOT(handleReadyRead())
+    );
+}
+
+void BusTrackService::sendRequest_(Message request, RequestType type) {
+    // Add this request to the request queue.
+    requestQueue_.insert(std::make_pair(request.getId(), type));
+    
+    // Send off!
+    std::string request_string = request.toString();
+    socket_->write(request_string.c_str(), request_string.length());
+    socket_->putChar('\n');
+    socket_->flush();
+
+    // Increment our ID (;
+    nextRequestId_++;
+}
+
 }
 
 // vim: set ts=4 sw=4 et:

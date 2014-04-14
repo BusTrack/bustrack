@@ -20,7 +20,13 @@
 #ifndef BUSTRACKSERVICE_H
 #define BUSTRACKSERVICE_H
 
+#include <unordered_map>
 #include <QTcpSocket>
+
+#include "bustrack/message.h"
+#include "bustrack/bus_stop.h"
+
+namespace bustrack {
 
 class BusTrackService : public QObject
 {
@@ -28,10 +34,35 @@ class BusTrackService : public QObject
 
 public:
     BusTrackService(QObject* parent = 0);
+    
+    void getBusStops();
+
+signals:
+    void connected();
+    void error();
+
+    void getBusStopsComplete(std::vector<BusStop> busStops);
+
+private slots:
+    void handleError(QAbstractSocket::SocketError socketError);
+    void handleConnected();
+    void handleReadyRead();
 
 private:
-    QTcpSocket socket_;
+    enum RequestType {
+        BUS_STOPS_REQUEST
+    };
+
+    static const std::string TAG;
+    QTcpSocket* socket_;
+    unsigned int nextRequestId_;
+    std::unordered_map<unsigned int, RequestType> requestQueue_;
+
+    void connectSignals_();
+    void sendRequest_(Message request, RequestType type);
 };
+
+}
 
 #endif // BUSTRACKSERVICE_H
 

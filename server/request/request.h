@@ -59,10 +59,12 @@ namespace bustrack {
     /**
      * Processes the request given by message.
      *
-     * @param message The message containing the request payload.
-     * @param socket  The client socket.
+     * @param request  The message containing the request payload.
+     * @param response The message containing the response payload.
+     * @param socket   The client socket.
      */
-    virtual void process(Message message, QTcpSocket* socket) = 0;
+    virtual void process(Message request, Message response,
+        QTcpSocket* socket) = 0;
 
   protected:
     /**

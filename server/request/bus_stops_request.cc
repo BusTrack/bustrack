@@ -26,7 +26,7 @@
 
 namespace bustrack {
 
-  void BusStopsRequest::process(Message message, QTcpSocket* socket) {
+  void BusStopsRequest::process(Message, Message response, QTcpSocket* socket) {
     // Obtain the DAO manager.
     std::shared_ptr<DAOManager> dao = getContext()->getDAOManager();
     std::shared_ptr<BusStopDAO> bus_stop_dao = dao->getBusStopDAO();
@@ -40,8 +40,7 @@ namespace bustrack {
     }
 
     // Create the response message.
-    Message response;
-    response.setTag("BUS_STOPS_RESPONSE");
+    response.setTag("BUS_STOPS");
     response.setPayload(QString::fromStdString(payload).toLatin1());
 
     // Send the response message down the wire.

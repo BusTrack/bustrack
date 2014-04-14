@@ -18,6 +18,7 @@
  * ========================================================================= */
 
 #include <sstream>
+#include <QString>
 #include "bustrack/message.h"
 
 namespace bustrack {
@@ -29,6 +30,7 @@ namespace bustrack {
 
   Message::Message(const std::string& tag, const QByteArray& payload) :
       tag_(tag),
+      id_(0),
       payload_(payload) {
   }
 
@@ -42,19 +44,29 @@ namespace bustrack {
     }
 
     // Check number of tokens.
-    if (tokens.empty() || tokens.size() > 2) {
+    if (tokens.empty() || tokens.size() > 3) {
       qWarning("Message: Unable to decode message, tokens.size() == %lu",
           tokens.size());
       return Message (TAG_INVALID, QByteArray());
     }
 
-    // Take the first token and convert the string to type.
+    // Take the first token and convert the string to tag.
     Message message;
     message.setTag(tokens[0]);
+
+    // Take the second token and convert the string to message ID.
+    bool parsing_ok = false;
+    unsigned int message_id = QString(tokens[1].c_str()).toUInt(&parsing_ok);
+    if (!parsing_ok) {
+      qWarning("Message: Unable to obtain message ID, raw = %s",
+          tokens[1].c_str());
+    } else {
+      message.setId(message_id);
+    }
     
     // Is there a payload?
-    if (tokens.size() > 1) {
-      QByteArray payload_base64 (tokens[1].c_str());
+    if (tokens.size() > 2) {
+      QByteArray payload_base64 (tokens[2].c_str());
       message.setPayload(QByteArray::fromBase64(payload_base64));
     }
 
@@ -69,6 +81,14 @@ namespace bustrack {
     tag_ = tag;
   }
 
+  unsigned int Message::getId() const {
+    return id_;
+  }
+
+  void Message::setId(unsigned int id) {
+    id_ = id;
+  }
+
   QByteArray Message::getPayload() const {
     return payload_;
   }
@@ -81,6 +101,8 @@ namespace bustrack {
     std::string encoded;
 
     encoded.append(tag_);
+    encoded.append(" ");
+    encoded.append(QString::number(id_).toStdString());
     encoded.append(" ");
 
     QByteArray payload_base64 = payload_.toBase64();

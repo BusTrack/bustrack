@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     app.setStyleSheet(style);
 
     // Create the main BusTrack window.
-    BusTrackWindow window;
+    bustrack::BusTrackWindow window;
     window.show();
 
     // Run the app.

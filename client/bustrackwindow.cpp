@@ -8,10 +8,15 @@ const float MAX_ZOOM = 6.0;
 const float MAX_NUM_PEOPLE_BUS = 50;
 const float BUS_NUM = 6;
 
+namespace bustrack {
+
 BusTrackWindow::BusTrackWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::BusTrackWindow)
 {
+    // Initialize the BusTrack service.
+    busTrackService = new bustrack::BusTrackService();
+
     ui->setupUi(this);
 
     initializeLists();
@@ -40,6 +45,18 @@ BusTrackWindow::~BusTrackWindow()
 }
 
 // event handlers
+void BusTrackWindow::btsConnected()
+{
+    busTrackService->getBusStops();
+}
+
+void BusTrackWindow::btsGetBusStopsComplete(
+        std::vector<BusStop> bus_stops)
+{
+    for (BusStop bus_stop : bus_stops) {
+        qDebug() << bus_stop.getName().c_str();
+    }
+}
 
 // override default mouse behaviour to implement zoom
 void BusTrackWindow::wheelEvent(QWheelEvent *event)
@@ -336,6 +353,15 @@ void BusTrackWindow::initializeConnections()
         connect(clockButtonList[i], SIGNAL(clicked()), signalMapper, SLOT(map()));
     }
     connect(signalMapper, SIGNAL(mapped(QWidget*)), this, SLOT(createTimeWidget()));
+
+    // Receive events from BusTrackService.
+    connect(busTrackService, SIGNAL(connected()), this, SLOT(btsConnected()));
+    connect(
+        busTrackService,
+        SIGNAL(getBusStopsComplete(std::vector<BusStop>)),
+        this,
+        SLOT(btsGetBusStopsComplete(std::vector<BusStop>))
+    );
 }
 
 void BusTrackWindow::drawStop(QString name, int offsetx, int offsety, int numPeople)
@@ -563,6 +589,8 @@ QImage BusTrackWindow::determineBusPNG(QString busService){
 		background.load(":/resources/D2.png");	
 	}
 	return background;
+}
+
 }
 
 // vim: set ts=4 sw=4 et:

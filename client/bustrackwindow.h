@@ -17,11 +17,18 @@
 #include <QPushButton>
 #include <QLabel>
 
+#include "bustrack/bus_stop.h"
+
 namespace Ui {
 class BusTrackWindow;
 }
 
+namespace bustrack {
 class BusTrackService;
+}
+
+namespace bustrack {
+
 class BusTrackWindow : public QMainWindow
 {
     Q_OBJECT
@@ -50,6 +57,9 @@ private slots:
     void calendarSelectionChanged(int i);
     void timeSelectionChanged(int i);
 
+    void btsConnected();
+    void btsGetBusStopsComplete(std::vector<BusStop> bus_stops);
+
 private:
     Ui::BusTrackWindow *ui;
     QGraphicsScene mapScene;
@@ -58,7 +68,7 @@ private:
     QMenu *fileMenu;
     QAction *hideAction;
     QAction *dispatchAction;
-    BusTrackService* busTrackService;
+    bustrack::BusTrackService* busTrackService;
 
     float currentZoom;
     int slideValue;
@@ -87,6 +97,8 @@ private:
     QImage determineBusPNG(QString busService);
     void searchStop(QString name);
 };
+
+}
 
 #endif // BUSTRACKWINDOW_H
 
