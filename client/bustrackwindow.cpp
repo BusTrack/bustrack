@@ -10,6 +10,8 @@ const float BUS_NUM = 6;
 
 namespace bustrack {
 
+const std::string BusTrackWindow::TAG ("BusTrackWindow");
+
 BusTrackWindow::BusTrackWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::BusTrackWindow)
@@ -38,19 +40,21 @@ BusTrackWindow::~BusTrackWindow()
 void BusTrackWindow::btsConnected()
 {
     busTrackService->getBusStops();
+    busTrackService->getBuses();
 }
 
 void BusTrackWindow::btsGetBusStopsComplete(std::vector<BusStop> bus_stops)
 {
     for (BusStop bus_stop : bus_stops) {
-        qDebug() << bus_stop.getName().c_str();
+        qDebug("%s: Found bus stop: %s", TAG.c_str(),
+            bus_stop.getName().c_str());
     }
 }
 
 void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
 {
     for (Bus bus : buses) {
-        qDebug() << bus.getId().c_str();
+        qDebug("%s: Found bus: %s", TAG.c_str(), bus.getId().c_str());
     }
 }
 

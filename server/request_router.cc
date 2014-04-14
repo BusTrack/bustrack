@@ -17,6 +17,7 @@
  * limitations under the License.
  * ========================================================================= */
 
+#include "request/buses_request.h"
 #include "request/bus_stops_request.h"
 #include "request/invalid_request.h"
 #include "server_context.h"
@@ -27,6 +28,7 @@ namespace bustrack {
 
   const std::string RequestRouter::TAG ("RequestRouter");
   const std::string RequestRouter::REQUEST_BUS_STOPS_TAG ("BUS_STOPS");
+  const std::string RequestRouter::REQUEST_BUSES_TAG ("BUSES");
 
   RequestRouter::RequestRouter(ServerContext const* context) :
     context_(context) {
@@ -48,6 +50,8 @@ namespace bustrack {
   std::unique_ptr<Request> RequestRouter::getActualRequest(Message request) {
     if (request.getTag() == REQUEST_BUS_STOPS_TAG) {
       return std::unique_ptr<Request>(new BusStopsRequest(context_));
+    } else if (request.getTag() == REQUEST_BUSES_TAG) {
+      return std::unique_ptr<Request>(new BusesRequest(context_));
     } else {
       return std::unique_ptr<Request>(new InvalidRequest(context_));
     }

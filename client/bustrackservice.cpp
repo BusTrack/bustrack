@@ -34,6 +34,7 @@ BusTrackService::BusTrackService(QObject*) : nextRequestId_(0)
 }
 
 void BusTrackService::getBusStops() {
+    qDebug("%s: Invoked getBusStops()", TAG.c_str());
     Message request;
     request.setId(nextRequestId_);
     request.setTag("BUS_STOPS");
@@ -41,6 +42,7 @@ void BusTrackService::getBusStops() {
 }
 
 void BusTrackService::getBuses() {
+    qDebug("%s: Invoked getBuses()", TAG.c_str());
     Message request;
     request.setId(nextRequestId_);
     request.setTag("BUSES");

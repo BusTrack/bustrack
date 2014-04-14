@@ -63,6 +63,8 @@ private slots:
     void btsGetBusesComplete(std::vector<Bus> buses);
 
 private:
+    static const std::string TAG;
+    
     Ui::BusTrackWindow *ui;
     QGraphicsScene mapScene;
     QGraphicsPixmapItem* mapPixmap;
