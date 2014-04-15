@@ -605,10 +605,11 @@ void BusTrackWindow::drawStop(int index)
                 int destinationIndex = bus.getDestination();
                 int busStopIndex = 999999;
                 for (int j = destinationIndex; j < service.getRoute().size() && busStopIndex == 999999; j++) {
-                    if (latitude == service.getRoute().at(j)->getLatitude() &&
-                            longitude == service.getRoute().at(j)->getLongitude()) {
+                    std::shared_ptr<BusStop> waypoint = std::dynamic_pointer_cast<BusStop>(service.getRoute().at(j));
+                    if (temp.getId() == waypoint->getId()) {
                         busStopIndex = j;
                     }
+
                 }
                 int distance = 2 * (busStopIndex - destinationIndex + 1);
                 if (distance < first) {
