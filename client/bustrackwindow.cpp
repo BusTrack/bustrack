@@ -409,6 +409,7 @@ void BusTrackWindow::initializeValues()
     searchActive = false;
     initializedBusStopServices = false;
     searchOverlay = new QGraphicsPathItem(0);
+    searchServiceOverlay = new QGraphicsPathItem(0);
 }
 
 void BusTrackWindow::initializeConnections()
