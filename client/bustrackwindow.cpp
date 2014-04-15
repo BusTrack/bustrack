@@ -777,11 +777,9 @@ void BusTrackWindow::drawBus(int index)
     int offsety = 2617 * (1.304444-latitude)/(1.304444-1.290457);
     int offsetx = 3205 * (longitude-103.769694)/(103.786843-103.769694);
 	float percentageNumPeople = (numPeople * 1.0)/MAX_NUM_PEOPLE_BUS;
-    
-    int rotationDegree = qAtan((latitude-(temp.getDestination().getLatitude()))/(longitude-(temp.getDestination().getLongitude())))/3.142*180;
-    qDebug() << (latitude-(temp.getDestination().getLatitude()));
-    qDebug() << (longitude-(temp.getDestination().getLongitude()));
-    qDebug() << rotationDegree;
+    std::vector<std::shared_ptr<Waypoint>> tempRoute = temp.getService().getRoute();
+    std::shared_ptr<Waypoint> destinationWaypoint = tempRoute.at(temp.getDestination());
+    int rotationDegree = qAtan((latitude-(destinationWaypoint->getLatitude()))/(longitude-(destinationWaypoint->getLongitude())))/3.142*180;
     QMatrix rotateMatrix;
     rotateMatrix.rotate(rotationDegree*-1 -145);
 
