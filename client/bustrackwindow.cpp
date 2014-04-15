@@ -208,7 +208,7 @@ void BusTrackWindow::toggleSearchResultsWidget(QString query)
 {
     if(query.length() > 0)
     {
-        searchResultsWidget->setVisible(true);
+        searchResultsWidget->setVisible(false);
         runSearch(query);
     }
     else
