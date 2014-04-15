@@ -20,6 +20,7 @@
 #include "request/bus_services_request.h"
 #include "request/bus_stops_request.h"
 #include "request/buses_request.h"
+#include "request/dispatch_request.h"
 #include "request/invalid_request.h"
 
 #include "server_context.h"
@@ -32,6 +33,7 @@ namespace bustrack {
   const std::string RequestRouter::REQUEST_BUS_SERVICES_TAG ("BUS_SERVICES");
   const std::string RequestRouter::REQUEST_BUS_STOPS_TAG ("BUS_STOPS");
   const std::string RequestRouter::REQUEST_BUSES_TAG ("BUSES");
+  const std::string RequestRouter::REQUEST_DISPATCH_TAG ("DISPATCH");
 
   RequestRouter::RequestRouter(ServerContext const* context) :
     context_(context) {
@@ -57,6 +59,8 @@ namespace bustrack {
       return std::unique_ptr<Request>(new BusStopsRequest(context_));
     } else if (request.getTag() == REQUEST_BUSES_TAG) {
       return std::unique_ptr<Request>(new BusesRequest(context_));
+    } else if (request.getTag() == REQUEST_DISPATCH_TAG) {
+      return std::unique_ptr<Request>(new DispatchRequest(context_));
     } else {
       return std::unique_ptr<Request>(new InvalidRequest(context_));
     }

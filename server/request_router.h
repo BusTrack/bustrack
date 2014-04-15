@@ -64,6 +64,7 @@ namespace bustrack {
     static const std::string REQUEST_BUS_SERVICES_TAG;
     static const std::string REQUEST_BUS_STOPS_TAG;
     static const std::string REQUEST_BUSES_TAG;
+    static const std::string REQUEST_DISPATCH_TAG;
 
     ServerContext const* context_;
 
