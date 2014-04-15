@@ -31,7 +31,8 @@ namespace bustrack {
   const std::string Bus::TAG ("Bus");
 
   Bus::Bus() :
-      id_("Unknown ID"), occupancy_(0), longitude_(0), latitude_(0) {
+      id_("Unknown ID"), destination_(0), occupancy_(0), longitude_(0),
+      latitude_(0), active_(false) {
   }
 
   std::string Bus::getId() {
@@ -50,11 +51,11 @@ namespace bustrack {
     service_ = service;
   }
 
-  BusStop Bus::getDestination() {
+  int Bus::getDestination() {
     return destination_;
   }
 
-  void Bus::setDestination(BusStop destination) {
+  void Bus::setDestination(int destination) {
     destination_ = destination;
   }
   
@@ -80,6 +81,14 @@ namespace bustrack {
   
   void Bus::setLongitude(float longitude) {
     longitude_ = longitude;
+  }
+
+  bool Bus::isActive() {
+    return active_;
+  }
+
+  void Bus::setIsActive(bool active) {
+    active_ = active;
   }
 
   Bus Bus::fromString(const std::string& serialized) {
@@ -124,6 +133,11 @@ namespace bustrack {
       qWarning("%s Unable to parse longitude for bus with ID %s", TAG.c_str(),
         bus.getId().c_str());
     }
+
+    // Get the service code.
+    BusService service = bus.getService();
+    service.setCode(tokens[4].toStdString());
+    bus.setService(service);
     
     return bus;
   }
@@ -137,8 +151,8 @@ namespace bustrack {
   std::string Bus::toStringAll() {
     std::stringstream serialized_all_ss (toString(),
         std::stringstream::out | std::stringstream::ate);
-    serialized_all_ss << "|" << getOccupancy() << "|" << getLatitude() <<
-      getLongitude();
+    serialized_all_ss << "|" << getOccupancy() << "|" << getLatitude() << "|" <<
+      getLongitude() << "|" << getService().getCode();
     return serialized_all_ss.str();
   }
 

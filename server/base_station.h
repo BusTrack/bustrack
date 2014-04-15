@@ -20,10 +20,27 @@
 #ifndef BUSTRACK_BASE_STATION_H_
 #define BUSTRACK_BASE_STATION_H_
 
+#include "dao/bus_dao.h"
+#include "server_context.h"
+
 namespace bustrack {
 
-  class BaseStation {
+  class BaseStation : public QObject {
+    Q_OBJECT
 
+  public slots:
+    void simulateStep(const ServerContext& context);
+
+  private:
+    static const std::string TAG;
+    static const int NUM_ACTIVE_BUSES;
+
+    void advanceActiveBuses(std::shared_ptr<DAOManager> dao_manager);
+    void randomizeBusOccupancy(std::shared_ptr<DAOManager> dao_manager);
+    void maintainActiveBuses(std::shared_ptr<DAOManager> dao_manager);
+    void dispatchBusForRandomService(Bus bus,
+        std::shared_ptr<DAOManager> dao_manager);
+    void destinationCheck(std::shared_ptr<DAOManager> dao_manager);
   };
 
 }

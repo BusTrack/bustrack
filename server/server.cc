@@ -18,13 +18,15 @@
  * ========================================================================= */
 
 #include <QTcpSocket>
+#include <QTimer>
 
 #include "client_handler.h"
 #include "server.h"
 
 namespace bustrack {
 
-  Server::Server(QObject*) {
+  Server::Server(QObject*) :
+      base_station_timer_(new QTimer(this)) {
     connect(this, SIGNAL(newConnection()), this, SLOT(handleNewConnection()));
   }
 
@@ -37,6 +39,12 @@ namespace bustrack {
   }
 
   bool Server::listen() {
+    connect(base_station_timer_,
+        SIGNAL(timeout()),
+        this,
+        SLOT(handleBaseStationTimer()));
+    base_station_timer_->start(5000);
+
     return listen(context_.getListenAddress(), context_.getListenPort());
   }
 
@@ -53,6 +61,10 @@ namespace bustrack {
 
   void Server::clientHandlerComplete(ClientHandler* handler) {
     delete handler;
+  }
+
+  void Server::handleBaseStationTimer() {
+    base_station_.simulateStep(context_);
   }
 
 }

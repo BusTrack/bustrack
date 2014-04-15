@@ -28,6 +28,7 @@ set (server_SOURCES
   request/bus_services_request.cc
   request/bus_stops_request.cc
   request/invalid_request.cc
+  base_station.cc
   client_handler.cc
   request_router.cc
   server_context.cc
@@ -36,6 +37,7 @@ set (server_SOURCES
 )
 
 set (server_HEADERS
+  base_station.h
   client_handler.h
   server.h
 )

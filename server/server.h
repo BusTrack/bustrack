@@ -23,8 +23,10 @@
 #include <memory>
 #include <QTcpServer>
 
+#include "base_station.h"
 #include "server_context.h"
 
+class QTimer;
 namespace bustrack {
 
   /**
@@ -94,8 +96,15 @@ namespace bustrack {
      */
     void clientHandlerComplete(ClientHandler* handler);
 
+    /**
+     * Handles a base station timer event.
+     */
+    void handleBaseStationTimer();
+
   private:
     ServerContext context_;
+    BaseStation base_station_;
+    QTimer* base_station_timer_;
 
     /**
      * We disable the listen() method from QTcpServer because we do not

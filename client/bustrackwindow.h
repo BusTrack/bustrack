@@ -17,6 +17,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QListWidget>
+#include <QTimer>
 #include <QtCore/qmath.h>
 
 #include "bustrack/bus.h"
@@ -62,6 +63,7 @@ private slots:
     void btsGetBusServicesComplete(std::vector<BusService> bus_services);
     void btsGetBusStopsComplete(std::vector<BusStop> bus_stops);
     void btsGetBusesComplete(std::vector<Bus> buses);
+    void btsRefresh();
     void setSearchTextFromBuses(QListWidgetItem* item);
     void setSearchTextFromBusStops(QListWidgetItem* item);
 
@@ -76,6 +78,7 @@ private:
     QAction *hideAction;
     QAction *dispatchAction;
     bustrack::BusTrackService* busTrackService;
+    QTimer *busTrackServiceTimer;
 
     float currentZoom;
     int slideValue;

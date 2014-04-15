@@ -74,7 +74,8 @@ void BusTrackWindow::btsGetBusStopsComplete(std::vector<BusStop> bus_stops)
 void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
 {
     for (Bus bus : buses) {
-        qDebug("%s: Found bus: %s", TAG.c_str(), bus.getId().c_str());
+        qDebug("%s: Found bus: %s (%f, %f)", TAG.c_str(), bus.getId().c_str(),
+                bus.getLatitude(), bus.getLongitude());
         busListComplete.append(bus);
         busList->addItem(bus.getId().c_str());
     }
@@ -84,6 +85,11 @@ void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
     }
     
     busTrackService->getBusServices();
+}
+
+void BusTrackWindow::btsRefresh() {
+    qDebug("%s: New data available from server. Refreshing...", TAG.c_str());
+    busTrackService->getBuses();
 }
 
 void BusTrackWindow::updateMap()
@@ -479,6 +485,10 @@ void BusTrackWindow::initializeBusStopServices()
         busStopServices.insert(i, tempList);
         i++;
     }
+
+    busTrackServiceTimer = new QTimer(this);
+    connect(busTrackServiceTimer, SIGNAL(timeout()), this, SLOT(btsRefresh()));
+    busTrackServiceTimer->start(15000);
 }
 
 void BusTrackWindow::drawStop(int index)
@@ -575,8 +585,7 @@ void BusTrackWindow::drawStop(int index)
                 int destinationIndex = 999;
                 int busStopIndex = 999999;
                 for (int j = 0; j < service.getRoute().size() && destinationIndex == 999; j++) {
-                    if (bus.getDestination().getLatitude() == service.getRoute().at(j)->getLatitude() &&
-                            bus.getDestination().getLongitude() == service.getRoute().at(j)->getLongitude()) {
+                    if (bus.getDestination() == j) {
                         destinationIndex = j;
                     }
                 }

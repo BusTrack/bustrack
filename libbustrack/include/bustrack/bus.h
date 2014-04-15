@@ -35,8 +35,8 @@ namespace bustrack {
     BusService getService();
     void setService(BusService service);
    
-    BusStop getDestination();
-    void setDestination(BusStop destination);
+    int getDestination();
+    void setDestination(int destination);
     
     unsigned int getOccupancy();
     void setOccupancy(unsigned int occupancy);
@@ -52,18 +52,26 @@ namespace bustrack {
     std::string toString();
     std::string toStringAll();
 
+    /**
+     * For server use only.
+     */
+    bool isActive();
+    void setIsActive(bool active);
+
   private:
     static const std::string TAG;
     static const int NUM_SERIALIZED_FIELDS = 1;
-    static const int NUM_ALL_FIELDS = 4;
+    static const int NUM_ALL_FIELDS = 5;
 
     std::string id_;
     BusService service_;
-    BusStop destination_;
+    int destination_;
     
     unsigned int occupancy_;
     float longitude_;
     float latitude_;
+
+    bool active_;
   };
 
 }
