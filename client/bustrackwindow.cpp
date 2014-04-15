@@ -84,7 +84,17 @@ void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
     for (Bus bus : buses) {
         qDebug("%s: Found bus: %s (%f, %f)", TAG.c_str(), bus.getId().c_str(),
                 bus.getLatitude(), bus.getLongitude());
+        QString label = QString::fromStdString(bus.getId());
+        label += " (";
+        if (bus.getService().getCode().empty()) {
+            label += "Inactive";
+        } else {
+            label += bus.getService().getCode().c_str();
+        }
+        label += ")";
+
         busListComplete.append(bus);
+        busList->addItem(label);
     }
     
     busTrackService->getBusServices();
@@ -498,7 +508,7 @@ void BusTrackWindow::initializeBusStopServices()
 
     busTrackServiceTimer = new QTimer(this);
     connect(busTrackServiceTimer, SIGNAL(timeout()), this, SLOT(btsRefresh()));
-    busTrackServiceTimer->start(15000);
+    busTrackServiceTimer->start(10000);
 }
 
 void BusTrackWindow::drawStop(int index)
