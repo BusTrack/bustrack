@@ -582,13 +582,8 @@ void BusTrackWindow::drawStop(int index)
         int first = 999, second = 999;
         for (Bus bus : busListComplete) {
             if (bus.getService().getCode() == service.getCode()) {
-                int destinationIndex = 999;
+                int destinationIndex = bus.getDestination();
                 int busStopIndex = 999999;
-                for (int j = 0; j < service.getRoute().size() && destinationIndex == 999; j++) {
-                    if (bus.getDestination() == j) {
-                        destinationIndex = j;
-                    }
-                }
                 for (int j = destinationIndex; j < service.getRoute().size() && busStopIndex == 999999; j++) {
                     if (latitude == service.getRoute().at(j)->getLatitude() &&
                             longitude == service.getRoute().at(j)->getLongitude()) {
