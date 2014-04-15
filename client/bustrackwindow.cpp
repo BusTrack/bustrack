@@ -44,6 +44,7 @@ void BusTrackWindow::btsConnected()
 void BusTrackWindow::btsGetBusServicesComplete(
         std::vector<BusService> bus_services)
 {
+    busServiceListComplete.clear();
     for (BusService bus_service : bus_services) {
         qDebug("%s: Found bus service: %s", TAG.c_str(),
                 bus_service.getCode().c_str());
@@ -58,6 +59,7 @@ void BusTrackWindow::btsGetBusServicesComplete(
 
 void BusTrackWindow::btsGetBusStopsComplete(std::vector<BusStop> bus_stops)
 {
+    busStopListComplete.clear();
     for (BusStop bus_stop : bus_stops) {
         qDebug("%s: Found bus stop: %s", TAG.c_str(),bus_stop.getName().c_str());
         busStopListComplete.append(bus_stop);
@@ -73,15 +75,12 @@ void BusTrackWindow::btsGetBusStopsComplete(std::vector<BusStop> bus_stops)
 
 void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
 {
+    busListComplete.clear();
     for (Bus bus : buses) {
         qDebug("%s: Found bus: %s (%f, %f)", TAG.c_str(), bus.getId().c_str(),
                 bus.getLatitude(), bus.getLongitude());
         busListComplete.append(bus);
         busList->addItem(bus.getId().c_str());
-    }
-    for(int i=0; i<busListComplete.length(); i++)
-    {
-        drawBus(i);
     }
     
     busTrackService->getBusServices();
@@ -772,7 +771,14 @@ void BusTrackWindow::drawBus(int index)
     int offsety = 2617 * (1.304444-latitude)/(1.304444-1.290457);
     int offsetx = 3205 * (longitude-103.769694)/(103.786843-103.769694);
 	float percentageNumPeople = (numPeople * 1.0)/MAX_NUM_PEOPLE_BUS;
-    std::vector<std::shared_ptr<Waypoint>> tempRoute = temp.getService().getRoute();
+    
+    std::vector<std::shared_ptr<Waypoint>> tempRoute;
+    for (BusService bus_service : busServiceListComplete) {
+        if (bus_service.getCode() == temp.getService().getCode()) {
+            tempRoute = bus_service.getRoute();
+        }
+    }
+
     std::shared_ptr<Waypoint> destinationWaypoint = tempRoute.at(temp.getDestination());
     int rotationDegree = qAtan((latitude-(destinationWaypoint->getLatitude()))/(longitude-(destinationWaypoint->getLongitude())))/3.142*180;
     QMatrix rotateMatrix;
