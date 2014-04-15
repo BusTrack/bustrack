@@ -40,6 +40,7 @@ namespace bustrack {
     // Event loop!
     advanceActiveBuses(dao_manager);
     randomizeBusOccupancy(dao_manager);
+    randomizeBusStopOccupancy(dao_manager);
     destinationCheck(dao_manager);
     maintainActiveBuses(dao_manager);
   }
@@ -99,6 +100,25 @@ namespace bustrack {
         qDebug("%s: Bus %s now has occupancy %d", TAG.c_str(),
             bus.getId().c_str(), occupancy);
       }
+    }
+  }
+
+  void BaseStation::randomizeBusStopOccupancy(
+      std::shared_ptr<DAOManager> dao_manager) {
+    qDebug("%s: Running hook: randomizeBusStopOccupancy", TAG.c_str());
+
+    std::shared_ptr<BusStopDAO> bus_stop_dao = dao_manager->getBusStopDAO();
+    std::vector<BusStop> bus_stops = bus_stop_dao->getItems();
+    std::srand(std::time(NULL));
+
+    for (BusStop bus_stop : bus_stops) {
+      int occupancy = std::rand() % 30;
+      bus_stop.setOccupancy(occupancy);
+      bus_stop_dao->removeItem(bus_stop.getId());
+      bus_stop_dao->createItem(bus_stop);
+
+      qDebug("%s: Bus stop %s now has crowdedness %d", TAG.c_str(),
+          bus_stop.getId().c_str(), occupancy);
     }
   }
 
