@@ -333,8 +333,7 @@ void BusTrackWindow::dispatchBus()
     {
         if(busSelectedList[i] == true)
         {
-            // TODO dispatch bus
-            qDebug() << busServiceList[i];
+            busTrackService->dispatchBus(busServiceList[i].toStdString());
             buses.append(busServiceList[i] + ", ");
         }
     }

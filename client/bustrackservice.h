@@ -40,6 +40,7 @@ public:
     void getBusServices();
     void getBusStops();
     void getBuses();
+    void dispatchBus(const std::string& service);
 
 signals:
     void connected();
@@ -58,7 +59,8 @@ private:
     enum RequestType {
         BUS_SERVICES_REQUEST,
         BUS_STOPS_REQUEST,
-        BUSES_REQUEST
+        BUSES_REQUEST,
+        DISPATCH_REQUEST
     };
 
     static const std::string TAG;

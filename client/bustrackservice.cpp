@@ -57,6 +57,16 @@ void BusTrackService::getBuses() {
     sendRequest_(request, BUSES_REQUEST);
 }
 
+void BusTrackService::dispatchBus(const std::string& service) {
+    qDebug("%s: Invoked dispatchBus with argument %s", TAG.c_str(),
+            service.c_str());
+    Message request;
+    request.setId(nextRequestId_);
+    request.setTag("DISPATCH");
+    request.setPayload(QByteArray::fromRawData(service.c_str(), service.size()));
+    sendRequest_(request, DISPATCH_REQUEST);
+}
+
 void BusTrackService::handleError(QAbstractSocket::SocketError) {
     qWarning("%s: Error connecting to server: %s", TAG.c_str(),
             socket_->errorString().toStdString().c_str());
