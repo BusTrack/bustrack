@@ -475,8 +475,8 @@ void BusTrackWindow::initializeBusStopServices()
         for (BusService bus_service : busServiceListComplete) {
             std::vector<std::shared_ptr<Waypoint>> route = bus_service.getRoute();
             for (std::shared_ptr<Waypoint> waypoint : route) {
-                if (waypoint->getLatitude() == bus_stop.getLatitude() &&
-                        waypoint->getLongitude() == bus_stop.getLongitude()) {
+                std::shared_ptr<BusStop> waypoint_temp = std::dynamic_pointer_cast<BusStop>(waypoint);
+                if (waypoint_temp->getId() == bus_stop.getId()) {
                     tempList.append(bus_service);
                 }                
             }
