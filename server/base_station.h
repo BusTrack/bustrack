@@ -37,6 +37,7 @@ namespace bustrack {
 
     void advanceActiveBuses(std::shared_ptr<DAOManager> dao_manager);
     void randomizeBusOccupancy(std::shared_ptr<DAOManager> dao_manager);
+    void randomizeBusStopOccupancy(std::shared_ptr<DAOManager> dao_manager);
     void maintainActiveBuses(std::shared_ptr<DAOManager> dao_manager);
     void dispatchBusForRandomService(Bus bus,
         std::shared_ptr<DAOManager> dao_manager);
