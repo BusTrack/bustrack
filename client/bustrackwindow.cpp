@@ -80,7 +80,6 @@ void BusTrackWindow::btsGetBusesComplete(std::vector<Bus> buses)
         qDebug("%s: Found bus: %s (%f, %f)", TAG.c_str(), bus.getId().c_str(),
                 bus.getLatitude(), bus.getLongitude());
         busListComplete.append(bus);
-        busList->addItem(bus.getId().c_str());
     }
     
     busTrackService->getBusServices();
@@ -383,6 +382,13 @@ void BusTrackWindow::initializeWidgets()
     busStopList->setFlow(QListView::TopToBottom);
     busStopList->setUniformItemSizes(true);
     busStopListWidget->setVisible(false);
+
+    busList->addItem("A1");
+    busList->addItem("A2");
+    busList->addItem("B");
+    busList->addItem("C");
+    busList->addItem("D1");
+    busList->addItem("D2");
 
     ui->dispatchWidget->setVisible(false);
 
