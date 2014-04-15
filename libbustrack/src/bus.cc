@@ -138,6 +138,9 @@ namespace bustrack {
     BusService service = bus.getService();
     service.setCode(tokens[4].toStdString());
     bus.setService(service);
+
+    // Get the destination.
+    bus.setDestination(tokens[5].toInt());
     
     return bus;
   }
@@ -152,7 +155,8 @@ namespace bustrack {
     std::stringstream serialized_all_ss (toString(),
         std::stringstream::out | std::stringstream::ate);
     serialized_all_ss << "|" << getOccupancy() << "|" << getLatitude() << "|" <<
-      getLongitude() << "|" << getService().getCode();
+      getLongitude() << "|" << getService().getCode() << "|" <<
+      getDestination();
     return serialized_all_ss.str();
   }
 

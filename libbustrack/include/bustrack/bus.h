@@ -61,7 +61,7 @@ namespace bustrack {
   private:
     static const std::string TAG;
     static const int NUM_SERIALIZED_FIELDS = 1;
-    static const int NUM_ALL_FIELDS = 5;
+    static const int NUM_ALL_FIELDS = 6;
 
     std::string id_;
     BusService service_;
